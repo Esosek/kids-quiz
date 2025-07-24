@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] },
     "target": "esnext",
     "module": "commonjs",
     "rootDir": "./src",
