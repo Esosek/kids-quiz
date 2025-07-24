@@ -1,11 +1,29 @@
 {
   "name": "kids-quiz",
   "version": "1.0.0",
-  "description": "Backend for web app which builds quizzes for kids with PostgreSQL db and Express",
+  "type": "commonjs",
+  "description": "Backend for web app which builds quizzes for kids with PostgreSQL and Express",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "npx nodemon src/index.ts",
+    "test": "vitest --run"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "drizzle-orm": "^0.44.3",
+    "express": "^5.1.0",
+    "postgres": "^3.4.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.1.0",
+    "drizzle-kit": "^0.31.4",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
 }
