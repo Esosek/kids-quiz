@@ -1,0 +1,11 @@
+{
+  "name": "kids-quiz",
+  "version": "1.0.0",
+  "description": "Backend for web app which builds quizzes for kids with PostgreSQL db and Express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
