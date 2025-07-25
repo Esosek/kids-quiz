@@ -2,11 +2,19 @@ import { NextFunction, Request, Response } from 'express'
 
 import { createUser } from '../db/queries/users'
 import { ValidationError } from '../types/errors'
+import { hashPassword } from 'src/auth'
 
-export async function handlerCreateUser(req: Request, res: Response, next: NextFunction) {
+export async function handlerCreateUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { username, password } = validateInput(req.body)
-    const userResponse = await createUser(username, hashPassword(password))
+    const userResponse = await createUser(
+      username,
+      await hashPassword(password)
+    )
     res.status(201).json(userResponse)
   } catch (error) {
     next(error)
@@ -30,9 +38,4 @@ function validateInput(reqBody: any) {
     throw new ValidationError(validationErrors.join(', '))
   }
   return { username: reqBody.username, password: reqBody.password }
-}
-
-function hashPassword(password: string) {
-  // TODO: Implement password hashing
-  return password
 }
