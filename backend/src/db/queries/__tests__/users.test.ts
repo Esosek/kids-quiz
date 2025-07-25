@@ -3,7 +3,7 @@ import { describe, it, vi, expect } from 'vitest'
 import { createUser } from '../users'
 
 const userId = 'a81bc81b-dead-4e5d-abff-90865d1e13b1'
-const nickname = 'CactoHippoTanto'
+const username = 'CactoHippoTanto'
 const hashedPassword = 'password'
 
 vi.mock('../users', () => {
@@ -13,7 +13,7 @@ vi.mock('../users', () => {
         id: userId,
         createdAt: '',
         updatedAt: '',
-        nickname,
+        username,
         currency: 0,
       }
     }),
@@ -22,12 +22,12 @@ vi.mock('../users', () => {
 
 describe('Creating user', () => {
   it('should return a user response in correct format', async () => {
-    const result = await createUser(nickname, hashedPassword)
+    const result = await createUser(username, hashedPassword)
 
     expect(result.id).toBeTypeOf('string')
     expect(result.createdAt).toBeTypeOf('string')
     expect(result.updatedAt).toBeTypeOf('string')
-    expect(result.nickname).equals(nickname)
+    expect(result.username).equals(username)
     expect(result.currency).equals(0)
   })
 })

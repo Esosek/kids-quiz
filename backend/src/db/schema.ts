@@ -9,7 +9,7 @@ export const users = pgTable('users', {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-  nickname: varchar('nickname', { length: 256 }).unique().notNull(),
+  username: varchar('username', { length: 64 }).unique().notNull(),
   hashedPassword: varchar('hashed_password').default('unset').notNull(),
   currency: integer('currency').default(0).notNull(),
 })
