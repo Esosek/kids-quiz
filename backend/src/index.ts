@@ -1,5 +1,5 @@
 import express from 'express'
-import { handlerCreateUser } from './handlers/usersHandler'
+import { handlerCreateUser } from './handlers/users_handler'
 
 const app = express()
 const PORT = 8080

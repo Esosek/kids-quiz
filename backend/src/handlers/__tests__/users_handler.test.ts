@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Request, Response } from 'express'
 
-import { handlerCreateUser } from '../usersHandler'
+import { handlerCreateUser } from '../users_handler'
 
 const userId = 'a81bc81b-dead-4e5d-abff-90865d1e13b1'
 const username = 'CactoHippoTanto'
@@ -51,7 +51,10 @@ describe('Create users handler', () => {
     await handlerCreateUser(req, res, next)
 
     expect(res.status).toHaveBeenCalledWith(201)
-    expect(res.json).toHaveBeenCalledWith({ ...userResponse, username: req.body.username })
+    expect(res.json).toHaveBeenCalledWith({
+      ...userResponse,
+      username: req.body.username,
+    })
   })
 
   it('should throw an error when username is missing', async () => {
@@ -80,7 +83,9 @@ describe('Create users handler', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(Error)
-    expect(firstCallArgument.message).toEqual('Username must be between 3 and 32 characters long')
+    expect(firstCallArgument.message).toEqual(
+      'Username must be between 3 and 32 characters long'
+    )
   })
 
   it('should throw an error when username is too long', async () => {
@@ -95,7 +100,9 @@ describe('Create users handler', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(Error)
-    expect(firstCallArgument.message).toEqual('Username must be between 3 and 32 characters long')
+    expect(firstCallArgument.message).toEqual(
+      'Username must be between 3 and 32 characters long'
+    )
   })
 
   it('should throw an error when password is missing', async () => {
@@ -124,14 +131,17 @@ describe('Create users handler', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(Error)
-    expect(firstCallArgument.message).toEqual('Password must be between 8 and 64 characters long')
+    expect(firstCallArgument.message).toEqual(
+      'Password must be between 8 and 64 characters long'
+    )
   })
 
   it('should throw an error when password is too long', async () => {
     const req = {
       body: {
         username,
-        password: '1HsYBnyeHpLTWDXlkt51esafPHZKPVkU6ynodziAI9NTRGhfJwmy6385n2UboTBoC',
+        password:
+          '1HsYBnyeHpLTWDXlkt51esafPHZKPVkU6ynodziAI9NTRGhfJwmy6385n2UboTBoC',
       },
     } as Request
 
@@ -139,6 +149,8 @@ describe('Create users handler', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(Error)
-    expect(firstCallArgument.message).toEqual('Password must be between 8 and 64 characters long')
+    expect(firstCallArgument.message).toEqual(
+      'Password must be between 8 and 64 characters long'
+    )
   })
 })
