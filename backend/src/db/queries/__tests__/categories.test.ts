@@ -9,13 +9,13 @@ const { MOCK_DATA } = vi.hoisted(() => ({
       id: '07b43f0b-9b59-4ca7-8225-3b0c09c64b53',
       createdAt: new Date(),
       updatedAt: new Date(),
-      label: 'Dopravní značky I',
+      label: 'Dopravní značky',
     },
     {
       id: 'ad050506-e87e-4cc0-8753-076401420f53',
       createdAt: new Date(),
       updatedAt: new Date(),
-      label: 'Vesmír I',
+      label: 'Vesmír',
     },
   ] as Category[],
 }))
