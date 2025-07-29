@@ -13,3 +13,26 @@ export const users = pgTable('users', {
   hashedPassword: varchar('hashed_password').default('unset').notNull(),
   currency: integer('currency').default(0).notNull(),
 })
+
+export const categories = pgTable('categories', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  label: varchar('label', { length: 64 }).unique().notNull(),
+})
+
+export const subcategories = pgTable('subcategories', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  label: varchar('label', { length: 64 }).unique().notNull(),
+  categoryId: uuid('category_id').references(() => categories.id, {
+    onDelete: 'set null',
+  }),
+})

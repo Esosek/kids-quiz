@@ -15,6 +15,13 @@
       "when": 1753367807306,
       "tag": "0001_special_grim_reaper",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753788707769,
+      "tag": "0002_simple_salo",
+      "breakpoints": true
     }
   ]
 }
