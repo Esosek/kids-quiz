@@ -2,7 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Response, Request } from 'express'
 
 import errorHandler from '../error_handler'
-import { NotFoundError, ValidationError } from '../../types/errors'
+import {
+  AuthenticationError,
+  AuthorizationError,
+  NotFoundError,
+  ValidationError,
+} from '../../types/errors'
 
 describe('errorHandler', () => {
   let res: Response
@@ -16,13 +21,6 @@ describe('errorHandler', () => {
       send: vi.fn(),
     } as unknown as Response
   })
-  it('should call res.status with 404 when handling NotFoundError', () => {
-    const error = new NotFoundError('Username not found')
-    errorHandler(error, req, res, next)
-
-    expect(res.status).toHaveBeenCalledWith(404)
-    expect(res.send).toHaveBeenCalledWith('Not Found')
-  })
 
   it('should call res.status with 400 when handling ValidationError', () => {
     const error = new ValidationError('Missing username')
@@ -30,6 +28,22 @@ describe('errorHandler', () => {
 
     expect(res.status).toHaveBeenCalledWith(400)
     expect(res.json).toHaveBeenCalledWith({ error: error.message })
+  })
+
+  it('should call res.status with 401 when handling AuthorizationError', () => {
+    const error = new AuthenticationError('Unauthorized')
+    errorHandler(error, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(401)
+    expect(res.send).toHaveBeenCalledWith('Unauthorized')
+  })
+
+  it('should call res.status with 404 when handling NotFoundError', () => {
+    const error = new NotFoundError('Username not found')
+    errorHandler(error, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(404)
+    expect(res.send).toHaveBeenCalledWith('Not Found')
   })
 
   it('should call res.status with 500 when handling generic Error', () => {
