@@ -7,6 +7,7 @@ const config = {
       migrationsFolder: './src/db/migrations',
     },
   },
+  jwtSecret: envOrThrow('JWT_SECRET_KEY'),
 }
 
 function envOrThrow(key: string) {

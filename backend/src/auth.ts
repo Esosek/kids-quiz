@@ -1,4 +1,9 @@
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+
+import { AuthenticationError } from './types/errors'
+
+const MAX_JWT_EXPIRATION = 60 * 24 * 14 // 14 days
 
 export async function hashPassword(password: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
@@ -15,10 +20,33 @@ export async function hashPassword(password: string): Promise<string> {
   })
 }
 
-export function createJWT() {
-  // TODO: Implement createJWT
+type Payload = Pick<jwt.JwtPayload, 'iss' | 'sub' | 'iat' | 'exp'>
+
+export function createJWT(
+  userId: string,
+  secret: string,
+  expiresIn = MAX_JWT_EXPIRATION
+): string {
+  const issuedAt = Math.floor(Date.now() / 1000)
+  const payload: Payload = {
+    iss: 'kids_quiz',
+    sub: userId,
+    iat: issuedAt,
+    exp: issuedAt + expiresIn,
+  }
+  return jwt.sign(payload, secret)
 }
 
-export function validateJWT() {
-  // TODO: Implement validateJWT
+// returns userId
+export function validateJWT(token: string, secret: string): string {
+  try {
+    const payload = jwt.verify(token, secret)
+    if (payload.sub && typeof payload.sub === 'string') {
+      return payload.sub
+    } else {
+      throw new Error('JWT payload sub is missing or in wrong format')
+    }
+  } catch (err) {
+    throw new AuthenticationError('JWT token is invalid')
+  }
 }
