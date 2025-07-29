@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 
+import config from '../config'
 import { createUser } from '../db/queries/users'
 import { ValidationError } from '../types/errors'
-import { hashPassword } from '../auth'
+import { createJWT, hashPassword } from '../auth'
 
 export async function handlerCreateUser(
   req: Request,
@@ -15,7 +16,15 @@ export async function handlerCreateUser(
       username,
       await hashPassword(password)
     )
-    res.status(201).json(userResponse)
+    const jwt = createJWT(userResponse.id, config.jwtSecret)
+    const cookieAge = 1000 * 60 * 60 * 24 * 14 // 14 days
+
+    res.cookie('kidsqz_l', jwt, {
+      maxAge: cookieAge,
+      httpOnly: true,
+      secure: true,
+    })
+    res.status(201).json({ ...userResponse, token: jwt })
   } catch (error) {
     next(error)
   }

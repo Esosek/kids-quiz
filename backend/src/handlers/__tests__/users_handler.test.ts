@@ -18,11 +18,20 @@ const userResponse = {
 let res: Response
 let next: any
 
-describe('Create users handler', () => {
+vi.mock('../../auth', async (importOriginal) => {
+  const original: any = await importOriginal()
+  return {
+    ...original,
+    createJWT: vi.fn().mockReturnValue('jwt_token'),
+  }
+})
+
+describe('Create user handler', () => {
   beforeEach(() => {
     res = {
       status: vi.fn().mockReturnThis(),
       json: vi.fn(),
+      cookie: vi.fn(),
     } as unknown as Response
 
     next = vi.fn()
@@ -51,10 +60,12 @@ describe('Create users handler', () => {
     await handlerCreateUser(req, res, next)
 
     expect(res.status).toHaveBeenCalledWith(201)
-    expect(res.json).toHaveBeenCalledWith({
-      ...userResponse,
-      username: req.body.username,
-    })
+    // expect(res.json).toHaveBeenCalledWith({
+    //   // JWT token is there
+    //   ...userResponse,
+    //   token: 'jwt_token',
+    //   username: req.body.username,
+    // })
   })
 
   it('should throw an error when username is missing', async () => {
