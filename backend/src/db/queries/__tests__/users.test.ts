@@ -1,8 +1,7 @@
-import { describe, it, vi, expect, beforeAll } from 'vitest'
+import { describe, it, vi, expect } from 'vitest'
 
 import { createUser, getUserByName, updateUser } from '../users'
-import { NotFoundError } from 'src/types/errors'
-import { hashPassword } from 'src/auth'
+import { NotFoundError, ValidationError } from '../../../types/errors'
 
 const { USER_ID, USERNAME, PASSWORD } = vi.hoisted(() => ({
   USER_ID: 'a81bc81b-dead-4e5d-abff-90865d1e13b1',
@@ -38,6 +37,7 @@ vi.mock('../../../db/index', () => {
         }),
       })),
       returning: vi.fn().mockResolvedValue([userResponse]),
+      onConflictDoNothing: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
       from: vi.fn().mockReturnValue({
         where: vi.fn((isTrue: boolean) => {
@@ -60,7 +60,7 @@ vi.mock('drizzle-orm', () => ({
 
 describe('Creating user', () => {
   it('should return a user response in correct format', async () => {
-    const result = await createUser(USERNAME, await hashPassword(PASSWORD))
+    const result = await createUser(USERNAME, PASSWORD)
     expect(result.id).toBeTypeOf('string')
     expect(result.createdAt).toBeTypeOf('string')
     expect(result.updatedAt).toBeTypeOf('string')

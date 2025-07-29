@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { NotFoundError, ValidationError } from 'src/types/errors'
+import { NotFoundError, ValidationError } from '../types/errors'
 
 function errorHandler(
   err: Error,

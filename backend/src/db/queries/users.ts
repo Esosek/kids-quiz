@@ -2,8 +2,8 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '../../db/index'
 import { type User, users } from '../../db/schema'
-import { NotFoundError } from 'src/types/errors'
-import { hashPassword } from 'src/auth'
+import { NotFoundError, ValidationError } from '../../types/errors'
+import { hashPassword } from '../../auth'
 
 type UserResponse = Omit<User, 'hashedPassword'>
 
@@ -15,11 +15,17 @@ export async function createUser(
     const [result] = await db
       .insert(users)
       .values({ username, hashedPassword: await hashPassword(password) })
+      .onConflictDoNothing()
       .returning()
+    if (!result) {
+      throw new ValidationError('User already exists')
+    }
     const { hashedPassword, ...userResponse } = result
     return userResponse
   } catch (error) {
-    throw new Error('Creating user failed')
+    if (error instanceof ValidationError) {
+      throw error
+    } else throw new Error('Creating user failed')
   }
 }
 

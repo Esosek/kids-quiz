@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 
 import { getCategories, createCategory } from '../categories'
-import { type Category } from 'src/db/schema'
+import { type Category } from '../../../db/schema'
 
 const { MOCK_DATA } = vi.hoisted(() => ({
   MOCK_DATA: [
@@ -28,6 +28,7 @@ vi.mock('../../../db/index', () => {
       insert: vi.fn().mockReturnThis(),
       values: vi.fn((values) => {
         return {
+          onConflictDoNothing: vi.fn().mockReturnThis(),
           returning: vi
             .fn()
             .mockReturnValue([{ ...MOCK_DATA[0], label: values.label }]),

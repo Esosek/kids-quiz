@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Response, Request } from 'express'
 
 import errorHandler from '../error_handler'
-import { NotFoundError, ValidationError } from 'src/types/errors'
+import { NotFoundError, ValidationError } from '../../types/errors'
 
 describe('errorHandler', () => {
   let res: Response

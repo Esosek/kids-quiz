@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import { createUser } from '../db/queries/users'
 import { ValidationError } from '../types/errors'
-import { hashPassword } from 'src/auth'
+import { hashPassword } from '../auth'
 
 export async function handlerCreateUser(
   req: Request,

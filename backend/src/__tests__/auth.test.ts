@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { hashPassword } from 'src/auth'
+import { hashPassword } from '../auth'
 
 const password = 'password'
 
