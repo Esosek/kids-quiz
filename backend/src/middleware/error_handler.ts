@@ -9,13 +9,13 @@ function errorHandler(
   _next: NextFunction
 ) {
   if (err instanceof NotFoundError) {
-    console.log(err.message)
+    // console.log(err.message)
     res.status(404).send('Not Found')
   } else if (err instanceof ValidationError) {
-    console.log(err.message)
+    // console.log(err.message)
     res.status(400).json({ error: err.message })
   } else {
-    console.log(err)
+    // console.log(err)
     res.status(500).send('Internal Server Error')
   }
 }

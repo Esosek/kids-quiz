@@ -1,6 +1,7 @@
 import { pgTable, timestamp, uuid, varchar, integer } from 'drizzle-orm/pg-core'
 
 export type User = typeof users.$inferSelect
+export type Category = typeof categories.$inferSelect
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),

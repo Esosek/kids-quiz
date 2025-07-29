@@ -19,7 +19,6 @@ export async function createUser(
     const { hashedPassword, ...userResponse } = result
     return userResponse
   } catch (error) {
-    console.log(error)
     throw new Error('Creating user failed')
   }
 }
