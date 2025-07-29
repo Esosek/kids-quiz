@@ -1,0 +1,42 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { Response, Request } from 'express'
+
+import errorHandler from '../error_handler'
+import { NotFoundError, ValidationError } from 'src/types/errors'
+
+describe('errorHandler', () => {
+  let res: Response
+  const req = {} as Request
+  const next = vi.fn()
+
+  beforeEach(() => {
+    res = {
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
+      send: vi.fn(),
+    } as unknown as Response
+  })
+  it('should call res.status with 404 when handling NotFoundError', () => {
+    const error = new NotFoundError('Username not found')
+    errorHandler(error, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(404)
+    expect(res.send).toHaveBeenCalledWith('Not Found')
+  })
+
+  it('should call res.status with 400 when handling ValidationError', () => {
+    const error = new ValidationError('Missing username')
+    errorHandler(error, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(400)
+    expect(res.json).toHaveBeenCalledWith({ error: error.message })
+  })
+
+  it('should call res.status with 500 when handling generic Error', () => {
+    const error = new Error('')
+    errorHandler(error, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(500)
+    expect(res.send).toHaveBeenCalledWith('Internal Server Error')
+  })
+})
