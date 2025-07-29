@@ -4,17 +4,18 @@ import { createUser, getUserByName, updateUser } from '../users'
 import { NotFoundError } from 'src/types/errors'
 import { hashPassword } from 'src/auth'
 
-const USER_ID = 'a81bc81b-dead-4e5d-abff-90865d1e13b1'
-const USERNAME = 'CactoHippoTanto'
-const PASSWORD = 'password'
+const { USER_ID, USERNAME, PASSWORD } = vi.hoisted(() => ({
+  USER_ID: 'a81bc81b-dead-4e5d-abff-90865d1e13b1',
+  USERNAME: 'CactoHippoTanto',
+  PASSWORD: 'password',
+}))
 
 vi.mock('../../../db/index', () => {
-  const userId = 'a81bc81b-dead-4e5d-abff-90865d1e13b1'
   const userResponse = {
-    id: userId,
+    id: USER_ID,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    username: 'CactoHippoTanto',
+    username: USERNAME,
     currency: 0,
   }
 

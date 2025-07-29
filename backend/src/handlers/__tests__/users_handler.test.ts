@@ -3,15 +3,15 @@ import { Request, Response } from 'express'
 
 import { handlerCreateUser } from '../users_handler'
 
-const userId = 'a81bc81b-dead-4e5d-abff-90865d1e13b1'
-const username = 'CactoHippoTanto'
-const hashedPassword = 'password'
+const USER_ID = 'a81bc81b-dead-4e5d-abff-90865d1e13b1'
+const USERNAME = 'CactoHippoTanto'
+const HASHED_PASSWORD = 'password'
 
 const userResponse = {
-  id: userId,
+  id: USER_ID,
   createdAt: '',
   updatedAt: '',
-  username,
+  username: USERNAME,
   currency: 0,
 }
 
@@ -30,10 +30,10 @@ describe('Create users handler', () => {
       return {
         createUser: vi.fn(() => {
           return {
-            id: userId,
+            id: USER_ID,
             createdAt: '',
             updatedAt: '',
-            username,
+            username: USERNAME,
             currency: 0,
           }
         }),
@@ -43,8 +43,8 @@ describe('Create users handler', () => {
   it('should successfully create a user', async () => {
     const req = {
       body: {
-        username,
-        password: hashedPassword,
+        username: USERNAME,
+        password: HASHED_PASSWORD,
       },
     } as Request
 
@@ -60,7 +60,7 @@ describe('Create users handler', () => {
   it('should throw an error when username is missing', async () => {
     const req = {
       body: {
-        password: hashedPassword,
+        password: HASHED_PASSWORD,
       },
     } as Request
 
@@ -75,7 +75,7 @@ describe('Create users handler', () => {
     const req = {
       body: {
         username: 'AB',
-        password: hashedPassword,
+        password: HASHED_PASSWORD,
       },
     } as Request
 
@@ -92,7 +92,7 @@ describe('Create users handler', () => {
     const req = {
       body: {
         username: 'thisisa34characterslongusernamebro',
-        password: hashedPassword,
+        password: HASHED_PASSWORD,
       },
     } as Request
 
@@ -108,7 +108,7 @@ describe('Create users handler', () => {
   it('should throw an error when password is missing', async () => {
     const req = {
       body: {
-        username,
+        username: USERNAME,
       },
     } as Request
 
@@ -122,7 +122,7 @@ describe('Create users handler', () => {
   it('should throw an error when password is too short', async () => {
     const req = {
       body: {
-        username,
+        username: USERNAME,
         password: '1234567',
       },
     } as Request
@@ -139,7 +139,7 @@ describe('Create users handler', () => {
   it('should throw an error when password is too long', async () => {
     const req = {
       body: {
-        username,
+        username: USERNAME,
         password:
           '1HsYBnyeHpLTWDXlkt51esafPHZKPVkU6ynodziAI9NTRGhfJwmy6385n2UboTBoC',
       },
