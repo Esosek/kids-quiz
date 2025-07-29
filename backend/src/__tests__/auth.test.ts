@@ -1,17 +1,34 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, beforeAll } from 'vitest'
 
-import { hashPassword, createJWT, validateJWT } from '../auth'
+import {
+  hashPassword,
+  createJWT,
+  validateJWT,
+  checkPasswordHash,
+} from '../auth'
 import { AuthenticationError } from '../types/errors'
 
-describe('Auth', () => {
-  const password = 'password'
-  it('should hash a password', async () => {
-    const hashedPassword = await hashPassword(password)
-    expect(hashedPassword).not.toEqual(password)
+describe('Password Hashing', () => {
+  const password1 = 'correctPassword123!'
+  const password2 = 'anotherPassword456!'
+  let hash1: string
+
+  beforeAll(async () => {
+    hash1 = await hashPassword(password1)
+  })
+
+  it('should return true for the correct password', async () => {
+    const result = await checkPasswordHash(password1, hash1)
+    expect(result).toBe(true)
+  })
+
+  it('should return false for the wrong password', async () => {
+    const result = await checkPasswordHash(password2, hash1)
+    expect(result).toBe(false)
   })
 })
 
-describe('JWT', () => {
+describe('JWT authentication', () => {
   const userId = '06b17ade-0f03-4de2-9f6e-d96c809504f6'
   const secret1 = 'ballerina'
   const secret2 = 'capuccina'

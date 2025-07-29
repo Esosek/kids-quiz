@@ -20,6 +20,20 @@ export async function hashPassword(password: string): Promise<string> {
   })
 }
 
+export async function checkPasswordHash(
+  password: string,
+  hash: string
+): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) => {
+    bcrypt.compare(password, hash, (err, result) => {
+      if (err) {
+        reject(new Error('Failed to check password hash'))
+      }
+      resolve(result)
+    })
+  })
+}
+
 type Payload = Pick<jwt.JwtPayload, 'iss' | 'sub' | 'iat' | 'exp'>
 
 export function createJWT(
