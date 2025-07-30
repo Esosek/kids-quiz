@@ -13,9 +13,7 @@ export async function handlerLogin(
 ) {
   try {
     const validatedBody = validateInput(req.body)
-    console.log('Body validated')
     const user = await getUserByName(validatedBody.username)
-    console.log('This should not be reached')
     const isPasswordCorrect = await checkPasswordHash(
       validatedBody.password,
       user.hashedPassword
@@ -29,7 +27,6 @@ export async function handlerLogin(
     setResCookie(config.jwt.cookieName, jwt, res)
     res.status(200).json({ ...userResponse, token: jwt })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }

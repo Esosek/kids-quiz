@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { AuthenticationError } from './types/errors'
+import { Request } from 'express'
 
 const MAX_JWT_EXPIRATION = 60 * 24 * 14 // 14 days
 
@@ -63,4 +64,12 @@ export function validateJWT(token: string, secret: string): string {
   } catch (err) {
     throw new AuthenticationError('JWT token is invalid')
   }
+}
+
+export function getBearerToken(req: Request) {
+  const authHeader = req.get('Authorization')
+  if (!authHeader) {
+    throw new AuthenticationError('Authorization header is missing')
+  }
+  return authHeader.split(' ')[1]
 }

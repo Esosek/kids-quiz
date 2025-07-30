@@ -1,10 +1,12 @@
 import { describe, it, expect, beforeEach, beforeAll } from 'vitest'
+import { Request } from 'express'
 
 import {
   hashPassword,
   createJWT,
   validateJWT,
   checkPasswordHash,
+  getBearerToken,
 } from '../auth'
 import { AuthenticationError } from '../types/errors'
 
@@ -67,5 +69,29 @@ describe('JWT authentication', () => {
     })
 
     expect(() => validateJWT(token, secret1)).toThrowError()
+  })
+})
+
+describe('Get bearer token', () => {
+  const bearerToken = 'beerer'
+  it('returns the token when present', () => {
+    const req = {
+      get: (key: string) => {
+        if (key === 'Authorization') {
+          return `Bearer ${bearerToken}`
+        } else return undefined
+      },
+    } as Request
+
+    const token = getBearerToken(req)
+    expect(token).toBe(bearerToken)
+  })
+
+  it('throws Authorization error when token is missing', () => {
+    const req = {
+      get: (_) => undefined,
+    } as Request
+
+    expect(() => getBearerToken(req)).toThrow(AuthenticationError)
   })
 })

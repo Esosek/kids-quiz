@@ -16,11 +16,9 @@ const { MOCK_USER } = vi.hoisted(() => ({
 
 vi.mock('../../db/queries/users', () => ({
   getUserByName: vi.fn((username: string) => {
-    console.log('Getting user by name', username)
     if (username === MOCK_USER.username) {
       return MOCK_USER
     } else {
-      console.log('throwing')
       throw new NotFoundError('User not found')
     }
   }),
