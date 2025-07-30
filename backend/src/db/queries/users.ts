@@ -14,7 +14,7 @@ export async function createUser(
   try {
     const [result] = await db
       .insert(users)
-      .values({ username, hashedPassword: await hashPassword(password) })
+      .values({ username, hashedPassword: password })
       .onConflictDoNothing()
       .returning()
     if (!result) {

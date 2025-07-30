@@ -7,7 +7,10 @@ const config = {
       migrationsFolder: './src/db/migrations',
     },
   },
-  jwtSecret: envOrThrow('JWT_SECRET_KEY'),
+  jwt: {
+    secret: envOrThrow('JWT_SECRET_KEY'),
+    cookieName: 'kidsqz_l',
+  },
 }
 
 function envOrThrow(key: string) {

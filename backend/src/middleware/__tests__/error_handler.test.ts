@@ -35,7 +35,15 @@ describe('errorHandler', () => {
     errorHandler(error, req, res, next)
 
     expect(res.status).toHaveBeenCalledWith(401)
-    expect(res.send).toHaveBeenCalledWith('Unauthorized')
+    expect(res.send).toHaveBeenCalledWith({ error: error.message })
+  })
+
+  it('should call res.status with 403 when handling AuthorizationError', () => {
+    const error = new AuthorizationError('Forbidden')
+    errorHandler(error, req, res, next)
+
+    expect(res.status).toHaveBeenCalledWith(403)
+    expect(res.send).toHaveBeenCalledWith('Forbidden')
   })
 
   it('should call res.status with 404 when handling NotFoundError', () => {

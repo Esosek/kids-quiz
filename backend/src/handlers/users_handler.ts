@@ -4,6 +4,7 @@ import config from '../config'
 import { createUser } from '../db/queries/users'
 import { ValidationError } from '../types/errors'
 import { createJWT, hashPassword } from '../auth'
+import { setResCookie } from '../utils'
 
 export async function handlerCreateUser(
   req: Request,
@@ -16,14 +17,9 @@ export async function handlerCreateUser(
       username,
       await hashPassword(password)
     )
-    const jwt = createJWT(userResponse.id, config.jwtSecret)
-    const cookieAge = 1000 * 60 * 60 * 24 * 14 // 14 days
+    const jwt = createJWT(userResponse.id, config.jwt.secret)
 
-    res.cookie('kidsqz_l', jwt, {
-      maxAge: cookieAge,
-      httpOnly: true,
-      secure: true,
-    })
+    setResCookie(config.jwt.cookieName, jwt, res)
     res.status(201).json({ ...userResponse, token: jwt })
   } catch (error) {
     next(error)

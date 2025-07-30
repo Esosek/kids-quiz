@@ -60,12 +60,12 @@ describe('Create user handler', () => {
     await handlerCreateUser(req, res, next)
 
     expect(res.status).toHaveBeenCalledWith(201)
-    // expect(res.json).toHaveBeenCalledWith({
-    //   // JWT token is there
-    //   ...userResponse,
-    //   token: 'jwt_token',
-    //   username: req.body.username,
-    // })
+    expect(res.json).toHaveBeenCalledWith({
+      // JWT token is there
+      ...userResponse,
+      token: 'jwt_token',
+      username: req.body.username,
+    })
   })
 
   it('should throw an error when username is missing', async () => {
