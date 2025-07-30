@@ -108,4 +108,13 @@ describe('Updating user', () => {
     expect(result.username).toBe(USERNAME)
     expect(result.currency).toBe(updatedUserData.currency)
   })
+
+  it('should throw ValidationError if username already exitsts', async () => {
+    const fn = async () =>
+      await updateUser(USER_ID, {
+        username: USERNAME,
+      })
+
+    await expect(fn()).rejects.toThrow(ValidationError)
+  })
 })

@@ -4,7 +4,7 @@ import { AuthenticationError, ValidationError } from '../types/errors'
 import { getUserByName } from '../db/queries/users'
 import { checkPasswordHash, createJWT } from '../auth'
 import config from '../config'
-import { setResCookie } from 'src/utils'
+import { setResCookie } from '../utils'
 
 export async function handlerLogin(
   req: Request,

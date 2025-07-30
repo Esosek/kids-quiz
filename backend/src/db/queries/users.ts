@@ -3,7 +3,6 @@ import { eq } from 'drizzle-orm'
 import { db } from '../../db/index'
 import { type User, users } from '../../db/schema'
 import { NotFoundError, ValidationError } from '../../types/errors'
-import { hashPassword } from '../../auth'
 
 type UserResponse = Omit<User, 'hashedPassword'>
 
@@ -57,6 +56,15 @@ export async function updateUser(
   userData: UserData
 ): Promise<UserResponse> {
   try {
+    if (userData.username) {
+      const [result] = await db
+        .select()
+        .from(users)
+        .where(eq(users.username, userData.username))
+      if (result) {
+        throw new ValidationError(`User ${userData.username} already exists`)
+      }
+    }
     const [result] = await db
       .update(users)
       .set(userData)
@@ -68,7 +76,7 @@ export async function updateUser(
     const { hashedPassword, ...userResponse } = result
     return userResponse
   } catch (error) {
-    if (error instanceof NotFoundError) {
+    if (error instanceof NotFoundError || error instanceof ValidationError) {
       throw error
     } else throw new Error('Updating user failed')
   }
