@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeAll, beforeEach, Mock } from 'vitest'
 import { NextFunction, Request, Response } from 'express'
 
-import { handlerLogin } from '../login_handler'
+import { handlerLogin } from '../login'
 import { hashPassword } from '../../auth'
 import { AuthenticationError, NotFoundError } from '../../types/errors'
 

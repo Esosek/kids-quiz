@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Request, Response } from 'express'
 
-import { handlerCreateUser } from '../users_handler'
+import { handlerCreateUser } from '../create_user'
 
 const USER_ID = 'a81bc81b-dead-4e5d-abff-90865d1e13b1'
 const USERNAME = 'CactoHippoTanto'

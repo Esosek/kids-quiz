@@ -1,8 +1,8 @@
 import express from 'express'
 
 import errorHandler from './middleware/error_handler'
-import { handlerCreateUser } from './handlers/users_handler'
-import { handlerLogin } from './handlers/login_handler'
+import { handlerCreateUser } from './handlers/create_user'
+import { handlerLogin } from './handlers/login'
 
 const app = express()
 const PORT = 8080
