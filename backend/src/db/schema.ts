@@ -1,8 +1,16 @@
-import { pgTable, timestamp, uuid, varchar, integer } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  timestamp,
+  uuid,
+  varchar,
+  integer,
+  text,
+} from 'drizzle-orm/pg-core'
 
 export type User = typeof users.$inferSelect
 export type Category = typeof categories.$inferSelect
 export type Subcategory = typeof subcategories.$inferSelect
+export type Question = typeof questions.$inferSelect
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -37,4 +45,21 @@ export const subcategories = pgTable('subcategories', {
   categoryId: uuid('category_id').references(() => categories.id, {
     onDelete: 'set null',
   }),
+})
+
+export const questions = pgTable('questions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at')
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  text: text('text'),
+  answer: text('answer').unique().notNull(),
+  imgUrl: varchar('img_url'),
+  subcategoryId: uuid('subcategory_id')
+    .notNull()
+    .references(() => subcategories.id, {
+      onDelete: 'cascade',
+    }),
 })
