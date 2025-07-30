@@ -29,7 +29,7 @@ export async function createUser(
   }
 }
 
-export async function getUserByName(username: string): Promise<UserResponse> {
+export async function getUserByName(username: string): Promise<User> {
   try {
     const [result] = await db
       .select()
@@ -38,8 +38,7 @@ export async function getUserByName(username: string): Promise<UserResponse> {
     if (!result) {
       throw new NotFoundError('User not found')
     }
-    const { hashedPassword, ...userResponse } = result
-    return userResponse
+    return result
   } catch (error) {
     if (error instanceof NotFoundError) {
       throw error

@@ -42,7 +42,7 @@ vi.mock('../../../db/index', () => {
       from: vi.fn().mockReturnValue({
         where: vi.fn((isTrue: boolean) => {
           if (isTrue) {
-            return [userResponse]
+            return [{ ...userResponse, hashedPassword: PASSWORD }]
           } else {
             return []
           }
@@ -70,9 +70,10 @@ describe('Creating user', () => {
 })
 
 describe('Getting user by name', () => {
-  it('should return a user response if it exists', async () => {
+  it('should return a user if it exists', async () => {
     const result = await getUserByName(USERNAME)
     expect(result.username).toEqual(USERNAME)
+    expect(result.hashedPassword).toEqual(PASSWORD)
   })
 
   it("should throw NotFoundError if user doesn't exist", async () => {
