@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
+import validator from 'validator'
 
 import config from '../config'
 import { getBearerToken, validateJWT } from '../auth'
@@ -41,8 +42,8 @@ function validateBody(reqBody: any): QuestionInput {
 
   if (!reqBody.subcategoryId) {
     validationErrors.push('Missing subcategoryId field')
-  } else if (typeof reqBody.subcategoryId !== 'string') {
-    validationErrors.push('SubcategoryId must be a string')
+  } else if (!validator.isUUID(reqBody.subcategoryId)) {
+    validationErrors.push('SubcategoryId must be an UUID')
   }
 
   if (!reqBody.imgUrl && !reqBody.text) {

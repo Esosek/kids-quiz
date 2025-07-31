@@ -21,7 +21,7 @@ function errorHandler(
   } else if (err instanceof AuthorizationError) {
     res.status(403).send('Forbidden')
   } else if (err instanceof NotFoundError) {
-    res.status(404).send('Not Found')
+    res.status(404).send({ error: err.message })
   } else {
     res.status(500).send('Internal Server Error')
   }

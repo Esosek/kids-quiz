@@ -1,7 +1,8 @@
 import { eq } from 'drizzle-orm'
 
 import { db } from '../../db/index'
-import { questions, type Question } from '../schema'
+import { questions, subcategories, type Question } from '../schema'
+import { NotFoundError } from '../../types/errors'
 
 export type QuestionInput = {
   answer: string
@@ -14,10 +15,24 @@ export async function createQuestion(
   question: QuestionInput
 ): Promise<Question> {
   try {
-    const [result] = await db.insert(questions).values(question).returning()
-    return result
+    const [subcategory] = await db
+      .select()
+      .from(subcategories)
+      .where(eq(subcategories.id, question.subcategoryId))
+
+    if (!subcategory) {
+      throw new NotFoundError(`Subcategory ${question.subcategoryId} not found`)
+    }
+
+    const [createdQuestion] = await db
+      .insert(questions)
+      .values(question)
+      .returning()
+    return createdQuestion
   } catch (error) {
-    throw new Error('Creating question failed')
+    if (error instanceof NotFoundError) {
+      throw error
+    } else throw new Error('Creating question failed')
   }
 }
 
