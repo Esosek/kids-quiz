@@ -12,12 +12,6 @@ export async function handlerCreateQuestion(
   next: NextFunction
 ) {
   try {
-    const token = getBearerToken(req)
-    const userId = validateJWT(token, config.jwt.secret)
-    if (userId !== config.adminUserId) {
-      throw new AuthorizationError('Restricted for basic user')
-    }
-
     const body = validateBody(req.body)
     const createdQuestion = await createQuestion(body)
 
