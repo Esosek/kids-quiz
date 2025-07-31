@@ -15,9 +15,6 @@ const userResponse = {
   currency: 0,
 }
 
-let res: Response
-let next: any
-
 vi.mock('../../auth', async (importOriginal) => {
   const original: any = await importOriginal()
   return {
@@ -27,6 +24,8 @@ vi.mock('../../auth', async (importOriginal) => {
 })
 
 describe('Create user handler', () => {
+  let res: Response
+  let next: any
   beforeEach(() => {
     res = {
       status: vi.fn().mockReturnThis(),

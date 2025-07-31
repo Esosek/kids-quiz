@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm'
 import { db } from '../../db/index'
 import { questions, type Question } from '../schema'
 
-type QuestionInput = {
+export type QuestionInput = {
   answer: string
   subcategoryId: string
   imgUrl?: string

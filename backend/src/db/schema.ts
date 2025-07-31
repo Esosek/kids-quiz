@@ -55,7 +55,7 @@ export const questions = pgTable('questions', {
     .defaultNow()
     .$onUpdate(() => new Date()),
   text: text('text'),
-  answer: text('answer').unique().notNull(),
+  answer: text('answer').notNull(),
   imgUrl: varchar('img_url'),
   subcategoryId: uuid('subcategory_id')
     .notNull()

@@ -11,6 +11,7 @@ const config = {
     secret: envOrThrow('JWT_SECRET_KEY'),
     cookieName: 'kidsqz_l',
   },
+  adminUserId: envOrThrow('ADMIN_USER_ID'),
 }
 
 function envOrThrow(key: string) {
