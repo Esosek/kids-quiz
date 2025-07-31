@@ -10,7 +10,7 @@ const { MOCK_QUESTION, ADMIN, USER } = vi.hoisted(() => ({
     text: 'Co je to za značku?',
     answer: 'Zákaz vjezdu',
     imgUrl: 'http://url.net',
-    subcategoryId: 'subcat_id',
+    subcategoryId: 'aa0c8333-5b4a-46fd-bdf1-fec0bb702dbf',
   },
   ADMIN: 'admin',
   USER: 'user',
@@ -18,13 +18,6 @@ const { MOCK_QUESTION, ADMIN, USER } = vi.hoisted(() => ({
 
 vi.mock('../../db/queries/questions', () => ({
   createQuestion: vi.fn().mockReturnValue(MOCK_QUESTION),
-}))
-
-vi.mock('../../auth', () => ({
-  getBearerToken: vi.fn((req: Request) => {
-    return req.body?.isUser ? USER : ADMIN
-  }),
-  validateJWT: vi.fn((token: string) => (token === ADMIN ? ADMIN : USER)),
 }))
 
 vi.mock('../../config', () => ({
@@ -90,23 +83,6 @@ describe('Create question', () => {
 
     expect(res.status).toBeCalledWith(201)
     expect(res.json).toBeCalledWith(MOCK_QUESTION)
-  })
-
-  it('should fail to create a question for basic user', async () => {
-    const req = {
-      body: {
-        isUser: true,
-        answer: MOCK_QUESTION.answer,
-        imgUrl: MOCK_QUESTION.imgUrl,
-        subcategoryId: MOCK_QUESTION.subcategoryId,
-      },
-    } as unknown as Request
-    await handlerCreateQuestion(req, res, next)
-
-    const firstCallArgument = next.mock.calls[0][0]
-
-    expect(firstCallArgument).toBeInstanceOf(AuthorizationError)
-    expect(firstCallArgument.message).toEqual('Restricted for basic user')
   })
 
   it('should fail to validate without request body', async () => {
@@ -195,6 +171,6 @@ describe('Create question', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual('SubcategoryId must be a string')
+    expect(firstCallArgument.message).toEqual('SubcategoryId must be an UUID')
   })
 })

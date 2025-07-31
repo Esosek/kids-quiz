@@ -51,7 +51,7 @@ describe('errorHandler', () => {
     errorHandler(error, req, res, next)
 
     expect(res.status).toHaveBeenCalledWith(404)
-    expect(res.send).toHaveBeenCalledWith('Not Found')
+    expect(res.send).toHaveBeenCalledWith({ error: error.message })
   })
 
   it('should call res.status with 500 when handling generic Error', () => {

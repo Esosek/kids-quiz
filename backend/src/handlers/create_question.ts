@@ -36,7 +36,10 @@ function validateBody(reqBody: any): QuestionInput {
 
   if (!reqBody.subcategoryId) {
     validationErrors.push('Missing subcategoryId field')
-  } else if (!validator.isUUID(reqBody.subcategoryId)) {
+  } else if (
+    typeof reqBody.subcategoryId !== 'string' ||
+    !validator.isUUID(reqBody.subcategoryId)
+  ) {
     validationErrors.push('SubcategoryId must be an UUID')
   }
 
