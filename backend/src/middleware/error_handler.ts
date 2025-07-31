@@ -13,22 +13,22 @@ function errorHandler(
   res: Response,
   _next: NextFunction
 ) {
+  console.log(`${err.constructor.name}: ${err.message}`)
   if (err instanceof ValidationError) {
-    console.log(err.message)
     res.status(400).json({ error: err.message })
   } else if (err instanceof AuthenticationError) {
-    console.log(err.message)
     res.status(401).send({ error: err.message })
   } else if (err instanceof AuthorizationError) {
-    console.log(err.message)
     res.status(403).send('Forbidden')
   } else if (err instanceof NotFoundError) {
-    console.log(err.message)
     res.status(404).send('Not Found')
   } else {
-    console.log(err)
     res.status(500).send('Internal Server Error')
   }
+}
+
+function logError(error: any) {
+  console.log(error.name)
 }
 
 export default errorHandler
