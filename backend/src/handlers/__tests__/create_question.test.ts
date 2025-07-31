@@ -2,31 +2,18 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Request, Response } from 'express'
 
 import { handlerCreateQuestion } from '../create_question'
-import { AuthorizationError, ValidationError } from '../../types/errors'
+import { ValidationError } from '../../types/errors'
 
-const { MOCK_QUESTION, ADMIN, USER } = vi.hoisted(() => ({
-  MOCK_QUESTION: {
-    id: 'question_id',
-    text: 'Co je to za značku?',
-    answer: 'Zákaz vjezdu',
-    imgUrl: 'http://url.net',
-    subcategoryId: 'aa0c8333-5b4a-46fd-bdf1-fec0bb702dbf',
-  },
-  ADMIN: 'admin',
-  USER: 'user',
+const MOCK_QUESTION = vi.hoisted(() => ({
+  id: 'question_id',
+  text: 'Co je to za značku?',
+  answer: 'Zákaz vjezdu',
+  imgUrl: 'http://url.net',
+  subcategoryId: 'aa0c8333-5b4a-46fd-bdf1-fec0bb702dbf',
 }))
 
 vi.mock('../../db/queries/questions', () => ({
   createQuestion: vi.fn().mockReturnValue(MOCK_QUESTION),
-}))
-
-vi.mock('../../config', () => ({
-  default: {
-    adminUserId: ADMIN,
-    jwt: {
-      secret: 'secret',
-    },
-  },
 }))
 
 describe('Create question', () => {
@@ -50,7 +37,7 @@ describe('Create question', () => {
     next = vi.fn()
   })
 
-  it('should create a question for admin user', async () => {
+  it('should create a question', async () => {
     await handlerCreateQuestion(req, res, next)
 
     expect(res.status).toBeCalledWith(201)
