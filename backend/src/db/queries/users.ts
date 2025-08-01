@@ -45,6 +45,20 @@ export async function getUserByName(username: string): Promise<User> {
   }
 }
 
+export async function getUserById(id: string): Promise<User> {
+  try {
+    const [result] = await db.select().from(users).where(eq(users.id, id))
+    if (!result) {
+      throw new NotFoundError('User not found')
+    }
+    return result
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      throw error
+    } else throw new Error('Retrieving user failed')
+  }
+}
+
 type UserData = {
   username?: string
   hashedPassword?: string
