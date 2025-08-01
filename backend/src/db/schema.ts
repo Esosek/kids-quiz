@@ -13,6 +13,7 @@ export type Category = typeof categories.$inferSelect
 export type Subcategory = typeof subcategories.$inferSelect
 export type Question = typeof questions.$inferSelect
 export type UserUnlock = typeof userUnlocks.$inferSelect
+export type UserAnswer = typeof userAnswers.$inferSelect
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -87,5 +88,26 @@ export const userUnlocks = pgTable(
     return [
       unique('unique_user_subcategory').on(table.userId, table.subcategoryId),
     ]
+  }
+)
+
+export const userAnswers = pgTable(
+  'user_answers',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    questionId: uuid('question_id')
+      .references(() => questions.id, { onDelete: 'cascade' })
+      .notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => {
+    return [unique('unique_user_question').on(table.userId, table.questionId)]
   }
 )
