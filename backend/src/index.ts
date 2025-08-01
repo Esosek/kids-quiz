@@ -11,6 +11,7 @@ import { handlerCreateCategory } from './handlers/create_category'
 import { handlerGetSubcategories } from './handlers/get_subcategories'
 import { handlerCreateSubcategory } from './handlers/create_subcategory'
 import { handlerCreateUserUnlock } from './handlers/create_user_unlock'
+import { handlerCreateUserAnswer } from './handlers/create_user_answer'
 
 const app = express()
 const PORT = 8080
@@ -25,6 +26,7 @@ app.get('/api/subcategories', handlerGetSubcategories)
 app.post('/api/subcategories', checkAdmin, handlerCreateSubcategory)
 app.post('/api/questions', checkAdmin, handlerCreateQuestion)
 app.post('/api/user_unlocks', handlerCreateUserUnlock)
+app.post('/api/user_answers', handlerCreateUserAnswer)
 app.use(errorHandler)
 
 app.listen(PORT, () => {
