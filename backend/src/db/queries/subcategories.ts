@@ -44,3 +44,21 @@ export async function createSubcategory(
     } else throw new Error('Creating subcategory failed')
   }
 }
+
+export async function getSubcategoryById(id: string): Promise<Subcategory> {
+  try {
+    const [subcategory] = await db
+      .select()
+      .from(subcategories)
+      .where(eq(subcategories.id, id))
+
+    if (!subcategory) {
+      throw new NotFoundError(`Subcategory ${id} not found`)
+    }
+    return subcategory
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      throw error
+    } else throw new Error('Retrieving subcategory failed')
+  }
+}
