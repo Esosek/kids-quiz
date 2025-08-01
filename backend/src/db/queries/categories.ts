@@ -1,4 +1,4 @@
-import { ValidationError } from 'src/types/errors'
+import { ValidationError } from '../../types/errors'
 import { db } from '../../db/index'
 import { categories, type Category } from '../../db/schema'
 

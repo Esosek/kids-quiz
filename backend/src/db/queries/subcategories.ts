@@ -1,6 +1,8 @@
-import { ValidationError } from 'src/types/errors'
+import { eq } from 'drizzle-orm'
+
+import { NotFoundError, ValidationError } from '../../types/errors'
 import { db } from '../../db/index'
-import { subcategories, Subcategory } from '../schema'
+import { categories, subcategories, Subcategory } from '../schema'
 
 export async function getSubcategories(): Promise<Subcategory[]> {
   try {
@@ -15,14 +17,29 @@ export async function createSubcategory(
   categoryId?: string
 ): Promise<Subcategory> {
   try {
-    const [result] = await db
+    if (categoryId) {
+      const [category] = await db
+        .select()
+        .from(categories)
+        .where(eq(categories.id, categoryId))
+
+      if (!category) {
+        throw new NotFoundError('Category not found')
+      }
+    }
+
+    const [createdSubcategory] = await db
       .insert(subcategories)
       .values({ label, categoryId })
       .onConflictDoNothing()
       .returning()
-    return result
+
+    if (!createdSubcategory) {
+      throw new ValidationError('Subcategory already exists')
+    }
+    return createdSubcategory
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof NotFoundError || error instanceof ValidationError) {
       throw error
     } else throw new Error('Creating subcategory failed')
   }
