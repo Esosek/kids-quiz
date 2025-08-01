@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { AuthenticationError } from './types/errors'
 import { Request } from 'express'
 
-const MAX_JWT_EXPIRATION = 60 * 24 * 14 // 14 days
+const MAX_JWT_EXPIRATION = 60 * 60 * 24 * 14 // 14 days
 
 export async function hashPassword(password: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
