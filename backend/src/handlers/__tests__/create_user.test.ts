@@ -23,6 +23,10 @@ vi.mock('../../auth', async (importOriginal) => {
   }
 })
 
+vi.mock('../../db/queries/user_unlocks', () => ({
+  unlockFreeSubcategoriesForUser: vi.fn(),
+}))
+
 describe('Create user handler', () => {
   let res: Response
   let next: any

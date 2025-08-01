@@ -4,7 +4,7 @@ import { db } from '../../db/index'
 import { users, userUnlocks, type UserUnlock } from '../../db/schema'
 import { NotFoundError, ValidationError } from '../../types/errors'
 import { getUserById } from './users'
-import { getSubcategoryById } from './subcategories'
+import { getFreeSubcategories, getSubcategoryById } from './subcategories'
 
 export async function createUserUnlock(
   userId: string,
@@ -41,6 +41,14 @@ export async function createUserUnlock(
     }
     throw new Error('Creating user unlock failed')
   }
+}
+
+export async function unlockFreeSubcategoriesForUser(userId: string) {
+  const freeSubcategories = await getFreeSubcategories()
+
+  freeSubcategories.forEach(async (sub) => {
+    await createUserUnlock(userId, sub.id)
+  })
 }
 
 async function getUserUnlock(

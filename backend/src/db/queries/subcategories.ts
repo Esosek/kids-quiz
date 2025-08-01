@@ -12,6 +12,17 @@ export async function getSubcategories(): Promise<Subcategory[]> {
   }
 }
 
+export async function getFreeSubcategories(): Promise<Subcategory[]> {
+  try {
+    return await db
+      .select()
+      .from(subcategories)
+      .where(eq(subcategories.unlockPrice, 0))
+  } catch (error) {
+    throw new Error('Retrieving free subcategories failed')
+  }
+}
+
 export async function createSubcategory(
   label: string,
   categoryId?: string

@@ -5,6 +5,7 @@ import { createUser } from '../db/queries/users'
 import { ValidationError } from '../types/errors'
 import { createJWT, hashPassword } from '../auth'
 import { setResCookie } from '../utils'
+import { unlockFreeSubcategoriesForUser } from '../db/queries/user_unlocks'
 
 export async function handlerCreateUser(
   req: Request,
@@ -17,6 +18,7 @@ export async function handlerCreateUser(
       username,
       await hashPassword(password)
     )
+    await unlockFreeSubcategoriesForUser(userResponse.id)
     const jwt = createJWT(userResponse.id, config.jwt.secret)
 
     setResCookie(config.jwt.cookieName, jwt, res)

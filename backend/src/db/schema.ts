@@ -72,10 +72,10 @@ export const userUnlocks = pgTable(
   {
     id: uuid('id').primaryKey().defaultRandom(),
     userId: uuid('user_id')
-      .references(() => users.id)
+      .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
     subcategoryId: uuid('subcategory_id')
-      .references(() => subcategories.id)
+      .references(() => subcategories.id, { onDelete: 'cascade' })
       .notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
