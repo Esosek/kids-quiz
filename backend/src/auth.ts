@@ -52,7 +52,11 @@ export function createJWT(
   return jwt.sign(payload, secret)
 }
 
-// returns userId
+/**
+ * @returns userId
+ * @throws AuthenticationError if JWT token is invalid
+ * @throws Error if JWT is in invalid format
+ *  */
 export function validateJWT(token: string, secret: string): string {
   try {
     const payload = jwt.verify(token, secret)
@@ -66,6 +70,10 @@ export function validateJWT(token: string, secret: string): string {
   }
 }
 
+/**
+ * @returns JWT token
+ * @throws AuthenticationError if header is missing in request
+ *  */
 export function getBearerToken(req: Request) {
   const authHeader = req.get('Authorization')
   if (!authHeader) {
