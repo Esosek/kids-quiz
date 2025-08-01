@@ -1,0 +1,1 @@
+ALTER TABLE "user_unlocks" ADD CONSTRAINT "unique_user_subcategory" UNIQUE("user_id","subcategory_id");

@@ -1,3 +1,5 @@
+import { and, eq } from 'drizzle-orm'
+
 import { db } from '../../db/index'
 import { users, userUnlocks, type UserUnlock } from '../../db/schema'
 import { NotFoundError, ValidationError } from '../../types/errors'
@@ -9,6 +11,13 @@ export async function createUserUnlock(
   subcategoryId: string
 ): Promise<UserUnlock> {
   try {
+    const existingUnlock = await getUserUnlock(userId, subcategoryId)
+    if (existingUnlock) {
+      throw new ValidationError(
+        `Subcategory with ID ${subcategoryId} is already unlocked`
+      )
+    }
+
     const { currency } = await getUserById(userId)
     const { unlockPrice } = await getSubcategoryById(subcategoryId)
 
@@ -31,5 +40,26 @@ export async function createUserUnlock(
       throw error
     }
     throw new Error('Creating user unlock failed')
+  }
+}
+
+async function getUserUnlock(
+  userId: string,
+  subcategoryId: string
+): Promise<UserUnlock | undefined> {
+  try {
+    const [result] = await db
+      .select()
+      .from(userUnlocks)
+      .where(
+        and(
+          eq(userUnlocks.userId, userId),
+          eq(userUnlocks.subcategoryId, subcategoryId)
+        )
+      )
+
+    return result
+  } catch (error) {
+    throw new Error('Retrieving user unlock failed')
   }
 }

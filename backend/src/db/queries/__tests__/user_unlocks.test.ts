@@ -26,6 +26,11 @@ vi.mock('../../index', () => ({
     returning: vi.fn().mockReturnValue([MOCK_USER_UNLOCK]),
     update: vi.fn().mockReturnThis(),
     set: vi.fn(),
+    select: vi.fn().mockReturnValue({
+      from: () => ({
+        where: vi.fn().mockReturnValue([]),
+      }),
+    }),
   },
 }))
 

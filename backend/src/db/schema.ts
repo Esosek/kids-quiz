@@ -1,3 +1,4 @@
+import { unique } from 'drizzle-orm/pg-core'
 import {
   pgTable,
   timestamp,
@@ -66,17 +67,25 @@ export const questions = pgTable('questions', {
     .$onUpdate(() => new Date()),
 })
 
-export const userUnlocks = pgTable('user_unlocks', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id')
-    .references(() => users.id)
-    .notNull(),
-  subcategoryId: uuid('subcategory_id')
-    .references(() => subcategories.id)
-    .notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at')
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-})
+export const userUnlocks = pgTable(
+  'user_unlocks',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .references(() => users.id)
+      .notNull(),
+    subcategoryId: uuid('subcategory_id')
+      .references(() => subcategories.id)
+      .notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => {
+    return [
+      unique('unique_user_subcategory').on(table.userId, table.subcategoryId),
+    ]
+  }
+)
