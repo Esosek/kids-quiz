@@ -3,24 +3,25 @@ import { describe, it, expect, vi } from 'vitest'
 import { getSubcategories, createSubcategory } from '../subcategories'
 import { Subcategory } from '../../../db/schema'
 
-const { MOCK_SUBCATEGORIES } = vi.hoisted(() => ({
-  MOCK_SUBCATEGORIES: [
-    {
-      id: '552e63a2-00f9-4e86-a078-319acc8cff33',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      label: 'Dopravní značky I',
-      categoryId: '07b43f0b-9b59-4ca7-8225-3b0c09c64b53',
-    },
-    {
-      id: 'ae1eb936-7930-42a5-b591-889156baa37a',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      label: 'Vesmír I',
-      categoryId: null,
-    },
-  ] as Subcategory[],
-}))
+const MOCK_SUBCATEGORIES = vi.hoisted(
+  () =>
+    [
+      {
+        id: '552e63a2-00f9-4e86-a078-319acc8cff33',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        label: 'Dopravní značky I',
+        categoryId: '07b43f0b-9b59-4ca7-8225-3b0c09c64b53',
+      },
+      {
+        id: 'ae1eb936-7930-42a5-b591-889156baa37a',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        label: 'Vesmír I',
+        categoryId: null,
+      },
+    ] as Subcategory[]
+)
 
 vi.mock('../../../db/index', () => ({
   db: {
