@@ -52,8 +52,8 @@ describe('Getting subcategories', () => {
 
 describe('Creating subcategory', () => {
   const label = 'Geografie I'
-  const categoryId = MOCK_SUBCATEGORIES[0].categoryId
-  it('should return created subcategory when categoryId is provided', async () => {
+
+  it('should return created subcategory when categoryId is NOT provided', async () => {
     const result = await createSubcategory(label)
 
     expect(result.label).toBe(label)
@@ -61,7 +61,8 @@ describe('Creating subcategory', () => {
     expect(result.id).toBeTypeOf('string')
   })
 
-  it('should return created subcategory when categoryId is NOT provided', async () => {
+  it('should return created subcategory when categoryId is provided', async () => {
+    const categoryId = MOCK_SUBCATEGORIES[1].categoryId
     const result = await createSubcategory(label, categoryId!)
 
     expect(result.label).toBe(label)
