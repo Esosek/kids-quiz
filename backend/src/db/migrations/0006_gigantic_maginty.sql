@@ -1,0 +1,1 @@
+ALTER TABLE "subcategories" ADD COLUMN "unlock_price" integer DEFAULT 0 NOT NULL;

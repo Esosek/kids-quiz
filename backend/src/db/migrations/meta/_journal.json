@@ -43,6 +43,13 @@
       "when": 1754040574502,
       "tag": "0005_rapid_thunderbolt",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1754054187498,
+      "tag": "0006_gigantic_maginty",
+      "breakpoints": true
     }
   ]
 }
