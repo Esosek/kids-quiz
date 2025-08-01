@@ -36,6 +36,13 @@
       "when": 1753967366771,
       "tag": "0004_legal_banshee",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1754040574502,
+      "tag": "0005_rapid_thunderbolt",
+      "breakpoints": true
     }
   ]
 }
