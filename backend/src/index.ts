@@ -8,6 +8,7 @@ import { handlerUpdateUser } from './handlers/update_user'
 import { handlerCreateQuestion } from './handlers/create_question'
 import { handlerGetCategories } from './handlers/get_categories'
 import { handlerCreateCategory } from './handlers/create_category'
+import { handlerGetSubcategories } from './handlers/get_subcategories'
 import { handlerCreateSubcategory } from './handlers/create_subcategory'
 
 const app = express()
@@ -19,6 +20,7 @@ app.put('/api/users', handlerUpdateUser)
 app.post('/api/login', handlerLogin)
 app.get('/api/categories', handlerGetCategories)
 app.post('/api/categories', checkAdmin, handlerCreateCategory)
+app.get('/api/subcategories', handlerGetSubcategories)
 app.post('/api/subcategories', checkAdmin, handlerCreateSubcategory)
 app.post('/api/questions', checkAdmin, handlerCreateQuestion)
 app.use(errorHandler)
