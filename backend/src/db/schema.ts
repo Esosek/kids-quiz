@@ -20,6 +20,7 @@ export const users = pgTable('users', {
   username: varchar('username', { length: 64 }).unique().notNull(),
   hashedPassword: varchar('hashed_password').default('unset').notNull(),
   currency: integer('currency').default(0).notNull(),
+  avatar: varchar('avatar').notNull().default('not set'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
