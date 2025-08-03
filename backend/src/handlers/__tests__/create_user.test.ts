@@ -2,10 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Request, Response } from 'express'
 
 import { handlerCreateUser } from '../create_user'
+import { ValidationError } from '../../types/errors'
 
 const USER_ID = 'a81bc81b-dead-4e5d-abff-90865d1e13b1'
 const USERNAME = 'CactoHippoTanto'
 const HASHED_PASSWORD = 'password'
+const AVATAR = 'monkey.png'
 
 const userResponse = {
   id: USER_ID,
@@ -13,6 +15,7 @@ const userResponse = {
   updatedAt: '',
   username: USERNAME,
   currency: 0,
+  avatar: AVATAR,
 }
 
 vi.mock('../../auth', async (importOriginal) => {
@@ -47,6 +50,7 @@ describe('Create user handler', () => {
             updatedAt: '',
             username: USERNAME,
             currency: 0,
+            avatar: AVATAR,
           }
         }),
       }
@@ -57,6 +61,7 @@ describe('Create user handler', () => {
       body: {
         username: USERNAME,
         password: HASHED_PASSWORD,
+        avatar: AVATAR,
       },
     } as Request
 
@@ -64,7 +69,6 @@ describe('Create user handler', () => {
 
     expect(res.status).toHaveBeenCalledWith(201)
     expect(res.json).toHaveBeenCalledWith({
-      // JWT token is there
       ...userResponse,
       token: 'jwt_token',
       username: req.body.username,
@@ -75,6 +79,7 @@ describe('Create user handler', () => {
     const req = {
       body: {
         password: HASHED_PASSWORD,
+        avatar: AVATAR,
       },
     } as Request
 
@@ -90,6 +95,7 @@ describe('Create user handler', () => {
       body: {
         username: 'AB',
         password: HASHED_PASSWORD,
+        avatar: AVATAR,
       },
     } as Request
 
@@ -107,6 +113,7 @@ describe('Create user handler', () => {
       body: {
         username: 'thisisa34characterslongusernamebro',
         password: HASHED_PASSWORD,
+        avatar: AVATAR,
       },
     } as Request
 
@@ -123,6 +130,7 @@ describe('Create user handler', () => {
     const req = {
       body: {
         username: USERNAME,
+        avatar: AVATAR,
       },
     } as Request
 
@@ -138,6 +146,7 @@ describe('Create user handler', () => {
       body: {
         username: USERNAME,
         password: '1234567',
+        avatar: AVATAR,
       },
     } as Request
 
@@ -156,6 +165,7 @@ describe('Create user handler', () => {
         username: USERNAME,
         password:
           '1HsYBnyeHpLTWDXlkt51esafPHZKPVkU6ynodziAI9NTRGhfJwmy6385n2UboTBoC',
+        avatar: AVATAR,
       },
     } as Request
 
@@ -166,5 +176,36 @@ describe('Create user handler', () => {
     expect(firstCallArgument.message).toEqual(
       'Password must be between 8 and 64 characters long'
     )
+  })
+
+  it('should throw an error when avatar is missing', async () => {
+    const req = {
+      body: {
+        username: USERNAME,
+        password: HASHED_PASSWORD,
+      },
+    } as Request
+
+    await handlerCreateUser(req, res, next)
+    const firstCallArgument = next.mock.calls[0][0]
+
+    expect(firstCallArgument).toBeInstanceOf(ValidationError)
+    expect(firstCallArgument.message).toEqual('Missing avatar')
+  })
+
+  it('should throw an error when avatar is in invalid format', async () => {
+    const req = {
+      body: {
+        username: USERNAME,
+        password: HASHED_PASSWORD,
+        avatar: 123456,
+      },
+    } as Request
+
+    await handlerCreateUser(req, res, next)
+    const firstCallArgument = next.mock.calls[0][0]
+
+    expect(firstCallArgument).toBeInstanceOf(ValidationError)
+    expect(firstCallArgument.message).toEqual('Avatar is in invalid format')
   })
 })

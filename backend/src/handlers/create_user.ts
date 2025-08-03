@@ -13,10 +13,11 @@ export async function handlerCreateUser(
   next: NextFunction
 ) {
   try {
-    const { username, password } = validateInput(req.body)
+    const { username, password, avatar } = validateInput(req.body)
     const userResponse = await createUser(
       username,
-      await hashPassword(password)
+      await hashPassword(password),
+      avatar
     )
     await unlockFreeSubcategoriesForUser(userResponse.id)
     const jwt = createJWT(userResponse.id, config.jwt.secret)
@@ -41,8 +42,19 @@ function validateInput(reqBody: any) {
   } else if (reqBody.password.length < 8 || reqBody.password.length > 64) {
     validationErrors.push('Password must be between 8 and 64 characters long')
   }
+
+  if (!reqBody.avatar) {
+    validationErrors.push('Missing avatar')
+  } else if (typeof reqBody.avatar !== 'string') {
+    validationErrors.push('Avatar is in invalid format')
+  }
+
   if (validationErrors.length) {
     throw new ValidationError(validationErrors.join(', '))
   }
-  return { username: reqBody.username, password: reqBody.password }
+  return {
+    username: reqBody.username,
+    password: reqBody.password,
+    avatar: reqBody.avatar,
+  }
 }

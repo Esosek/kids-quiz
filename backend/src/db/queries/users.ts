@@ -8,12 +8,13 @@ type UserResponse = Omit<User, 'hashedPassword'>
 
 export async function createUser(
   username: string,
-  password: string
+  password: string,
+  avatar: string
 ): Promise<UserResponse> {
   try {
     const [result] = await db
       .insert(users)
-      .values({ username, hashedPassword: password })
+      .values({ username, hashedPassword: password, avatar })
       .onConflictDoNothing()
       .returning()
     if (!result) {
