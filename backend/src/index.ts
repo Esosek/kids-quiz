@@ -17,6 +17,7 @@ const app = express()
 const PORT = 8080
 
 app.use(express.json())
+app.use(express.static('public'))
 app.post('/api/users', handlerCreateUser)
 app.put('/api/users', handlerUpdateUser)
 app.post('/api/login', handlerLogin)
