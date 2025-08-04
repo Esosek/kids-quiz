@@ -8,6 +8,7 @@ const MOCK_SUBCATEGORY = vi.hoisted(() => ({
   id: 'eba2f80e-1f5b-40be-a5e6-b058eedb7471',
   label: 'Dopravní značky I',
   categoryId: 'b8150ff5-4733-4d78-a23b-3b6d5dd28a20',
+  unlockPrice: 50,
 }))
 
 vi.mock('../../db/queries/subcategories', () => ({
@@ -152,5 +153,23 @@ describe('Create subcategory', () => {
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
     expect(firstCallArgument.message).toEqual('CategoryId is in invalid format')
+  })
+
+  it('should fail to validate if unlock price is in wrong format', async () => {
+    const req = {
+      body: {
+        label: MOCK_SUBCATEGORY.label,
+        unlockPrice: '50',
+      },
+    } as unknown as Request
+
+    await handlerCreateSubcategory(req, res, next)
+
+    const firstCallArgument = next.mock.calls[0][0]
+
+    expect(firstCallArgument).toBeInstanceOf(ValidationError)
+    expect(firstCallArgument.message).toEqual(
+      'Unlock price is in invalid format'
+    )
   })
 })

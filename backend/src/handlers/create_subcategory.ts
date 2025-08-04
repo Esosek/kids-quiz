@@ -13,7 +13,8 @@ export async function handlerCreateSubcategory(
     const body = validateInput(req.body)
     const createdSubcategory = await createSubcategory(
       body.label,
-      body.categoryId
+      body.categoryId,
+      body.unlockPrice
     )
     res.status(201).json(createdSubcategory)
   } catch (error) {
@@ -24,6 +25,7 @@ export async function handlerCreateSubcategory(
 function validateInput(reqBody: any): {
   label: string
   categoryId?: string
+  unlockPrice?: number
 } {
   if (!reqBody) {
     throw new ValidationError('Missing request body')
@@ -40,5 +42,13 @@ function validateInput(reqBody: any): {
   if (reqBody.categoryId && !validator.isUUID(reqBody.categoryId)) {
     throw new ValidationError('CategoryId is in invalid format')
   }
-  return { label: reqBody.label, categoryId: reqBody.categoryId }
+
+  if (reqBody.unlockPrice && typeof reqBody.unlockPrice !== 'number') {
+    throw new ValidationError('Unlock price is in invalid format')
+  }
+  return {
+    label: reqBody.label,
+    categoryId: reqBody.categoryId,
+    unlockPrice: reqBody.unlockPrice,
+  }
 }
