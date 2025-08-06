@@ -43,6 +43,18 @@ export async function createUserUnlock(
   }
 }
 
+export async function getUserUnlocks(userId: string) {
+  try {
+    const result = await db
+      .select()
+      .from(userUnlocks)
+      .where(eq(userUnlocks.userId, userId))
+    return result
+  } catch (error) {
+    throw new Error('Retrieving user unlocks with subcategories failed')
+  }
+}
+
 export async function unlockFreeSubcategoriesForUser(userId: string) {
   const freeSubcategories = await getFreeSubcategories()
 

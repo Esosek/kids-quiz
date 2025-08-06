@@ -2,11 +2,33 @@ import { eq } from 'drizzle-orm'
 
 import { NotFoundError, ValidationError } from '../../types/errors'
 import { db } from '../../db/index'
-import { categories, subcategories, Subcategory } from '../schema'
+import { categories, questions, subcategories, Subcategory } from '../schema'
 
 export async function getSubcategories(): Promise<Subcategory[]> {
   try {
     return await db.select().from(subcategories)
+  } catch (error) {
+    throw new Error('Retrieving subcategories failed')
+  }
+}
+
+export async function getSubcategoriesWithQuestionsAndCategories() {
+  try {
+    return await db
+      .select({
+        id: subcategories.id,
+        label: subcategories.label,
+        unlockPrice: subcategories.unlockPrice,
+        categoryId: categories.id,
+        categoryLabel: categories.label,
+        questionId: questions.id,
+        answer: questions.answer,
+        questionImgUrl: questions.imgUrl,
+        questionText: questions.text,
+      })
+      .from(subcategories)
+      .leftJoin(categories, eq(subcategories.categoryId, categories.id))
+      .leftJoin(questions, eq(subcategories.id, questions.subcategoryId))
   } catch (error) {
     throw new Error('Retrieving subcategories failed')
   }
