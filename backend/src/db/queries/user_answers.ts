@@ -30,6 +30,17 @@ export async function createUserAnswer(
   }
 }
 
+export async function getAnswersByUser(userId: string): Promise<UserAnswer[]> {
+  try {
+    return await db
+      .select()
+      .from(userAnswers)
+      .where(eq(userAnswers.userId, userId))
+  } catch (error) {
+    throw new Error(`Retrieving answers for user ${userId} failed`)
+  }
+}
+
 async function getUserAnswer(
   userId: string,
   questionId: string
