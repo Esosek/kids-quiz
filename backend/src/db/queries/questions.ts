@@ -36,6 +36,18 @@ export async function createQuestion(
   }
 }
 
+export async function getQuestionById(questionId: string): Promise<Question> {
+  try {
+    const [result] = await db
+      .select()
+      .from(questions)
+      .where(eq(questions.id, questionId))
+    return result
+  } catch (error) {
+    throw new Error('Retrieving question failed')
+  }
+}
+
 export async function getQuestionsBySubcategory(subcategoryId: string) {
   try {
     const result = await db
