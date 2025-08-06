@@ -28,10 +28,10 @@ function validateBody(reqBody: any): QuestionInput {
     throw new ValidationError('Missing request body')
   }
 
-  if (!reqBody.answer) {
-    validationErrors.push('Missing answer field')
-  } else if (typeof reqBody.answer !== 'string') {
-    validationErrors.push('Answer must be a string')
+  if (!reqBody.answers) {
+    validationErrors.push('Missing answers field')
+  } else if (!Array.isArray(reqBody.answers)) {
+    validationErrors.push('Answers must be an array of strings')
   }
 
   if (!reqBody.subcategoryId) {
@@ -52,7 +52,7 @@ function validateBody(reqBody: any): QuestionInput {
   }
 
   return {
-    answer: reqBody.answer,
+    answers: reqBody.answers,
     subcategoryId: reqBody.subcategoryId,
     imgUrl: reqBody.imgUrl,
     text: reqBody.text,

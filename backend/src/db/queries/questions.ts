@@ -5,12 +5,12 @@ import { questions, subcategories, type Question } from '../schema'
 import { NotFoundError } from '../../types/errors'
 
 export type QuestionInput = {
-  answer: string
+  answers: string[]
   subcategoryId: string
   imgUrl?: string
   text?: string
 }
-
+// Correct answer must be first in answers array
 export async function createQuestion(
   question: QuestionInput
 ): Promise<Question> {
@@ -26,7 +26,7 @@ export async function createQuestion(
 
     const [createdQuestion] = await db
       .insert(questions)
-      .values(question)
+      .values({ correctAnswer: question.answers[0], ...question })
       .returning()
     return createdQuestion
   } catch (error) {

@@ -7,7 +7,8 @@ import { ValidationError } from '../../types/errors'
 const MOCK_QUESTION = vi.hoisted(() => ({
   id: 'question_id',
   text: 'Co je to za značku?',
-  answer: 'Zákaz vjezdu',
+  correctAnswer: 'Zákaz vjezdu',
+  answers: ['Zákaz vjezdu', 'Zákaz stání', 'Zákaz zastavení'],
   imgUrl: 'http://url.net',
   subcategoryId: 'aa0c8333-5b4a-46fd-bdf1-fec0bb702dbf',
 }))
@@ -19,7 +20,7 @@ vi.mock('../../db/queries/questions', () => ({
 describe('Create question', () => {
   const req = {
     body: {
-      answer: MOCK_QUESTION.answer,
+      answers: MOCK_QUESTION.answers,
       imgUrl: MOCK_QUESTION.imgUrl,
       text: MOCK_QUESTION.text,
       subcategoryId: MOCK_QUESTION.subcategoryId,
@@ -47,7 +48,7 @@ describe('Create question', () => {
   it('should create a question with only imgUrl', async () => {
     const req = {
       body: {
-        answer: MOCK_QUESTION.answer,
+        answers: MOCK_QUESTION.answers,
         imgUrl: MOCK_QUESTION.imgUrl,
         subcategoryId: MOCK_QUESTION.subcategoryId,
       },
@@ -61,7 +62,7 @@ describe('Create question', () => {
   it('should create a question with only text', async () => {
     const req = {
       body: {
-        answer: MOCK_QUESTION.answer,
+        answers: MOCK_QUESTION.answers,
         text: MOCK_QUESTION.text,
         subcategoryId: MOCK_QUESTION.subcategoryId,
       },
@@ -94,13 +95,13 @@ describe('Create question', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual('Missing answer field')
+    expect(firstCallArgument.message).toEqual('Missing answers field')
   })
 
   it('should fail to validate if answer is in invalid format', async () => {
     const req = {
       body: {
-        answer: 5,
+        answers: 5,
         imgUrl: MOCK_QUESTION.imgUrl,
         subcategoryId: MOCK_QUESTION.subcategoryId,
       },
@@ -110,13 +111,15 @@ describe('Create question', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual('Answer must be a string')
+    expect(firstCallArgument.message).toEqual(
+      'Answers must be an array of strings'
+    )
   })
 
   it('should fail to validate if both imgUrl and text is missing', async () => {
     const req = {
       body: {
-        answer: MOCK_QUESTION.answer,
+        answers: MOCK_QUESTION.answers,
         subcategoryId: MOCK_QUESTION.subcategoryId,
       },
     } as unknown as Request
@@ -133,7 +136,7 @@ describe('Create question', () => {
   it('should fail to validate if subcategoryId is missing', async () => {
     const req = {
       body: {
-        answer: MOCK_QUESTION.answer,
+        answers: MOCK_QUESTION.answers,
         imgUrl: MOCK_QUESTION.imgUrl,
       },
     } as unknown as Request
@@ -148,7 +151,7 @@ describe('Create question', () => {
   it('should fail to validate if subcategoryId is in invalid format', async () => {
     const req = {
       body: {
-        answer: MOCK_QUESTION.answer,
+        answers: MOCK_QUESTION.answers,
         imgUrl: MOCK_QUESTION.imgUrl,
         subcategoryId: 123,
       },

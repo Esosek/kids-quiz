@@ -55,7 +55,8 @@ export const subcategories = pgTable('subcategories', {
 export const questions = pgTable('questions', {
   id: uuid('id').primaryKey().defaultRandom(),
   text: text('text'),
-  answer: text('answer').notNull(),
+  correctAnswer: text('correct_answer').notNull(),
+  answers: text('answers').array().notNull(),
   imgUrl: varchar('img_url'),
   subcategoryId: uuid('subcategory_id')
     .notNull()

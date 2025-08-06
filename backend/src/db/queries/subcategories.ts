@@ -22,7 +22,8 @@ export async function getSubcategoriesWithQuestionsAndCategories() {
         categoryId: categories.id,
         categoryLabel: categories.label,
         questionId: questions.id,
-        answer: questions.answer,
+        correctAnswer: questions.correctAnswer,
+        answers: questions.answers,
         questionImgUrl: questions.imgUrl,
         questionText: questions.text,
       })
@@ -30,7 +31,7 @@ export async function getSubcategoriesWithQuestionsAndCategories() {
       .leftJoin(categories, eq(subcategories.categoryId, categories.id))
       .leftJoin(questions, eq(subcategories.id, questions.subcategoryId))
   } catch (error) {
-    throw new Error('Retrieving subcategories failed')
+    throw new Error('Retrieving detailed subcategories failed')
   }
 }
 

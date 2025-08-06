@@ -16,7 +16,8 @@ type SubcategoryDetail = {
   categoryId: string | null
   categoryLabel: string | null
   questionId: string | null
-  answer: string | null
+  correctAnswer: string | null
+  answers: string[] | null
   questionImgUrl: string | null
   questionText: string | null
 }
@@ -31,7 +32,8 @@ type SubcategoryDetailResponse = {
   } | null
   questions: {
     id: string
-    answer: string
+    correctAnswer: string
+    answers: string[]
     imgUrl: string | null
     text: string | null
     hasUserAnswered: boolean
@@ -112,7 +114,8 @@ function processSubcategoryData(
     if (row.questionId) {
       acc[row.id].questions.push({
         id: row.questionId,
-        answer: row.answer!,
+        correctAnswer: row.correctAnswer!,
+        answers: row.answers!,
         imgUrl: row.questionImgUrl,
         text: row.questionText,
         hasUserAnswered: answers[row.questionId] ? true : false,
