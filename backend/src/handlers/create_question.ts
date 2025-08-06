@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import validator from 'validator'
 
-import config from '../config'
-import { getBearerToken, validateJWT } from '../auth'
-import { AuthorizationError, ValidationError } from '../types/errors'
+import { ValidationError } from '../types/errors'
 import { createQuestion, type QuestionInput } from '../db/queries/questions'
 
 export async function handlerCreateQuestion(
