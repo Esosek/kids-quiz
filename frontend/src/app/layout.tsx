@@ -18,7 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='cs'>
-      <body className={rubik.className}>{children}</body>
+      <body
+        className={`${rubik.className} max-w-2xl grid justify-items-center mx-auto p-6`}
+      >
+        {children}
+      </body>
     </html>
   )
 }
