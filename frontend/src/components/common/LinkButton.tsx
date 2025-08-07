@@ -10,7 +10,7 @@ export default function LinkButton(props: LinkButtonProps) {
   return (
     <button
       onClick={props.onClick}
-      className={`${props.className} underline mt-4`}
+      className={`${props.className ?? ''} underline my-4`}
     >
       {props.children}
     </button>
