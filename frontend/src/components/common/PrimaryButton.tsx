@@ -11,7 +11,7 @@ export default function PrimaryButton(props: PrimaryButtonProps) {
     <button
       onClick={props.onClick}
       className={`${
-        props.className ?? 'bg-green-500 hover:bg-green-400'
+        props.className ?? 'bg-green-500'
       } text-2xl font-medium py-3 px-9 w-full max-w-lg rounded-full shadow-lg`}
     >
       {props.children}
