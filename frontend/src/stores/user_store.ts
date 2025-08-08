@@ -35,19 +35,21 @@ export const useUserStore = create<UserStore>()((set) => ({
       username,
       password,
     })
+
     if (res.ok) {
+      const body = res.body as User
       if (keepLoggedIn) {
         localStorage.setItem(
           process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!,
-          res.body.token
+          body.token
         )
       }
       set(() => ({
         user: {
-          id: res.body.id,
-          avatar: res.body.avatar,
-          token: res.body.token,
-          username: res.body.username,
+          id: body.id,
+          avatar: body.avatar,
+          token: body.token,
+          username: body.username,
         },
       }))
       return { ok: true }
@@ -66,19 +68,21 @@ export const useUserStore = create<UserStore>()((set) => ({
       password,
       avatar,
     })
+
     if (res.ok) {
+      const body = res.body as User
       if (keepLoggedIn) {
         localStorage.setItem(
           process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!,
-          res.body.token
+          body.token
         )
       }
       set(() => ({
         user: {
-          id: res.body.id,
-          avatar: res.body.avatar,
-          token: res.body.token,
-          username: res.body.username,
+          id: body.id,
+          avatar: body.avatar,
+          token: body.token,
+          username: body.username,
         },
       }))
       return { ok: true }
