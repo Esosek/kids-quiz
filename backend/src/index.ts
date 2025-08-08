@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 
 import errorHandler from './middleware/error_handler'
 import checkAdmin from './middleware/check_admin'
@@ -17,6 +18,13 @@ import { handlerInitialize } from './handlers/initialize'
 const app = express()
 const PORT = 8080
 
+const corsOptions = {
+  origin: 'http://localhost:3000', // Replace with the origin of your client application
+  methods: ['GET', 'POST', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.static('public'))
 app.post('/api/users', handlerCreateUser)
