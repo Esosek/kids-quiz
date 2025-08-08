@@ -123,7 +123,10 @@ export default function AuthPage() {
           onChange={(avatar) => setSelectedAvatar(avatar)}
         />
       )}
-      <LinkButton onClick={() => setIsRegistrationOpen(!isRegistrationOpen)}>
+      <LinkButton
+        onClick={() => setIsRegistrationOpen(!isRegistrationOpen)}
+        className='my-4'
+      >
         {isRegistrationOpen ? 'ZPÁTKY K PŘIHLÁŠENÍ' : 'JSI TU POPRVÉ?'}
       </LinkButton>
     </form>
