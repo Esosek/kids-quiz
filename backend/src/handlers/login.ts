@@ -4,7 +4,6 @@ import { AuthenticationError, ValidationError } from '../types/errors'
 import { getUserByName } from '../db/queries/users'
 import { checkPasswordHash, createJWT } from '../auth'
 import config from '../config'
-import { setResCookie } from '../utils'
 
 export async function handlerLogin(
   req: Request,
@@ -24,7 +23,6 @@ export async function handlerLogin(
     const jwt = createJWT(user.id, config.jwt.secret)
     const { hashedPassword, ...userResponse } = user
 
-    setResCookie(config.jwt.cookieName, jwt, res)
     res.status(200).json({ ...userResponse, token: jwt })
   } catch (error) {
     next(error)

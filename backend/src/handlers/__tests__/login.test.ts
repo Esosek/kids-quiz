@@ -54,12 +54,11 @@ describe('Login handler', () => {
 
   const next = vi.fn()
 
-  it('returns user response with jwt and Set-Cookie with valid credentials', async () => {
+  it('returns user response with jwt', async () => {
     await handlerLogin(req, res, next)
     const { hashedPassword, ...mockedUser } = MOCK_USER
 
     expect(res.status).toBeCalledWith(200)
-    expect(res.cookie).toHaveBeenCalledOnce()
     expect(res.json).toBeCalledWith(mockedUser)
   })
 
