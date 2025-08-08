@@ -4,14 +4,16 @@ import { useUserStore } from '@/stores/user_store'
 import iconMap from '@/assets/icon_map.png'
 import iconLogout from '@/assets/icon_logout.svg'
 import LinkButton from './common/LinkButton'
+import { useCurrencyStore } from '@/stores/currency_store'
 
 export default function Header() {
   const { user, logout } = useUserStore()
+  const currency = useCurrencyStore((state) => state.currency)
   return (
     <header className='flex justify-between items-start w-full'>
       <div className='flex items-center'>
         <Image src={iconMap} width={40} height={40} alt='Map icon' />
-        <div className='text-xl font-medium ml-1'>54</div>
+        <div className='text-xl font-medium ml-1'>{currency}</div>
       </div>
       <div className='grid justify-items-center gap-1'>
         <div className='size-10'>
