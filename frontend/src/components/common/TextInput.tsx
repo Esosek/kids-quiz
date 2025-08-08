@@ -57,7 +57,7 @@ export default function TextInput(props: TextInputProps) {
         <button
           type='button'
           onClick={handleToggleVisibility}
-          className='absolute right-8 top-0 bottom-0'
+          className='absolute right-4 top-0 bottom-0 sm:right-8'
         >
           <Image
             src={isPasswordVisible ? iconVisibilityOff : iconVisibility}
