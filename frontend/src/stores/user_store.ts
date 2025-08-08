@@ -29,8 +29,8 @@ type UserStore = {
 
 export const useUserStore = create<UserStore>()((set) => ({
   user: null,
-  initializeUser: (user: User) => set(() => ({ user })),
-  login: async (username: string, password: string, keepLoggedIn?: boolean) => {
+  initializeUser: (user) => set(() => ({ user })),
+  login: async (username, password, keepLoggedIn?) => {
     const res = await fetchRequest('/login', 'POST', {
       username,
       password,
@@ -57,12 +57,7 @@ export const useUserStore = create<UserStore>()((set) => ({
     return { ok: false, error: res.body.error }
   },
 
-  register: async (
-    username: string,
-    password: string,
-    avatar: string,
-    keepLoggedIn?: boolean
-  ) => {
+  register: async (username, password, avatar, keepLoggedIn?) => {
     const res = await fetchRequest('/users', 'POST', {
       username,
       password,
