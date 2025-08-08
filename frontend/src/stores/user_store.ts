@@ -20,12 +20,12 @@ type UserStore = {
   logout: () => void
 }
 
-const MOCK_USER = {
-  id: '123',
-  username: 'Alfik',
-  avatar: 'penguin.png',
-  token: 'abcdtoken',
-}
+// const MOCK_USER = {
+//   id: '123',
+//   username: 'Alfik',
+//   avatar: 'penguin.png',
+//   token: 'abcdtoken',
+// }
 
 export const useUserStore = create<UserStore>()((set) => ({
   user: null,

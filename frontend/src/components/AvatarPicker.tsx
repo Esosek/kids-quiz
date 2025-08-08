@@ -36,9 +36,9 @@ export default function AvatarPicker({ value, onChange }: AvatarPickerProps) {
   return (
     <div className='my-8 text-center'>
       <h2 className='mb-4'>VYBER SI SVŮJ OBRÁZEK</h2>
-      <ul className='flex gap-3'>
+      <ul className='flex gap-4 flex-wrap justify-center'>
         {images.map((image) => (
-          <li key={image}>
+          <li key={image} className='max-w-14 flex items-center'>
             <button
               type='button'
               onClick={() => handleSelectAvatar(image)}

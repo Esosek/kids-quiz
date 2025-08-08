@@ -77,7 +77,7 @@ export default function AuthPage() {
 
   return (
     <form onSubmit={handleSubmit} className='grid justify-items-center w-full'>
-      <div className='max-w-[70%] h-auto relative flex flex-col items-center'>
+      <div className='max-w-[50%] h-auto relative flex flex-col items-center'>
         <Image
           src={logo}
           alt='Logo aplikace'
