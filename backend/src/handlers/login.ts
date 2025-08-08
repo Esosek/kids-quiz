@@ -18,7 +18,7 @@ export async function handlerLogin(
       user.hashedPassword
     )
     if (!isPasswordCorrect) {
-      throw new AuthenticationError('Invalid password')
+      throw new AuthenticationError('Špatné heslo')
     }
     const jwt = createJWT(user.id, config.jwt.secret)
     const { hashedPassword, ...userResponse } = user

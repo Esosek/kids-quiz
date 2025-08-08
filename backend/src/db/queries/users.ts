@@ -18,7 +18,7 @@ export async function createUser(
       .onConflictDoNothing()
       .returning()
     if (!result) {
-      throw new ValidationError('User already exists')
+      throw new ValidationError('Hráč již existuje')
     }
     const { hashedPassword, ...userResponse } = result
     return userResponse
