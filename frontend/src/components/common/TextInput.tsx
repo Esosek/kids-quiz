@@ -53,12 +53,12 @@ export default function TextInput(props: TextInputProps) {
           props.error ? 'text-red-600' : 'text-black'
         }`}
       />
-      <button
-        type='button'
-        onClick={handleToggleVisibility}
-        className='absolute right-8 top-0 bottom-0'
-      >
-        {props.type === 'password' && (
+      {props.type === 'password' && (
+        <button
+          type='button'
+          onClick={handleToggleVisibility}
+          className='absolute right-8 top-0 bottom-0'
+        >
           <Image
             src={isPasswordVisible ? iconVisibilityOff : iconVisibility}
             width={24}
@@ -66,8 +66,8 @@ export default function TextInput(props: TextInputProps) {
             alt='Eye icon'
             className='size-10 opacity-50'
           />
-        )}
-      </button>
+        </button>
+      )}
     </div>
   )
 }

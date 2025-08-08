@@ -26,6 +26,7 @@ export default function AvatarPicker({ value, onChange }: AvatarPickerProps) {
   useEffect(() => {
     const randomIndex = Math.round(Math.random() * (images.length - 1))
     handleSelectAvatar(images[randomIndex])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handleSelectAvatar(avatar: string) {
