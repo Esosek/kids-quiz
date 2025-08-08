@@ -20,8 +20,8 @@ export default function AuthPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className='grid justify-items-center'>
-      <div className='max-w-[80%] h-auto relative flex flex-col items-center'>
+    <form onSubmit={handleSubmit} className='grid justify-items-center w-full'>
+      <div className='max-w-[70%] h-auto relative flex flex-col items-center'>
         <Image
           src={logo}
           alt='Logo aplikace'
@@ -48,7 +48,7 @@ export default function AuthPage() {
       <PrimaryButton onClick={handleLogin}>
         {isRegistrationOpen ? 'VYTVOŘIT ÚČET' : 'PŘIHLÁSIT'}
       </PrimaryButton>
-      {isRegistrationOpen && <AvatarPicker />}
+      {isRegistrationOpen && <AvatarPicker onChange={() => {}} />}
       <LinkButton onClick={() => setIsRegistrationOpen(!isRegistrationOpen)}>
         {isRegistrationOpen ? 'ZPÁTKY K PŘIHLÁŠENÍ' : 'JSI TU POPRVÉ?'}
       </LinkButton>

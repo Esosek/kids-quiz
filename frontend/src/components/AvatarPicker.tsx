@@ -1,7 +1,11 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-export default function AvatarPicker() {
+type AvatarPickerProps = {
+  onChange: (avatar: string) => void
+}
+
+export default function AvatarPicker({ onChange }: AvatarPickerProps) {
   const images = [
     'elephant',
     'giraffe',
@@ -19,6 +23,11 @@ export default function AvatarPicker() {
 
   const [selectedAvatar, setSelectedAvatar] = useState(images[randomIndex])
 
+  function handleSelectAvatar(avatar: string) {
+    setSelectedAvatar(avatar)
+    onChange(`${avatar}.png`)
+  }
+
   return (
     <div className='my-8 text-center'>
       <h2 className='mb-4'>VYBER SI SVŮJ OBRÁZEK</h2>
@@ -27,7 +36,7 @@ export default function AvatarPicker() {
           <li key={image}>
             <button
               type='button'
-              onClick={() => setSelectedAvatar(image)}
+              onClick={() => handleSelectAvatar(image)}
               className={`${
                 image === selectedAvatar &&
                 'outline-5 outline-offset-2 outline-green-500'
