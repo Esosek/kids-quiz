@@ -1,8 +1,10 @@
 type TextInputProps = {
   id: string
+  value?: string
   type?: string
   placeholder?: string
   error?: string
+  onChange?: (value: string) => void
 }
 
 export default function TextInput(props: TextInputProps) {
@@ -22,6 +24,10 @@ export default function TextInput(props: TextInputProps) {
         id={props.id}
         type={props.type ?? 'text'}
         placeholder={props.placeholder}
+        value={props.value}
+        onChange={
+          props.onChange ? (e) => props.onChange!(e.target.value) : undefined
+        }
         className={`text-2xl uppercase text-center w-full h-full py-3 rounded-full overflow-clip focus:outline-none placeholder:text-green-800/45 ${
           props.error ? 'text-red-600' : 'text-black'
         }`}

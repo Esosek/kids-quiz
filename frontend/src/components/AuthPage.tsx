@@ -9,14 +9,70 @@ import TextInput from './common/TextInput'
 import AvatarPicker from './AvatarPicker'
 
 export default function AuthPage() {
-  const login = useUserStore((state) => state.login)
+  const { login, register } = useUserStore()
+
   const [keepLoggedIn, setKeepLoggedIn] = useState(true)
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [selectedAvatar, setSelectedAvatar] = useState('')
 
-  const handleLogin = () => login('Alfik', 'password')
-  const handleSubmit = (event: FormEvent) => {
+  const [usernameError, setUsernameError] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+
+  function handleUsernameChange(value: string) {
+    setUsernameError('')
+    setUsername(value)
+  }
+
+  function handlePasswordChange(value: string) {
+    setPasswordError('')
+    setPassword(value)
+  }
+
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
-    console.log(event.target)
+    if (!isFormValid()) {
+      return
+    }
+
+    let result: { ok: boolean; error?: string }
+    if (isRegistrationOpen) {
+      result = await register(username, password, selectedAvatar, keepLoggedIn)
+    } else {
+      result = await login(username, password, keepLoggedIn)
+    }
+
+    if (!result.ok && result.error) {
+      if (/\bheslo\b/.test(result.error)) {
+        setPasswordError(result.error!)
+      } else setUsernameError(result.error!)
+    }
+  }
+
+  function isFormValid() {
+    let result = true
+    if (!username.trim().length) {
+      setUsernameError('prosím vyplň svou přezdívku')
+      result = false
+    } else if (username.length < 3) {
+      setUsernameError('přezdívka je příliš krátká')
+      result = false
+    } else if (username.length > 32) {
+      setUsernameError('přezdívka je příliš dlouhá')
+      result = false
+    }
+    if (!password.trim().length) {
+      setPasswordError('prosím vyplň heslo')
+      result = false
+    } else if (password.length < 8) {
+      setPasswordError('heslo je příliš krátké')
+      result = false
+    } else if (password.length > 64) {
+      setPasswordError('heslo je příliš dlouhé')
+      result = false
+    }
+    return result
   }
 
   return (
@@ -30,8 +86,21 @@ export default function AuthPage() {
           priority
         />
       </div>
-      <TextInput id='username' placeholder='PŘEZDÍVKA' />
-      <TextInput id='password' type='password' placeholder='HESLO' />
+      <TextInput
+        id='username'
+        placeholder='PŘEZDÍVKA'
+        value={username}
+        onChange={(value) => handleUsernameChange(value)}
+        error={usernameError}
+      />
+      <TextInput
+        id='password'
+        type='password'
+        placeholder='HESLO'
+        value={password}
+        onChange={(value) => handlePasswordChange(value)}
+        error={passwordError}
+      />
       <div className='justify-self-start m-2 ml-4 flex items-center'>
         <input
           type='checkbox'
@@ -45,10 +114,15 @@ export default function AuthPage() {
           zůstat přihlášen
         </label>
       </div>
-      <PrimaryButton onClick={handleLogin}>
+      <PrimaryButton type='submit'>
         {isRegistrationOpen ? 'VYTVOŘIT ÚČET' : 'PŘIHLÁSIT'}
       </PrimaryButton>
-      {isRegistrationOpen && <AvatarPicker onChange={() => {}} />}
+      {isRegistrationOpen && (
+        <AvatarPicker
+          value={selectedAvatar}
+          onChange={(avatar) => setSelectedAvatar(avatar)}
+        />
+      )}
       <LinkButton onClick={() => setIsRegistrationOpen(!isRegistrationOpen)}>
         {isRegistrationOpen ? 'ZPÁTKY K PŘIHLÁŠENÍ' : 'JSI TU POPRVÉ?'}
       </LinkButton>

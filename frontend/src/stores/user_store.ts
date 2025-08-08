@@ -1,12 +1,22 @@
 import { create } from 'zustand'
 
 import User from '@/types/user'
+import { fetchRequest } from '@/utils/fetch_request'
 
 type UserStore = {
   user: User | null
   initializeUser: (user: User) => void
-  login: (username: string, password: string) => void
-  register: (username: string, password: string, avatar: string) => void
+  login: (
+    username: string,
+    password: string,
+    keepLoggedIn?: boolean
+  ) => Promise<{ ok: boolean; error?: string }>
+  register: (
+    username: string,
+    password: string,
+    avatar: string,
+    keepLoggedIn?: boolean
+  ) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
 }
 
@@ -20,13 +30,61 @@ const MOCK_USER = {
 export const useUserStore = create<UserStore>()((set) => ({
   user: null,
   initializeUser: (user: User) => set(() => ({ user })),
-  login: (username: string, password: string) =>
-    set(() => {
-      console.log(`Logging in as ${username}...`)
-      localStorage.setItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!, 'test')
-      return { user: MOCK_USER }
-    }),
-  register: (username: string, password: string, avatar: string) => {},
+  login: async (username: string, password: string, keepLoggedIn?: boolean) => {
+    const res = await fetchRequest('/login', 'POST', {
+      username,
+      password,
+    })
+    if (res.ok) {
+      if (keepLoggedIn) {
+        localStorage.setItem(
+          process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!,
+          res.body.token
+        )
+      }
+      set(() => ({
+        user: {
+          id: res.body.id,
+          avatar: res.body.avatar,
+          token: res.body.token,
+          username: res.body.username,
+        },
+      }))
+      return { ok: true }
+    }
+    return { ok: false, error: res.body.error }
+  },
+
+  register: async (
+    username: string,
+    password: string,
+    avatar: string,
+    keepLoggedIn?: boolean
+  ) => {
+    const res = await fetchRequest('/users', 'POST', {
+      username,
+      password,
+      avatar,
+    })
+    if (res.ok) {
+      if (keepLoggedIn) {
+        localStorage.setItem(
+          process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!,
+          res.body.token
+        )
+      }
+      set(() => ({
+        user: {
+          id: res.body.id,
+          avatar: res.body.avatar,
+          token: res.body.token,
+          username: res.body.username,
+        },
+      }))
+      return { ok: true }
+    }
+    return { ok: false, error: res.body.error }
+  },
   logout: () =>
     set(() => {
       localStorage.removeItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!)

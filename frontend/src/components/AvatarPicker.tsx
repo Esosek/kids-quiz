@@ -1,31 +1,35 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useMemo } from 'react'
 
 type AvatarPickerProps = {
+  value: string
   onChange: (avatar: string) => void
 }
 
-export default function AvatarPicker({ onChange }: AvatarPickerProps) {
-  const images = [
-    'elephant',
-    'giraffe',
-    'hippo',
-    'monkey',
-    'panda',
-    'parrot',
-    'penguin',
-    'pig',
-    'rabbit',
-    'snake',
-  ]
+export default function AvatarPicker({ value, onChange }: AvatarPickerProps) {
+  const images = useMemo(
+    () => [
+      'elephant.png',
+      'giraffe.png',
+      'hippo.png',
+      'monkey.png',
+      'panda.png',
+      'parrot.png',
+      'penguin.png',
+      'pig.png',
+      'rabbit.png',
+      'snake.png',
+    ],
+    []
+  )
 
-  const randomIndex = Math.round(Math.random() * (images.length - 1))
-
-  const [selectedAvatar, setSelectedAvatar] = useState(images[randomIndex])
+  useEffect(() => {
+    const randomIndex = Math.round(Math.random() * (images.length - 1))
+    handleSelectAvatar(images[randomIndex])
+  }, [])
 
   function handleSelectAvatar(avatar: string) {
-    setSelectedAvatar(avatar)
-    onChange(`${avatar}.png`)
+    onChange(avatar)
   }
 
   return (
@@ -38,12 +42,12 @@ export default function AvatarPicker({ onChange }: AvatarPickerProps) {
               type='button'
               onClick={() => handleSelectAvatar(image)}
               className={`${
-                image === selectedAvatar &&
+                image === value &&
                 'outline-5 outline-offset-2 outline-green-500'
               } rounded-full `}
             >
               <Image
-                src={`/images/avatars/${image}.png`}
+                src={`/images/avatars/${image}`}
                 alt={`${image} avatar`}
                 width={284}
                 height={285}
