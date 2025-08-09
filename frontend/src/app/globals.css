@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #fff5d7;
+  --background: #d8f999;
   --foreground: #171717;
 }
 
@@ -17,7 +17,12 @@ body {
   color: var(--foreground);
 }
 
-button:hover {
+button:hover:not(:disabled) {
   cursor: pointer;
   opacity: 0.75;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }

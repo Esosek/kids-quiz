@@ -114,7 +114,7 @@ export default function AuthPage() {
           zůstat přihlášen
         </label>
       </div>
-      <PrimaryButton type='submit'>
+      <PrimaryButton type='submit' className='my-4'>
         {isRegistrationOpen ? 'VYTVOŘIT ÚČET' : 'PŘIHLÁSIT'}
       </PrimaryButton>
       {isRegistrationOpen && (
