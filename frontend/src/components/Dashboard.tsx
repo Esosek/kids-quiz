@@ -1,3 +1,4 @@
+import { Question } from '@/types/question'
 import Header from './Header'
 import SubcategoryCard from './subcategory/SubcategoryCard'
 
@@ -30,6 +31,14 @@ export default function Dashboard() {
           hasUserAnswered: false,
           subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
         },
+        { hasUserAnswered: true } as Question,
+        { hasUserAnswered: true } as Question,
+        { hasUserAnswered: true } as Question,
+        { hasUserAnswered: false } as Question,
+        { hasUserAnswered: false } as Question,
+        { hasUserAnswered: false } as Question,
+        { hasUserAnswered: false } as Question,
+        { hasUserAnswered: false } as Question,
       ],
     },
     '2eba7916-cc4b-4611-9b28-4873f0603213': {
@@ -40,7 +49,18 @@ export default function Dashboard() {
         id: 'c138ffa9-5e37-496b-85ba-e9c4322155b6',
         label: 'Dopravní značky',
       },
-      questions: [],
+      questions: [
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+      ] as Question[],
     },
     '06a005ea-027e-4afc-a29f-8d4dbf760262': {
       label: 'Vesmír II',
@@ -50,7 +70,18 @@ export default function Dashboard() {
         id: 'd0cb945e-c9f1-469e-9a96-6f9795941a9d',
         label: 'Vesmír',
       },
-      questions: [],
+      questions: [
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+        { hasUserAnswered: false },
+      ] as Question[],
     },
   }
   return (
