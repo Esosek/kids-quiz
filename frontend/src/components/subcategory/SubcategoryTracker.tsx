@@ -9,7 +9,7 @@ export default function SubcategoryTracker({
 }: SubcatgoryTrackerProps) {
   const answeredRatio = (answeredCount / questionCount) * 100
   return (
-    <div className='relative h-7 border-2 border-red-800 bg-red-800/15 rounded-2xl overflow-clip '>
+    <div className='w-full relative h-7 border-2 border-red-800 bg-red-800/15 rounded-2xl overflow-clip '>
       <div
         style={{ width: `${answeredRatio}%` }}
         className='bg-red-800 h-full'

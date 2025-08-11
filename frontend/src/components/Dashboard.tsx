@@ -89,7 +89,7 @@ export default function Dashboard() {
       <Header />
       <ul className='gap-8 grid auto-rows-fr grid-cols-1 sm:grid-cols-2 w-full max-w-sm sm:max-w-none'>
         {Object.entries(subcategories).map(([subId, sub]) => (
-          <SubcategoryCard key={subId} subcategory={sub} />
+          <SubcategoryCard key={subId} subcategory={{ id: subId, ...sub }} />
         ))}
       </ul>
     </>
