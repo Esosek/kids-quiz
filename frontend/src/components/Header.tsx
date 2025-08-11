@@ -25,7 +25,13 @@ export default function Header() {
           <div className='max-w-32 text-ellipsis overflow-clip font-medium'>
             {user?.username.toUpperCase()}
           </div>
-          <Image src={iconLogout} width={16} height={16} alt='Logout icon' />
+          <Image
+            src={iconLogout}
+            width={16}
+            height={16}
+            alt='Logout icon'
+            className='size-4'
+          />
         </LinkButton>
       </div>
     </header>

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import { type Subcategory } from '@/types/subcategory'
 import SubcategoryTracker from './SubcategoryTracker'
@@ -14,6 +15,7 @@ type SubcategoryCardProps = {
 }
 
 export default function SubcategoryCard({ subcategory }: SubcategoryCardProps) {
+  const router = useRouter()
   const [isUnlocking, setIsUnlocking] = useState(false)
   const { currency, removeCurrency } = useCurrencyStore()
 
@@ -31,6 +33,10 @@ export default function SubcategoryCard({ subcategory }: SubcategoryCardProps) {
     }
     setIsUnlocking(false)
   }
+
+  function handleStartQuiz() {
+    router.push(`/quiz?id=${subcategory.id}`)
+  }
   return (
     <li className='relative text-center w-full bg-pink-300 pt-6 pb-10 px-8 rounded-2x flex flex-col gap-5 justify-between items-center shadow-xl rounded-2xl'>
       <h2 className='uppercase text-2xl font-light'>{subcategory.label}</h2>
@@ -39,6 +45,7 @@ export default function SubcategoryCard({ subcategory }: SubcategoryCardProps) {
           src={`/images/subcategory_icons/${subcategory.id}.png`}
           alt={`Obrázek kvízu s názvem "${subcategory.label}"`}
           fill
+          sizes='100%'
           className='object-contain'
         />
       </div>
@@ -50,7 +57,9 @@ export default function SubcategoryCard({ subcategory }: SubcategoryCardProps) {
       {/* TODO: Implement subcategory explore */}
       {/* <LinkButton className='mb-2'>PROZKOUMAT</LinkButton> */}
       {subcategory.isUnlocked ? (
-        <PrimaryButton fontSize='text-base'>SPUSTIT</PrimaryButton>
+        <PrimaryButton fontSize='text-base' onClick={handleStartQuiz}>
+          SPUSTIT
+        </PrimaryButton>
       ) : (
         <>
           <PrimaryButton
