@@ -5,6 +5,8 @@ import SubcategoryTracker from './SubcategoryTracker'
 import CurrencyDisplay from '../CurrencyDisplay'
 import PrimaryButton from '../common/PrimaryButton'
 import { useCurrencyStore } from '@/stores/currency_store'
+import { useState } from 'react'
+import LoadSpinner from '../common/LoadSpinner'
 // import LinkButton from '../common/LinkButton'
 
 type SubcategoryCardProps = {
@@ -12,11 +14,23 @@ type SubcategoryCardProps = {
 }
 
 export default function SubcategoryCard({ subcategory }: SubcategoryCardProps) {
-  const { currency } = useCurrencyStore()
+  const [isUnlocking, setIsUnlocking] = useState(false)
+  const { currency, removeCurrency } = useCurrencyStore()
 
   const answeredQuestion = subcategory.questions.filter(
     (q) => q.hasUserAnswered
   )
+
+  async function handleUnlock() {
+    try {
+      setIsUnlocking(true)
+      await removeCurrency(subcategory.unlockPrice)
+      subcategory.isUnlocked = true
+    } catch (error) {
+      console.log(error)
+    }
+    setIsUnlocking(false)
+  }
   return (
     <li className='relative text-center w-full bg-pink-300 pt-6 pb-10 px-8 rounded-2x flex flex-col gap-5 justify-between items-center shadow-xl rounded-2xl'>
       <h2 className='uppercase text-2xl font-light'>{subcategory.label}</h2>
@@ -42,10 +56,16 @@ export default function SubcategoryCard({ subcategory }: SubcategoryCardProps) {
           <PrimaryButton
             fontSize='text-base'
             bgColor='bg-amber-200'
-            disabled={subcategory.unlockPrice > currency}
+            disabled={subcategory.unlockPrice > currency || isUnlocking}
             paddingY='py-[0.625rem]'
+            className='flex justify-center'
+            onClick={handleUnlock}
           >
-            <CurrencyDisplay value={-subcategory.unlockPrice} size='small' />
+            {isUnlocking ? (
+              <LoadSpinner />
+            ) : (
+              <CurrencyDisplay value={-subcategory.unlockPrice} size='small' />
+            )}
           </PrimaryButton>
         </>
       )}
