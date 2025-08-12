@@ -1,17 +1,33 @@
 import { Request, Response, NextFunction } from 'express'
 import validator from 'validator'
+import fs from 'fs'
+import { storage } from '../firebase'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 import { ValidationError } from '../types/errors'
-import { createQuestion, type QuestionInput } from '../db/queries/questions'
+import { createQuestion } from '../db/queries/questions'
 
-export async function handlerCreateQuestion(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function handlerCreateQuestion(req: Request, res: Response, next: NextFunction) {
   try {
-    const body = validateBody(req.body)
-    const createdQuestion = await createQuestion(body)
+    const body = validateBody(req)
+    let imageURL: string | undefined
+    if (body.image) {
+      const imageFileName = body.answers[0].toLowerCase().replace(/\s+/g, '_') + '.png'
+      const imageRef = ref(storage, `question_images/subcategory${body.subcategoryId}/` + imageFileName)
+      const file = fs.readFileSync(body.image.path)
+      await uploadBytes(imageRef, file, {
+        contentType: 'image/png',
+      })
+      imageURL = await getDownloadURL(imageRef)
+      fs.unlink(body.image.path, (err) => {
+        if (err) {
+          console.log(err)
+          throw new Error('Removing file from file system failed')
+        }
+      })
+    }
+
+    const createdQuestion = await createQuestion({ ...body, imgUrl: imageURL })
 
     res.status(201).json(createdQuestion)
   } catch (error) {
@@ -19,30 +35,32 @@ export async function handlerCreateQuestion(
   }
 }
 
-function validateBody(reqBody: any): QuestionInput {
+function validateBody(req: Request): {
+  answers: string[]
+  subcategoryId: string
+  image?: Express.Multer.File
+  text?: string
+} {
   const validationErrors: string[] = []
 
-  if (!reqBody) {
+  if (!req.body) {
     throw new ValidationError('Missing request body')
   }
 
-  if (!reqBody.answers) {
+  if (!req.body.answers) {
     validationErrors.push('Missing answers field')
-  } else if (!Array.isArray(reqBody.answers)) {
-    validationErrors.push('Answers must be an array of strings')
+  } else if (typeof req.body.answers !== 'string') {
+    validationErrors.push('Answers must be a string')
   }
 
-  if (!reqBody.subcategoryId) {
+  if (!req.body.subcategoryId) {
     validationErrors.push('Missing subcategoryId field')
-  } else if (
-    typeof reqBody.subcategoryId !== 'string' ||
-    !validator.isUUID(reqBody.subcategoryId)
-  ) {
+  } else if (typeof req.body.subcategoryId !== 'string' || !validator.isUUID(req.body.subcategoryId)) {
     validationErrors.push('SubcategoryId must be an UUID')
   }
 
-  if (!reqBody.imgUrl && !reqBody.text) {
-    validationErrors.push('Missing both imgUrl and text field')
+  if (!req.file && !req.body.text) {
+    validationErrors.push('Missing both image and text field')
   }
 
   if (validationErrors.length) {
@@ -50,9 +68,9 @@ function validateBody(reqBody: any): QuestionInput {
   }
 
   return {
-    answers: reqBody.answers,
-    subcategoryId: reqBody.subcategoryId,
-    imgUrl: reqBody.imgUrl,
-    text: reqBody.text,
+    answers: req.body.answers.split(', '),
+    subcategoryId: req.body.subcategoryId,
+    image: req.file,
+    text: req.body.text,
   }
 }

@@ -8,7 +8,7 @@ const MOCK_QUESTION = vi.hoisted(() => ({
   id: 'question_id',
   text: 'Co je to za značku?',
   correctAnswer: 'Zákaz vjezdu',
-  answers: ['Zákaz vjezdu', 'Zákaz stání', 'Zákaz zastavení'],
+  answers: 'Zákaz vjezdu, Zákaz stání, Zákaz zastavení',
   imgUrl: 'http://url.net',
   subcategoryId: 'aa0c8333-5b4a-46fd-bdf1-fec0bb702dbf',
 }))
@@ -17,8 +17,26 @@ vi.mock('../../db/queries/questions', () => ({
   createQuestion: vi.fn().mockReturnValue(MOCK_QUESTION),
 }))
 
+vi.mock('fs', () => ({
+  default: {
+    unlink: vi.fn(),
+    readFileSync: vi.fn(),
+  },
+}))
+
+vi.mock('firebase/storage', () => ({
+  getDownloadURL: vi.fn().mockReturnValue(MOCK_QUESTION.imgUrl),
+  ref: vi.fn(),
+  uploadBytes: vi.fn(),
+}))
+
+vi.mock('../../firebase', () => ({
+  storage: vi.fn(),
+}))
+
 describe('Create question', () => {
   const req = {
+    file: 'file',
     body: {
       answers: MOCK_QUESTION.answers,
       imgUrl: MOCK_QUESTION.imgUrl,
@@ -47,6 +65,7 @@ describe('Create question', () => {
 
   it('should create a question with only imgUrl', async () => {
     const req = {
+      file: 'file',
       body: {
         answers: MOCK_QUESTION.answers,
         imgUrl: MOCK_QUESTION.imgUrl,
@@ -61,6 +80,7 @@ describe('Create question', () => {
 
   it('should create a question with only text', async () => {
     const req = {
+      file: 'file',
       body: {
         answers: MOCK_QUESTION.answers,
         text: MOCK_QUESTION.text,
@@ -74,7 +94,7 @@ describe('Create question', () => {
   })
 
   it('should fail to validate without request body', async () => {
-    const req = {} as unknown as Request
+    const req = { file: 'file' } as unknown as Request
     await handlerCreateQuestion(req, res, next)
 
     const firstCallArgument = next.mock.calls[0][0]
@@ -85,6 +105,7 @@ describe('Create question', () => {
 
   it('should fail to validate if answer is missing', async () => {
     const req = {
+      file: 'file',
       body: {
         imgUrl: MOCK_QUESTION.imgUrl,
         subcategoryId: MOCK_QUESTION.subcategoryId,
@@ -100,6 +121,7 @@ describe('Create question', () => {
 
   it('should fail to validate if answer is in invalid format', async () => {
     const req = {
+      file: 'file',
       body: {
         answers: 5,
         imgUrl: MOCK_QUESTION.imgUrl,
@@ -111,9 +133,7 @@ describe('Create question', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual(
-      'Answers must be an array of strings'
-    )
+    expect(firstCallArgument.message).toEqual('Answers must be a string')
   })
 
   it('should fail to validate if both imgUrl and text is missing', async () => {
@@ -128,13 +148,12 @@ describe('Create question', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual(
-      'Missing both imgUrl and text field'
-    )
+    expect(firstCallArgument.message).toEqual('Missing both image and text field')
   })
 
   it('should fail to validate if subcategoryId is missing', async () => {
     const req = {
+      file: 'file',
       body: {
         answers: MOCK_QUESTION.answers,
         imgUrl: MOCK_QUESTION.imgUrl,
@@ -150,6 +169,7 @@ describe('Create question', () => {
 
   it('should fail to validate if subcategoryId is in invalid format', async () => {
     const req = {
+      file: 'file',
       body: {
         answers: MOCK_QUESTION.answers,
         imgUrl: MOCK_QUESTION.imgUrl,

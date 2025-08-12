@@ -36,13 +36,8 @@ app.post('/api/login', handlerLogin)
 app.get('/api/categories', handlerGetCategories)
 app.post('/api/categories', checkAdmin, handlerCreateCategory)
 app.get('/api/subcategories', handlerGetSubcategories)
-app.post(
-  '/api/subcategories',
-  checkAdmin,
-  upload.single('image'),
-  handlerCreateSubcategory
-)
-app.post('/api/questions', checkAdmin, handlerCreateQuestion)
+app.post('/api/subcategories', checkAdmin, upload.single('image'), handlerCreateSubcategory)
+app.post('/api/questions', checkAdmin, upload.single('question_image'), handlerCreateQuestion)
 app.post('/api/user_unlocks', handlerCreateUserUnlock)
 app.post('/api/user_answers', handlerCreateUserAnswer)
 app.get('/api/initialize', handlerInitialize)
