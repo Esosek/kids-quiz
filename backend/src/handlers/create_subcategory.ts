@@ -13,19 +13,7 @@ export async function handlerCreateSubcategory(req: Request, res: Response, next
       throw new ValidationError('Missing image file')
     }
     const body = validateInput(req.body)
-    const imageFileName = body.label.toLowerCase().replace(/\s+/g, '_') + '.png'
-    const imageRef = ref(storage, 'subcategory_images/' + imageFileName)
-    const file = fs.readFileSync(req.file.path)
-    await uploadBytes(imageRef, file, {
-      contentType: 'image/png',
-    })
-    const imageURL = await getDownloadURL(imageRef)
-    fs.unlink(req.file.path, (err) => {
-      if (err) {
-        console.log(err)
-        throw new Error('Removing file from file system failed')
-      }
-    })
+    const imageURL = await processImage(req.file.path, req.body.label)
 
     const createdSubcategory = await createSubcategory(body.label, imageURL, body.categoryId, body.unlockPrice)
     res.status(201).json(createdSubcategory)
@@ -55,13 +43,33 @@ function validateInput(reqBody: any): {
     throw new ValidationError('CategoryId is in invalid format')
   }
 
-  const unlockPrice = parseInt(reqBody.unlockPrice)
-  if (reqBody.unlockPrice && isNaN(unlockPrice)) {
-    throw new ValidationError('Unlock price is in invalid format')
+  let unlockPrice: number | undefined
+
+  if (reqBody.unlockPrice) {
+    unlockPrice = parseInt(reqBody.unlockPrice)
+    if (isNaN(unlockPrice)) {
+      throw new ValidationError('Unlock price is in invalid format')
+    }
   }
   return {
     label: reqBody.label,
     categoryId: reqBody.categoryId,
     unlockPrice,
   }
+}
+
+async function processImage(filePath: string, subcategoryLabel: string) {
+  const imageFileName = subcategoryLabel.toLowerCase().replace(/\s+/g, '_') + '.png'
+  const imageRef = ref(storage, 'subcategory_images/' + imageFileName)
+  const file = fs.readFileSync(filePath)
+  await uploadBytes(imageRef, file, {
+    contentType: 'image/png',
+  })
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.log(err)
+      throw new Error('Removing file from file system failed')
+    }
+  })
+  return await getDownloadURL(imageRef)
 }
