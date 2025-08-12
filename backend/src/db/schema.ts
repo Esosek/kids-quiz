@@ -42,6 +42,7 @@ export const subcategories = pgTable('subcategories', {
   id: uuid('id').primaryKey().defaultRandom(),
   label: varchar('label', { length: 64 }).unique().notNull(),
   unlockPrice: integer('unlock_price').notNull().default(0), // 0 is automatically unlocked on creating user
+  imageURL: varchar('image_url').unique().notNull(),
   categoryId: uuid('category_id').references(() => categories.id, {
     onDelete: 'set null',
   }),

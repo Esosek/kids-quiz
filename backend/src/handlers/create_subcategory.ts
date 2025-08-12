@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import validator from 'validator'
+import { readFileSync, unlink } from 'fs'
+import { storage } from '../firebase'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 import { createSubcategory } from '../db/queries/subcategories'
 import { ValidationError } from '../types/errors'
@@ -10,9 +13,27 @@ export async function handlerCreateSubcategory(
   next: NextFunction
 ) {
   try {
+    if (!req.file) {
+      throw new ValidationError('Missing image file')
+    }
     const body = validateInput(req.body)
+    const imageFileName = body.label.toLowerCase().replace(/\s+/g, '_') + '.png'
+    const imageRef = ref(storage, 'subcategory_images/' + imageFileName)
+    const file = readFileSync(req.file.path)
+    await uploadBytes(imageRef, file, {
+      contentType: 'image/png',
+    })
+    const imageURL = await getDownloadURL(imageRef)
+    unlink(req.file.path, (err) => {
+      if (err) {
+        console.log(err)
+        throw new Error('Removing file from file system failed')
+      }
+    })
+
     const createdSubcategory = await createSubcategory(
       body.label,
+      imageURL,
       body.categoryId,
       body.unlockPrice
     )
@@ -43,12 +64,13 @@ function validateInput(reqBody: any): {
     throw new ValidationError('CategoryId is in invalid format')
   }
 
-  if (reqBody.unlockPrice && typeof reqBody.unlockPrice !== 'number') {
+  const unlockPrice = parseInt(reqBody.unlockPrice)
+  if (reqBody.unlockPrice && isNaN(unlockPrice)) {
     throw new ValidationError('Unlock price is in invalid format')
   }
   return {
     label: reqBody.label,
     categoryId: reqBody.categoryId,
-    unlockPrice: reqBody.unlockPrice,
+    unlockPrice,
   }
 }

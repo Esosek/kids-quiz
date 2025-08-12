@@ -74,7 +74,7 @@ describe('Login handler', () => {
 
     const firstCallArgument = next.mock.calls[0][0]
     expect(firstCallArgument).toBeInstanceOf(AuthenticationError)
-    expect(firstCallArgument.message).toEqual('Invalid password')
+    expect(firstCallArgument.message).toEqual('Špatné heslo')
   })
 
   it('throws NotFoundError with invalid username', async () => {

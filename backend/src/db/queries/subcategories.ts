@@ -19,6 +19,7 @@ export async function getSubcategoriesWithQuestionsAndCategories() {
         id: subcategories.id,
         label: subcategories.label,
         unlockPrice: subcategories.unlockPrice,
+        subcategoryImg: subcategories.imageURL,
         categoryId: categories.id,
         categoryLabel: categories.label,
         questionId: questions.id,
@@ -48,6 +49,7 @@ export async function getFreeSubcategories(): Promise<Subcategory[]> {
 
 export async function createSubcategory(
   label: string,
+  imageURL: string,
   categoryId?: string,
   unlockPrice?: number
 ): Promise<Subcategory> {
@@ -65,7 +67,7 @@ export async function createSubcategory(
 
     const [createdSubcategory] = await db
       .insert(subcategories)
-      .values({ label, categoryId, unlockPrice })
+      .values({ label, categoryId, unlockPrice, imageURL })
       .onConflictDoNothing()
       .returning()
 

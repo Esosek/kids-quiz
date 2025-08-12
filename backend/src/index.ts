@@ -1,5 +1,8 @@
 import express from 'express'
 import cors from 'cors'
+import multer from 'multer'
+
+const upload = multer({ dest: 'public/uploads' })
 
 import errorHandler from './middleware/error_handler'
 import checkAdmin from './middleware/check_admin'
@@ -33,7 +36,12 @@ app.post('/api/login', handlerLogin)
 app.get('/api/categories', handlerGetCategories)
 app.post('/api/categories', checkAdmin, handlerCreateCategory)
 app.get('/api/subcategories', handlerGetSubcategories)
-app.post('/api/subcategories', checkAdmin, handlerCreateSubcategory)
+app.post(
+  '/api/subcategories',
+  checkAdmin,
+  upload.single('image'),
+  handlerCreateSubcategory
+)
 app.post('/api/questions', checkAdmin, handlerCreateQuestion)
 app.post('/api/user_unlocks', handlerCreateUserUnlock)
 app.post('/api/user_answers', handlerCreateUserAnswer)
