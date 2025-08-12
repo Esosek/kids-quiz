@@ -1,17 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
 import validator from 'validator'
-import { readFileSync, unlink } from 'fs'
+import fs from 'fs'
 import { storage } from '../firebase'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 
 import { createSubcategory } from '../db/queries/subcategories'
 import { ValidationError } from '../types/errors'
 
-export async function handlerCreateSubcategory(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function handlerCreateSubcategory(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.file) {
       throw new ValidationError('Missing image file')
@@ -19,24 +15,19 @@ export async function handlerCreateSubcategory(
     const body = validateInput(req.body)
     const imageFileName = body.label.toLowerCase().replace(/\s+/g, '_') + '.png'
     const imageRef = ref(storage, 'subcategory_images/' + imageFileName)
-    const file = readFileSync(req.file.path)
+    const file = fs.readFileSync(req.file.path)
     await uploadBytes(imageRef, file, {
       contentType: 'image/png',
     })
     const imageURL = await getDownloadURL(imageRef)
-    unlink(req.file.path, (err) => {
+    fs.unlink(req.file.path, (err) => {
       if (err) {
         console.log(err)
         throw new Error('Removing file from file system failed')
       }
     })
 
-    const createdSubcategory = await createSubcategory(
-      body.label,
-      imageURL,
-      body.categoryId,
-      body.unlockPrice
-    )
+    const createdSubcategory = await createSubcategory(body.label, imageURL, body.categoryId, body.unlockPrice)
     res.status(201).json(createdSubcategory)
   } catch (error) {
     next(error)

@@ -13,19 +13,19 @@ const MOCK_SUBCATEGORY = vi.hoisted(() => ({
 }))
 
 vi.mock('../../db/queries/subcategories', () => ({
-  createSubcategory: vi.fn(
-    (_label: string, _imageURL: string, categoryId: string) => {
-      if (categoryId === undefined) {
-        return { ...MOCK_SUBCATEGORY, categoryId: null }
-      }
-      return MOCK_SUBCATEGORY
+  createSubcategory: vi.fn((_label: string, _imageURL: string, categoryId: string) => {
+    if (categoryId === undefined) {
+      return { ...MOCK_SUBCATEGORY, categoryId: null }
     }
-  ),
+    return MOCK_SUBCATEGORY
+  }),
 }))
 
 vi.mock('fs', () => ({
-  unlink: vi.fn(),
-  readFileSync: vi.fn(),
+  default: {
+    unlink: vi.fn(),
+    readFileSync: vi.fn(),
+  },
 }))
 
 vi.mock('firebase/storage', () => ({
@@ -105,9 +105,7 @@ describe('Create subcategory', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual(
-      'Label is missing or in invalid format'
-    )
+    expect(firstCallArgument.message).toEqual('Label is missing or in invalid format')
   })
 
   it('should fail to validate if label is too short', async () => {
@@ -123,17 +121,14 @@ describe('Create subcategory', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual(
-      'Label must be between 3 and 64 characters long'
-    )
+    expect(firstCallArgument.message).toEqual('Label must be between 3 and 64 characters long')
   })
 
   it('should fail to validate if label is too long', async () => {
     const req = {
       file: 'file',
       body: {
-        label:
-          'ImfMExPKlDNBZTtmaFYVJruMnDpZDFTtsQUeGPPUtyadVrNNniXzmpprHtxCONPgh',
+        label: 'ImfMExPKlDNBZTtmaFYVJruMnDpZDFTtsQUeGPPUtyadVrNNniXzmpprHtxCONPgh',
       },
     } as unknown as Request
 
@@ -142,9 +137,7 @@ describe('Create subcategory', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual(
-      'Label must be between 3 and 64 characters long'
-    )
+    expect(firstCallArgument.message).toEqual('Label must be between 3 and 64 characters long')
   })
 
   it('should fail to validate if label is in wrong format', async () => {
@@ -160,9 +153,7 @@ describe('Create subcategory', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual(
-      'Label is missing or in invalid format'
-    )
+    expect(firstCallArgument.message).toEqual('Label is missing or in invalid format')
   })
 
   it('should fail to validate if subcategoryId is in wrong format', async () => {
@@ -196,9 +187,7 @@ describe('Create subcategory', () => {
     const firstCallArgument = next.mock.calls[0][0]
 
     expect(firstCallArgument).toBeInstanceOf(ValidationError)
-    expect(firstCallArgument.message).toEqual(
-      'Unlock price is in invalid format'
-    )
+    expect(firstCallArgument.message).toEqual('Unlock price is in invalid format')
   })
 
   it('should fail to validate if file is missing', async () => {
