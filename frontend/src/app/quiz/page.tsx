@@ -1,9 +1,12 @@
 'use client'
+import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+
 import LoadSpinner from '@/components/common/LoadSpinner'
 import { useInitializeData } from '@/hooks/useInitializeData'
 import { useUserStore } from '@/stores/user_store'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import Header from '@/components/Header'
+import Quiz from '@/components/quiz/Quiz'
 
 export default function QuizPage() {
   const router = useRouter()
@@ -21,12 +24,15 @@ export default function QuizPage() {
   }, [userData])
 
   useEffect(() => {
-    if (dataLoaded && !user) {
+    if (dataLoaded && (!user || !subcategoryId)) {
       router.push('/')
     }
-  }, [router, user, dataLoaded])
+  }, [router, user, dataLoaded, subcategoryId])
   return dataLoaded ? (
-    <div>QUIZ PAGE ID {subcategoryId}</div>
+    <>
+      <Header />
+      <Quiz subcategory={userData!.subcategories[subcategoryId!]} />
+    </>
   ) : (
     <div className='grid justify-items-center gap-4'>
       Nahrávám uživatelská data...
