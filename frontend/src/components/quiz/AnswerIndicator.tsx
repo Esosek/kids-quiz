@@ -29,8 +29,8 @@ export default function AnswerIndicator({ answer }: AnswerIndicatorProps) {
       break
   }
   return (
-    <div className={`${indicatorColors} size-8 border-2 rounded-full flex items-center justify-center`}>
-      <Image src={indicatorIcon} width={20} height={20} alt='Check icon' className={answer === undefined ? 'opacity-50' : ''} />
+    <div className={`${indicatorColors} size-[1.6rem] sm:size-8 border-2 rounded-full flex items-center justify-center`}>
+      <Image src={indicatorIcon} width={20} height={20} alt='Check icon' className={`${answer === undefined ? 'opacity-50' : ''} size-4 sm:size-5`} />
     </div>
   )
 }
