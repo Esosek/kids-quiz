@@ -54,7 +54,7 @@ const MOCK_DATA = {
           answers: ['Lajka', 'Bajka', 'Hafka', 'Rex', '51234'],
           imgUrl: null,
           text: 'Jak se jmenovalo první zvíře vyslané lidmi do vesmíru?',
-          hasUserAnswered: false,
+          hasUserAnswered: true,
           subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
         },
         {
@@ -63,6 +63,105 @@ const MOCK_DATA = {
           answers: ['Jupiter', 'Saturn', 'Pluto', 'Merkur', 'Plynný obr'],
           imgUrl: null,
           text: 'Jaká je největší planeta sluneční soustavy?',
+          hasUserAnswered: true,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'a1b2c3d4-e567-4890-8123-f45678901234',
+          correctAnswer: 'Slunce',
+          answers: ['Slunce', 'Měsíc', 'Mars', 'Venuše', 'Hvězda'],
+          imgUrl: null,
+          text: 'Co je středem naší sluneční soustavy?',
+          hasUserAnswered: true,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'b2c3d4e5-f678-4901-8234-g56789012345',
+          correctAnswer: 'Měsíc',
+          answers: ['Měsíc', 'Slunce', 'Mars', 'Jupiter', 'Kometa'],
+          imgUrl: null,
+          text: 'Jak se jmenuje přirozená družice Země?',
+          hasUserAnswered: true,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'c3d4e5f6-g789-4012-8345-h67890123456',
+          correctAnswer: '8',
+          answers: ['6', '7', '8', '9', '10'],
+          imgUrl: null,
+          text: 'Z kolika planet se skládá naše sluneční soustava?',
+          hasUserAnswered: true,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'd4e5f6g7-h890-4123-8456-i78901234567',
+          correctAnswer: 'Merkur',
+          answers: ['Merkur', 'Venuše', 'Mars', 'Jupiter', 'Země'],
+          imgUrl: null,
+          text: 'Která planeta je nejblíže Slunci?',
+          hasUserAnswered: false,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'g7h8i9j0-k123-4456-8789-l01234567890',
+          correctAnswer: 'Mars',
+          answers: ['Venuše', 'Mars', 'Jupiter', 'Saturn', 'Uran'],
+          imgUrl: null,
+          text: 'Která planeta je známá jako "rudá planeta"?',
+          hasUserAnswered: false,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'h8i9j0k1-l234-4567-8890-m12345678901',
+          correctAnswer: 'Venuše',
+          answers: ['Země', 'Mars', 'Venuše', 'Jupiter', 'Merkur'],
+          imgUrl: null,
+          text: 'Která planeta je nejteplejší?',
+          hasUserAnswered: false,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'k1l2m3n4-o567-4890-8123-p45678901234',
+          correctAnswer: 'Pluto',
+          answers: ['Pluto', 'Měsíc', 'Mars', 'Ceres', 'Eris'],
+          imgUrl: null,
+          text: 'Které těleso bylo dříve považováno za planetu, ale nyní je trpasličí planeta?',
+          hasUserAnswered: false,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'l2m3n4o5-p678-4901-8234-q56789012345',
+          correctAnswer: 'Mléčná dráha',
+          answers: ['Andromeda', 'Mléčná dráha', 'Triangulum', 'Sombrero', 'Vír'],
+          imgUrl: null,
+          text: 'Jak se jmenuje naše galaxie?',
+          hasUserAnswered: false,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'm3n4o5p6-q789-4012-8345-r67890123456',
+          correctAnswer: 'Hvězda',
+          answers: ['Planeta', 'Kometa', 'Hvězda', 'Měsíc', 'Asteroid'],
+          imgUrl: null,
+          text: 'Co je Slunce?',
+          hasUserAnswered: false,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'n4o5p6q7-r890-4123-8456-s78901234567',
+          correctAnswer: 'Kometa',
+          answers: ['Asteroid', 'Meteorit', 'Kometa', 'Planeta', 'Hvězda'],
+          imgUrl: null,
+          text: 'Co má ocas a obíhá kolem Slunce?',
+          hasUserAnswered: false,
+          subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
+        },
+        {
+          id: 'p6q7r8s9-t012-4345-8678-u90123456789',
+          correctAnswer: 'Meteorit',
+          answers: ['Asteroid', 'Kometa', 'Meteorit', 'Planeta', 'Hvězda'],
+          imgUrl: null,
+          text: 'Co vznikne, když meteor dopadne na Zemi?',
           hasUserAnswered: false,
           subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
         },
@@ -99,9 +198,7 @@ export const useInitializeData = () => {
   useEffect(() => {
     const tokenStorageKey = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY
     if (!tokenStorageKey) {
-      console.warn(
-        `Environment variable NEXT_PUBLIC_TOKEN_STORAGE_KEY is not set`
-      )
+      console.warn(`Environment variable NEXT_PUBLIC_TOKEN_STORAGE_KEY is not set`)
     } else {
       const token = localStorage.getItem(tokenStorageKey)
       if (token) {
@@ -111,6 +208,7 @@ export const useInitializeData = () => {
 
     async function fetchUserData(token: string) {
       try {
+        // TODO: Connect fetchUserData to backend
         const { id, avatar, username, currency } = MOCK_DATA.user
         initializeUser({ id, avatar, username, token })
         setCurrency(currency)
