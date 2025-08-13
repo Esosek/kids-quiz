@@ -13,7 +13,7 @@ export async function handlerCreateQuestion(req: Request, res: Response, next: N
     let imageURL: string | undefined
     if (body.image) {
       const imageFileName = body.answers[0].toLowerCase().replace(/\s+/g, '_') + '.png'
-      const imageRef = ref(storage, `question_images/subcategory${body.subcategoryId}/` + imageFileName)
+      const imageRef = ref(storage, `question_images/subcategory_${body.subcategoryId}/` + imageFileName)
       const file = fs.readFileSync(body.image.path)
       await uploadBytes(imageRef, file, {
         contentType: 'image/png',
