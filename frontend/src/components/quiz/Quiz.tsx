@@ -1,9 +1,12 @@
+import Image from 'next/image'
+import { useMemo, useState } from 'react'
+
 import { Subcategory } from '@/types/subcategory'
 import { generateQuiz } from '@/utils/quiz_generator'
-import { useMemo, useState } from 'react'
 import QuizProgressTracker from './QuizProgressTracker'
-import Image from 'next/image'
 import AnswerButton from './AnswerButton'
+import iconChevron from '@/assets/icon_chevron.svg'
+import IconButton from '../common/IconButton'
 
 type QuizProps = {
   subcategory: Subcategory
@@ -38,20 +41,21 @@ export default function Quiz({ subcategory }: QuizProps) {
   }
 
   function handleNextQuestion() {
+    setUserSelectedOption(null)
     setCurrentQuestionIndex(currentQuestionIndex + 1)
   }
 
   return (
     <>
       <h1 className='absolute top-8 text-2xl uppercase mb-6 sm:top-16'>{subcategory.label}</h1>
-      <QuizProgressTracker answers={userAnswers} />
+      <QuizProgressTracker currentIndex={currentQuestionIndex} answers={userAnswers} />
       {currentQuestion.text && <p className='uppercase text-lg my-4 text-center sm:my-8'>{currentQuestion.text}</p>}
       {currentQuestion.imgUrl && (
         <div className='relative w-full aspect-[3_/_2] sm:w-2/3 mb-4'>
           <Image src={currentQuestion.imgUrl} alt='Image for quiz question' width={600} height={400} />
         </div>
       )}
-      <ul className='grid grid-cols-2 w-full gap-2 gap-y-3 sm:grid-cols-1 sm:gap-3'>
+      <ul className='relative grid grid-cols-2 w-full gap-2 gap-y-3 sm:grid-cols-1 sm:gap-3'>
         {currentQuestion.answers.map((answer) => {
           let colorTheme: 'correct' | 'user-correct' | 'user' | undefined
           if (userSelectedOption) {
@@ -71,6 +75,12 @@ export default function Quiz({ subcategory }: QuizProps) {
             </li>
           )
         })}
+        {userSelectedOption && (
+          <div className='flex items-center self-center justify-self-center sm:absolute sm:-right-24 sm:top-0 sm:bottom-0'>
+            {' '}
+            <IconButton iconSrc={iconChevron} onClick={handleNextQuestion} alt='Ikona pro pokračování' />{' '}
+          </div>
+        )}
       </ul>
     </>
   )
