@@ -1,3 +1,5 @@
+import { useRouter } from 'next/navigation'
+
 import IconButton from '../common/IconButton'
 import CurrencyDisplay from '../CurrencyDisplay'
 import SubcategoryTracker from '../subcategory/SubcategoryTracker'
@@ -6,18 +8,16 @@ import iconReplay from '@/assets/icon_replay.svg'
 
 type QuizResultProps = {
   userAnswers: boolean[]
+  currencyEarned: number
+  onReplay: () => void
 }
 
-export default function QuizResult({ userAnswers }: QuizResultProps) {
+export default function QuizResult({ userAnswers, currencyEarned, onReplay }: QuizResultProps) {
+  const router = useRouter()
   const correctCount = userAnswers.filter((a) => a).length
 
-  function handleReplay() {
-    console.log('Replaying quiz...')
-  }
-
-  function handleHome() {
-    console.log('Heading home...')
-  }
+  const handleReplay = () => onReplay()
+  const handleHome = () => router.push('/')
 
   return (
     <div className='flex flex-col text-center gap-8 justify-center items-center w-full'>
@@ -26,7 +26,7 @@ export default function QuizResult({ userAnswers }: QuizResultProps) {
         <span className='text-3xl font-medium'>{correctCount}</span>
         <span className='text-sm'>{` / ${userAnswers.length} správně`}</span>
       </p>
-      <CurrencyDisplay value={'+15'} />
+      <CurrencyDisplay value={'+' + currencyEarned} />
       <div className='w-4/5'>
         <p className='uppercase'>Postup kategorie</p>
         <SubcategoryTracker answeredCount={8} questionCount={25} />

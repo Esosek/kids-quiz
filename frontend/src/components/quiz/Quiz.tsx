@@ -25,12 +25,12 @@ const testQuestion = {
 }
 
 export default function Quiz({ subcategory }: QuizProps) {
-  const quizQuestions = useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions])
-  quizQuestions[0] = testQuestion // Testing purposes
+  const [quizQuestions, setQuizQuestions] = useState(useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions]))
   const [userAnswers, setUserAnswers] = useState<Array<boolean | undefined>>(Array(quizQuestions.length).fill(undefined))
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(9)
   const [userSelectedOption, setUserSelectedOption] = useState<string | null>(null)
-  const [isQuizFinished, setIsQuizFinished] = useState(true)
+  const [isQuizFinished, setIsQuizFinished] = useState(false)
+  const [currencyEarned, setCurrencyEarned] = useState(0)
 
   const currentQuestion = quizQuestions[currentQuestionIndex]
 
@@ -40,16 +40,28 @@ export default function Quiz({ subcategory }: QuizProps) {
     updatedAnswers[currentQuestionIndex] = isAnswerCorrect
     setUserAnswers(updatedAnswers)
     setUserSelectedOption(value)
+    if (isAnswerCorrect) {
+      setCurrencyEarned((cur) => cur + 1) // Currently each answer earns +1 currency
+    }
   }
 
   function handleNextQuestion() {
     // Check if last question
     if (currentQuestionIndex + 1 >= quizQuestions.length) {
       setIsQuizFinished(true)
+      setCurrencyEarned((cur) => cur + 5) // Finishing quiz earns +5 currency
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
     setUserSelectedOption(null)
+  }
+
+  function handleReplay() {
+    setQuizQuestions(generateQuiz(subcategory.questions))
+    setUserAnswers(Array(quizQuestions.length).fill(undefined))
+    setCurrentQuestionIndex(0)
+    setCurrencyEarned(0)
+    setIsQuizFinished(false)
   }
 
   let content = (
@@ -90,8 +102,7 @@ export default function Quiz({ subcategory }: QuizProps) {
   )
 
   if (isQuizFinished) {
-    // content = <QuizResult userAnswers={userAnswers as boolean[]} />
-    content = <QuizResult userAnswers={Array(10).fill(true)} />
+    content = <QuizResult userAnswers={userAnswers as boolean[]} currencyEarned={currencyEarned} onReplay={handleReplay} />
   }
 
   return (
