@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+
 import type User from '@/types/user'
 import { fetchRequest } from '@/utils/fetch_request'
 import { useCurrencyStore } from '@/stores/currency_store'
 import { useUserStore } from '@/stores/user_store'
 import { Subcategory } from '@/types/subcategory'
+import { useCategoryStore } from '@/stores/category_store'
 
 type UserData =
   | {
@@ -194,6 +196,7 @@ const MOCK_DATA = {
 export const useInitializeData = () => {
   const { user, initializeUser } = useUserStore()
   const setCurrency = useCurrencyStore((state) => state.setCurrency)
+  const initializeCategoryData = useCategoryStore((state) => state.initialize)
   const [userData, setUserData] = useState<UserData>(undefined)
 
   useEffect(() => {
@@ -218,12 +221,13 @@ export const useInitializeData = () => {
           initializeUser({ id, avatar, username, token })
         }
 
+        initializeCategoryData({ categories: validatedBody.categories, subcategories: validatedBody.subcategories })
         setUserData(validatedBody)
       } catch (error) {
         console.log(error)
       }
     }
-  }, [initializeUser, setCurrency, user])
+  }, [initializeUser, setCurrency, initializeCategoryData, user])
 
   return userData
 }

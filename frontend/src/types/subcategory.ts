@@ -5,6 +5,7 @@ export type Subcategory = {
   label: string
   unlockPrice: number
   isUnlocked: boolean
+  imageURL: string
   category: { id: string; label: string }
   questions: Question[]
 }

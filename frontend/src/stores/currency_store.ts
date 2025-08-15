@@ -10,9 +10,10 @@ type CurrencyStoreType = {
 export const useCurrencyStore = create<CurrencyStoreType>()((set) => ({
   currency: 0,
   addCurrency: async (value = 1) =>
+    // TODO: Connect addCurrency to backend
     set((cur) => ({ currency: cur.currency + value })),
   removeCurrency: async (value = 1) => {
-    // TODO: Implement removeCurrency on backend
+    // TODO: Connect removeCurrency to backend
     await new Promise((resolve) =>
       setTimeout(() => {
         resolve(true)
@@ -26,9 +27,10 @@ export const useCurrencyStore = create<CurrencyStoreType>()((set) => ({
     })
   },
   setCurrency: async (value) =>
+    // TODO: Connect setCurrency to backend
     set(() => {
       if (value < 0) {
-        throw new Error("Currency can'nt be negative")
+        throw new Error("Currency can't be negative")
       }
       return { currency: value }
     }),
