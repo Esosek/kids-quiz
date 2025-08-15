@@ -7,6 +7,7 @@ import QuizProgressTracker from './QuizProgressTracker'
 import AnswerButton from './AnswerButton'
 import iconChevron from '@/assets/icon_chevron.svg'
 import IconButton from '../common/IconButton'
+import QuizResult from './QuizResult'
 
 type QuizProps = {
   subcategory: Subcategory
@@ -29,6 +30,7 @@ export default function Quiz({ subcategory }: QuizProps) {
   const [userAnswers, setUserAnswers] = useState<Array<boolean | undefined>>(Array(quizQuestions.length).fill(undefined))
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [userSelectedOption, setUserSelectedOption] = useState<string | null>(null)
+  const [isQuizFinished, setIsQuizFinished] = useState(true)
 
   const currentQuestion = quizQuestions[currentQuestionIndex]
 
@@ -41,14 +43,17 @@ export default function Quiz({ subcategory }: QuizProps) {
   }
 
   function handleNextQuestion() {
+    // Check if last question
+    if (currentQuestionIndex + 1 >= quizQuestions.length) {
+      setIsQuizFinished(true)
+    } else {
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
+    }
     setUserSelectedOption(null)
-    setCurrentQuestionIndex(currentQuestionIndex + 1)
   }
 
-  return (
-    <div className='flex flex-col items-center'>
-      <h1 className='absolute top-8 text-2xl uppercase mb-6 sm:top-16'>{subcategory.label}</h1>
-      <QuizProgressTracker currentIndex={currentQuestionIndex} answers={userAnswers} />
+  let content = (
+    <>
       {currentQuestion.text && <p className='uppercase text-lg my-4 text-center sm:my-8'>{currentQuestion.text}</p>}
       {currentQuestion.imgUrl && (
         <div className='relative w-full aspect-[3_/_2] mb-4 sm:w-2/3'>
@@ -81,6 +86,19 @@ export default function Quiz({ subcategory }: QuizProps) {
           </div>
         )}
       </ul>
+    </>
+  )
+
+  if (isQuizFinished) {
+    // content = <QuizResult userAnswers={userAnswers as boolean[]} />
+    content = <QuizResult userAnswers={Array(10).fill(true)} />
+  }
+
+  return (
+    <div className='flex flex-col items-center'>
+      <h1 className='absolute top-8 text-2xl uppercase mb-6 sm:top-16'>{subcategory.label}</h1>
+      <QuizProgressTracker currentIndex={currentQuestionIndex} answers={userAnswers} />
+      {content}
     </div>
   )
 }

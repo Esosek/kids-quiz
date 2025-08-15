@@ -1,0 +1,40 @@
+import IconButton from '../common/IconButton'
+import CurrencyDisplay from '../CurrencyDisplay'
+import SubcategoryTracker from '../subcategory/SubcategoryTracker'
+import iconHome from '@/assets/icon_home.svg'
+import iconReplay from '@/assets/icon_replay.svg'
+
+type QuizResultProps = {
+  userAnswers: boolean[]
+}
+
+export default function QuizResult({ userAnswers }: QuizResultProps) {
+  const correctCount = userAnswers.filter((a) => a).length
+
+  function handleReplay() {
+    console.log('Replaying quiz...')
+  }
+
+  function handleHome() {
+    console.log('Heading home...')
+  }
+
+  return (
+    <div className='flex flex-col text-center gap-8 justify-center items-center w-full'>
+      <h2 className='uppercase mt-12 text-xl'>{correctCount > 5 ? 'Gratulujeme!' : 'Zkus to znovu'}</h2>
+      <p className='flex gap-1 items-center justify-center uppercase '>
+        <span className='text-3xl font-medium'>{correctCount}</span>
+        <span className='text-sm'>{` / ${userAnswers.length} správně`}</span>
+      </p>
+      <CurrencyDisplay value={'+15'} />
+      <div className='w-4/5'>
+        <p className='uppercase'>Postup kategorie</p>
+        <SubcategoryTracker answeredCount={8} questionCount={25} />
+      </div>
+      <div className='flex absolute bottom-6 justify-around w-full gap-16 sm:mt-8 sm:static sm:justify-center'>
+        <IconButton iconSrc={iconHome} onClick={handleHome} alt='Home icon' bgColor='bg-pink-300' />
+        <IconButton iconSrc={iconReplay} onClick={handleReplay} alt='Replay icon' />
+      </div>
+    </div>
+  )
+}
