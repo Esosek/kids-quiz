@@ -8,6 +8,7 @@ import AnswerButton from './AnswerButton'
 import iconChevron from '@/assets/icon_chevron.svg'
 import IconButton from '../common/IconButton'
 import QuizResult from './QuizResult'
+import { useCurrencyStore } from '@/stores/currency_store'
 
 type QuizProps = {
   subcategory: Subcategory
@@ -20,6 +21,7 @@ export default function Quiz({ subcategory }: QuizProps) {
   const [userSelectedOption, setUserSelectedOption] = useState<string | null>(null)
   const [isQuizFinished, setIsQuizFinished] = useState(false)
   const [currencyEarned, setCurrencyEarned] = useState(0)
+  const addCurrency = useCurrencyStore((state) => state.addCurrency)
 
   const currentQuestion = quizQuestions[currentQuestionIndex]
 
@@ -31,6 +33,7 @@ export default function Quiz({ subcategory }: QuizProps) {
     setUserSelectedOption(value)
     if (isAnswerCorrect) {
       setCurrencyEarned((cur) => cur + 1) // Currently each answer earns +1 currency
+      addCurrency() // Currently each answer earns +1 currency
     }
   }
 
