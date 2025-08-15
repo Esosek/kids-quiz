@@ -11,8 +11,8 @@ type QuizProps = {
 
 const testQuestion = {
   id: 'd4e5f6g7-h890-4123-8456-i78901234567',
-  correctAnswer: 'Jupiter',
-  answers: ['Saturn', 'Jupiter', 'Neptun', 'Mars', 'Merkur'],
+  correctAnswer: 'Saturn',
+  answers: ['Jupiter', 'Saturn', 'Neptun', 'Mars', 'Merkur'],
   imgUrl:
     'https://firebasestorage.googleapis.com/v0/b/kids-quiz-c9ae5.firebasestorage.app/o/question_images%2Fvesmir_hd.png?alt=media&token=f04a301f-5d55-4926-9f1f-64058f97477c',
   text: 'Co je to za planetu?',
@@ -24,16 +24,17 @@ export default function Quiz({ subcategory }: QuizProps) {
   const quizQuestions = useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions])
   quizQuestions[0] = testQuestion // Testing purposes
   const [userAnswers, setUserAnswers] = useState<Array<boolean | undefined>>(Array(quizQuestions.length).fill(undefined))
-  // const [currentQuestion, setCurrentQuestion] = useState(quizQuestions[0])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [userSelectedOption, setUserSelectedOption] = useState<number | null>(null)
+  const [userSelectedOption, setUserSelectedOption] = useState<string | null>(null)
 
   const currentQuestion = quizQuestions[currentQuestionIndex]
 
-  function submitAnswer(isAnswerCorrect: boolean) {
+  function submitAnswer(value: string) {
+    const isAnswerCorrect = value === currentQuestion.correctAnswer
     const updatedAnswers = [...userAnswers]
     updatedAnswers[currentQuestionIndex] = isAnswerCorrect
     setUserAnswers(updatedAnswers)
+    setUserSelectedOption(value)
   }
 
   function handleNextQuestion() {
@@ -46,16 +47,30 @@ export default function Quiz({ subcategory }: QuizProps) {
       <QuizProgressTracker answers={userAnswers} />
       {currentQuestion.text && <p className='uppercase text-lg my-4 text-center sm:my-8'>{currentQuestion.text}</p>}
       {currentQuestion.imgUrl && (
-        <div className='relative w-full aspect-[3_/_2] sm:w-2/3 mb-4 border-2 border-red-500'>
+        <div className='relative w-full aspect-[3_/_2] sm:w-2/3 mb-4'>
           <Image src={currentQuestion.imgUrl} alt='Image for quiz question' width={600} height={400} />
         </div>
       )}
       <ul className='grid grid-cols-2 w-full gap-2 gap-y-3 sm:grid-cols-1 sm:gap-3'>
-        {currentQuestion.answers.map((answer) => (
-          <li key={answer}>
-            <AnswerButton value={answer} onClick={() => {}} />
-          </li>
-        ))}
+        {currentQuestion.answers.map((answer) => {
+          let colorTheme: 'correct' | 'user-correct' | 'user' | undefined
+          if (userSelectedOption) {
+            if (answer === currentQuestion.correctAnswer) {
+              colorTheme = 'correct'
+            }
+            if (answer === userSelectedOption) {
+              colorTheme = 'user'
+            }
+            if (userSelectedOption === currentQuestion.correctAnswer && answer === userSelectedOption) {
+              colorTheme = 'user-correct'
+            }
+          }
+          return (
+            <li key={answer}>
+              <AnswerButton disabled={!!userSelectedOption} value={answer} colorTheme={colorTheme} onClick={() => submitAnswer(answer)} />
+            </li>
+          )
+        })}
       </ul>
     </>
   )
