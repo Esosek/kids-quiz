@@ -21,7 +21,7 @@ export default function QuizResult({ userAnswers, currencyEarned, onReplay }: Qu
 
   return (
     <div className='flex flex-col text-center gap-8 justify-center items-center w-full'>
-      <h2 className='uppercase mt-12 text-xl'>{correctCount > 5 ? 'Gratulujeme!' : 'Zkus to znovu'}</h2>
+      <h2 className='uppercase mt-12 text-xl'>{correctCount > Math.floor(userAnswers.length / 2) ? 'Gratulujeme!' : 'Zkus to znovu'}</h2>
       <p className='flex gap-1 items-center justify-center uppercase '>
         <span className='text-3xl font-medium'>{correctCount}</span>
         <span className='text-sm'>{` / ${userAnswers.length} správně`}</span>
