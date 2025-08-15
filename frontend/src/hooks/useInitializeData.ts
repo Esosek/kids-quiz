@@ -1,12 +1,13 @@
+import { useEffect, useState } from 'react'
+import type User from '@/types/user'
+import { fetchRequest } from '@/utils/fetch_request'
 import { useCurrencyStore } from '@/stores/currency_store'
 import { useUserStore } from '@/stores/user_store'
 import { Subcategory } from '@/types/subcategory'
-import User from '@/types/user'
-import { useEffect, useState } from 'react'
 
 type UserData =
   | {
-      user: User
+      user: User & { currency: number }
       categories: Record<string, { id: string; label: string }>
       subcategories: Record<string, Subcategory>
     }
@@ -191,7 +192,7 @@ const MOCK_DATA = {
 }
 
 export const useInitializeData = () => {
-  const initializeUser = useUserStore((state) => state.initializeUser)
+  const { user, initializeUser } = useUserStore()
   const setCurrency = useCurrencyStore((state) => state.setCurrency)
   const [userData, setUserData] = useState<UserData>(undefined)
 
@@ -200,24 +201,55 @@ export const useInitializeData = () => {
     if (!tokenStorageKey) {
       console.warn(`Environment variable NEXT_PUBLIC_TOKEN_STORAGE_KEY is not set`)
     } else {
-      const token = localStorage.getItem(tokenStorageKey)
+      const token = localStorage.getItem(tokenStorageKey) ?? user?.token
       if (token) {
         fetchUserData(token)
-      }
+      } else setUserData(undefined)
     }
 
     async function fetchUserData(token: string) {
       try {
-        // TODO: Connect fetchUserData to backend
-        const { id, avatar, username, currency } = MOCK_DATA.user
-        initializeUser({ id, avatar, username, token })
-        setCurrency(currency)
-        setUserData(MOCK_DATA as unknown as UserData)
+        const { body } = await fetchRequest('/initialize', 'GET', undefined, token)
+        const validatedBody = validateBody(body)!
+
+        if (!user) {
+          const { id, avatar, username, currency } = validatedBody.user
+          setCurrency(currency)
+          initializeUser({ id, avatar, username, token })
+        }
+
+        setUserData(validatedBody)
       } catch (error) {
         console.log(error)
       }
     }
-  }, [initializeUser, setCurrency])
+  }, [initializeUser, setCurrency, user])
 
   return userData
+}
+
+function validateBody(body: unknown): UserData {
+  if (!body) {
+    throw new Error('Body is missing')
+  }
+
+  const validatedBody = body as UserData
+
+  if (!validatedBody?.user) {
+    throw new Error('User data is missing')
+  }
+
+  if (!validatedBody?.categories) {
+    throw new Error('Category data is missing')
+  }
+
+  if (!validatedBody?.subcategories) {
+    throw new Error('Subcategory data is missing')
+  }
+
+  return {
+    user: validatedBody.user,
+    categories: validatedBody.categories,
+    subcategories: validatedBody.subcategories,
+  }
 }

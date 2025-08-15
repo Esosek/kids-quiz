@@ -13,17 +13,6 @@ type QuizProps = {
   subcategory: Subcategory
 }
 
-const testQuestion = {
-  id: 'd4e5f6g7-h890-4123-8456-i78901234567',
-  correctAnswer: 'Saturn',
-  answers: ['Jupiter', 'Saturn', 'Neptun', 'Mars', 'Merkur'],
-  imgUrl:
-    'https://firebasestorage.googleapis.com/v0/b/kids-quiz-c9ae5.firebasestorage.app/o/question_images%2Fvesmir_hd.png?alt=media&token=f04a301f-5d55-4926-9f1f-64058f97477c',
-  text: 'Co je to za planetu?',
-  hasUserAnswered: false,
-  subcategoryId: '0043417e-e04b-4bd5-b940-bf8ef8b02e1f',
-}
-
 export default function Quiz({ subcategory }: QuizProps) {
   const [quizQuestions, setQuizQuestions] = useState(useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions]))
   const [userAnswers, setUserAnswers] = useState<Array<boolean | undefined>>(Array(quizQuestions.length).fill(undefined))

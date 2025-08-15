@@ -1,14 +1,9 @@
-export async function fetchRequest(
-  url: string,
-  method: 'GET' | 'POST' | 'PUT',
-  body?: Record<string, unknown>,
-  authToken?: string
-) {
+export async function fetchRequest(url: string, method: 'GET' | 'POST' | 'PUT', body?: Record<string, unknown>, authToken?: string) {
   try {
     const res = await fetch('http://localhost:8080/api' + url, {
       method,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': body ? 'application/json' : '',
         Authorization: authToken ? 'Bearer ' + authToken : '',
       },
       body: body ? JSON.stringify(body) : undefined,
