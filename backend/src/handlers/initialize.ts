@@ -13,6 +13,7 @@ type SubcategoryDetail = {
   id: string
   label: string
   unlockPrice: number
+  subcategoryImg: string
   categoryId: string | null
   categoryLabel: string | null
   questionId: string | null
@@ -23,8 +24,10 @@ type SubcategoryDetail = {
 }
 
 type SubcategoryDetailResponse = {
+  id: string
   label: string
   unlockPrice: number
+  imageURL: string
   isUnlocked: boolean
   category: {
     id: string
@@ -41,11 +44,7 @@ type SubcategoryDetailResponse = {
   }[]
 }
 
-export async function handlerInitialize(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function handlerInitialize(req: Request, res: Response, next: NextFunction) {
   try {
     const token = getBearerToken(req)
     const userId = validateJWT(token, config.jwt.secret)
@@ -56,11 +55,7 @@ export async function handlerInitialize(
     const subcategories = await getSubcategoriesWithQuestionsAndCategories()
     const userUnlocks = await getUserUnlocks(userId)
     const userAnswers = await getAnswersByUser(userId)
-    const processedSubcategories = processSubcategoryData(
-      subcategories,
-      userUnlocks,
-      userAnswers
-    )
+    const processedSubcategories = processSubcategoryData(subcategories, userUnlocks, userAnswers)
 
     res.status(200).json({
       user,
@@ -80,11 +75,7 @@ function processCategories(categories: Category[]) {
   }, {} as Record<string, Omit<Category, 'id'>>)
 }
 
-function processSubcategoryData(
-  subcategories: SubcategoryDetail[],
-  userUnlocks: UserUnlock[],
-  userAnswers: UserAnswer[]
-) {
+function processSubcategoryData(subcategories: SubcategoryDetail[], userUnlocks: UserUnlock[], userAnswers: UserAnswer[]) {
   const unlocks = userUnlocks.reduce((acc, cur) => {
     acc[cur.subcategoryId] = cur
     return acc
@@ -99,8 +90,10 @@ function processSubcategoryData(
   return subcategories.reduce((acc, row) => {
     if (!acc[row.id]) {
       acc[row.id] = {
+        id: row.id,
         label: row.label,
         unlockPrice: row.unlockPrice,
+        imageURL: row.subcategoryImg,
         isUnlocked: unlocks[row.id] ? true : false, // Mark unlocked subcategory if found in unlocks
         category: row.categoryId
           ? {
