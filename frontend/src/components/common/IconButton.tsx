@@ -15,7 +15,7 @@ export default function IconButton({ iconSrc, onClick, alt = '' }: IconButtonPro
     }, 50)
   }, [])
   return (
-    <button onClick={onClick} style={{ scale }} className='flex justify-center size-14 bg-green-500 rounded-full transition-transform duration-100'>
+    <button onClick={onClick} style={{ scale }} className='flex justify-center size-13 bg-green-500 rounded-full transition-transform duration-100 sm:size-14'>
       <Image src={iconSrc} width={30} height={30} alt={alt} />
     </button>
   )

@@ -46,16 +46,16 @@ export default function Quiz({ subcategory }: QuizProps) {
   }
 
   return (
-    <>
+    <div className='flex flex-col items-center'>
       <h1 className='absolute top-8 text-2xl uppercase mb-6 sm:top-16'>{subcategory.label}</h1>
       <QuizProgressTracker currentIndex={currentQuestionIndex} answers={userAnswers} />
       {currentQuestion.text && <p className='uppercase text-lg my-4 text-center sm:my-8'>{currentQuestion.text}</p>}
       {currentQuestion.imgUrl && (
-        <div className='relative w-full aspect-[3_/_2] sm:w-2/3 mb-4'>
+        <div className='relative w-full aspect-[3_/_2] mb-4 sm:w-2/3'>
           <Image src={currentQuestion.imgUrl} alt='Image for quiz question' width={600} height={400} />
         </div>
       )}
-      <ul className='relative grid grid-cols-2 w-full gap-2 gap-y-3 sm:grid-cols-1 sm:gap-3'>
+      <ul className='absolute bottom-8 left-6 right-6 grid grid-cols-2 gap-2 gap-y-3 sm:grid-cols-1 sm:gap-3'>
         {currentQuestion.answers.map((answer) => {
           let colorTheme: 'correct' | 'user-correct' | 'user' | undefined
           if (userSelectedOption) {
@@ -77,11 +77,10 @@ export default function Quiz({ subcategory }: QuizProps) {
         })}
         {userSelectedOption && (
           <div className='flex items-center self-center justify-self-center sm:absolute sm:-right-24 sm:top-0 sm:bottom-0'>
-            {' '}
             <IconButton iconSrc={iconChevron} onClick={handleNextQuestion} alt='Ikona pro pokračování' />{' '}
           </div>
         )}
       </ul>
-    </>
+    </div>
   )
 }
