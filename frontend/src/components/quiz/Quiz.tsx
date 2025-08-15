@@ -10,6 +10,9 @@ import IconButton from '../common/IconButton'
 import QuizResult from './QuizResult'
 import { useCurrencyStore } from '@/stores/currency_store'
 
+const QUIZ_COMPLETION_REWARD = 5
+const CORRECT_ANSWER_REWARD = 1
+
 type QuizProps = {
   subcategory: Subcategory
 }
@@ -32,8 +35,8 @@ export default function Quiz({ subcategory }: QuizProps) {
     setUserAnswers(updatedAnswers)
     setUserSelectedOption(value)
     if (isAnswerCorrect) {
-      setCurrencyEarned((cur) => cur + 1) // Currently each answer earns +1 currency
-      addCurrency() // Currently each answer earns +1 currency
+      setCurrencyEarned((cur) => cur + CORRECT_ANSWER_REWARD) // Currently each answer earns +1 currency
+      addCurrency(CORRECT_ANSWER_REWARD) // Currently each answer earns +1 currency
     }
   }
 
@@ -41,7 +44,8 @@ export default function Quiz({ subcategory }: QuizProps) {
     // Check if last question
     if (currentQuestionIndex + 1 >= quizQuestions.length) {
       setIsQuizFinished(true)
-      setCurrencyEarned((cur) => cur + 5) // Finishing quiz earns +5 currency
+      setCurrencyEarned((cur) => cur + QUIZ_COMPLETION_REWARD) // Finishing quiz earns +5 currency
+      addCurrency(QUIZ_COMPLETION_REWARD) // Finishing quiz earns +5 currency
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
