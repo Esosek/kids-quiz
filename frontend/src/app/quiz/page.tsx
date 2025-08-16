@@ -18,7 +18,7 @@ export default function QuizPage() {
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
-    if (userData) {
+    if (userData !== undefined) {
       setDataLoaded(true)
     }
   }, [userData])
@@ -28,7 +28,7 @@ export default function QuizPage() {
       router.push('/')
     }
   }, [router, user, dataLoaded, subcategoryId])
-  return dataLoaded ? (
+  return dataLoaded && userData ? (
     <>
       <Header />
       <Quiz subcategory={userData!.subcategories[subcategoryId!]} />

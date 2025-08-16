@@ -195,9 +195,9 @@ const MOCK_DATA = {
 
 export const useInitializeData = () => {
   const { user, initializeUser } = useUserStore()
-  const setCurrency = useCurrencyStore((state) => state.setCurrency)
+  const initializeCurrency = useCurrencyStore((state) => state.initializeCurrency)
   const initializeCategoryData = useCategoryStore((state) => state.initialize)
-  const [userData, setUserData] = useState<UserData>(undefined)
+  const [userData, setUserData] = useState<UserData | null>(undefined)
 
   useEffect(() => {
     const tokenStorageKey = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY
@@ -207,7 +207,7 @@ export const useInitializeData = () => {
       const token = localStorage.getItem(tokenStorageKey) ?? user?.token
       if (token) {
         fetchUserData(token)
-      } else setUserData(undefined)
+      } else setUserData(null)
     }
 
     async function fetchUserData(token: string) {
@@ -217,7 +217,7 @@ export const useInitializeData = () => {
 
         if (!user) {
           const { id, avatar, username, currency } = validatedBody.user
-          setCurrency(currency)
+          initializeCurrency(currency)
           initializeUser({ id, avatar, username, token })
         }
 
@@ -227,7 +227,7 @@ export const useInitializeData = () => {
         console.log(error)
       }
     }
-  }, [initializeUser, setCurrency, initializeCategoryData, user])
+  }, [initializeUser, initializeCurrency, initializeCategoryData, user])
 
   return userData
 }

@@ -9,7 +9,6 @@ export default function Dashboard() {
     if (!a.isUnlocked && b.isUnlocked) return 1
     return a.unlockPrice - b.unlockPrice
   })
-  console.log(subcategories)
   return (
     <>
       <Header />

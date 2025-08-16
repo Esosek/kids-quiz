@@ -2,21 +2,13 @@ import { create } from 'zustand'
 
 import User from '@/types/user'
 import { fetchRequest } from '@/utils/fetch_request'
+import { useCurrencyStore } from './currency_store'
 
 type UserStore = {
   user: User | null
   initializeUser: (user: User) => void
-  login: (
-    username: string,
-    password: string,
-    keepLoggedIn?: boolean
-  ) => Promise<{ ok: boolean; error?: string }>
-  register: (
-    username: string,
-    password: string,
-    avatar: string,
-    keepLoggedIn?: boolean
-  ) => Promise<{ ok: boolean; error?: string }>
+  login: (username: string, password: string, keepLoggedIn?: boolean) => Promise<{ ok: boolean; error?: string }>
+  register: (username: string, password: string, avatar: string, keepLoggedIn?: boolean) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
 }
 
@@ -37,13 +29,11 @@ export const useUserStore = create<UserStore>()((set) => ({
     })
 
     if (res.ok) {
-      const body = res.body as User
+      const body = res.body as User & { currency: number }
       if (keepLoggedIn) {
-        localStorage.setItem(
-          process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!,
-          body.token
-        )
+        localStorage.setItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!, body.token)
       }
+      useCurrencyStore.getState().initializeCurrency(body.currency)
       set(() => ({
         user: {
           id: body.id,
@@ -54,7 +44,7 @@ export const useUserStore = create<UserStore>()((set) => ({
       }))
       return { ok: true }
     }
-    return { ok: false, error: res.body.error }
+    return { ok: false, error: res.error }
   },
 
   register: async (username, password, avatar, keepLoggedIn?) => {
@@ -67,10 +57,7 @@ export const useUserStore = create<UserStore>()((set) => ({
     if (res.ok) {
       const body = res.body as User
       if (keepLoggedIn) {
-        localStorage.setItem(
-          process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!,
-          body.token
-        )
+        localStorage.setItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!, body.token)
       }
       set(() => ({
         user: {
@@ -82,7 +69,7 @@ export const useUserStore = create<UserStore>()((set) => ({
       }))
       return { ok: true }
     }
-    return { ok: false, error: res.body.error }
+    return { ok: false, error: res.error }
   },
   logout: () =>
     set(() => {
