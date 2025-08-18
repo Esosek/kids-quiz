@@ -9,6 +9,7 @@ import iconChevron from '@/assets/icon_chevron.svg'
 import IconButton from '../common/IconButton'
 import QuizResult from './QuizResult'
 import { useCurrencyStore } from '@/stores/currency_store'
+import { useCategoryStore } from '@/stores/category_store'
 
 const QUIZ_COMPLETION_REWARD = 5
 const CORRECT_ANSWER_REWARD = 1
@@ -29,16 +30,18 @@ export default function Quiz({ subcategory }: QuizProps) {
   const [isQuizFinished, setIsQuizFinished] = useState(false)
   const [currencyEarned, setCurrencyEarned] = useState(0)
   const addCurrency = useCurrencyStore((state) => state.addCurrency)
+  const answerQuestion = useCategoryStore((state) => state.answerQuestion)
 
   const currentQuestion = quizQuestions[currentQuestionIndex]
 
-  function submitAnswer(value: string) {
+  async function submitAnswer(value: string) {
     const isAnswerCorrect = value === currentQuestion.correctAnswer
     const updatedAnswers = [...userAnswers]
     updatedAnswers[currentQuestionIndex] = isAnswerCorrect
     setUserAnswers(updatedAnswers)
     setUserSelectedOption(value)
     if (isAnswerCorrect) {
+      await answerQuestion(subcategory.id, quizQuestions[currentQuestionIndex].id)
       setCurrencyEarned((cur) => cur + CORRECT_ANSWER_REWARD) // Currently each answer earns +1 currency
       addCurrency(CORRECT_ANSWER_REWARD) // Currently each answer earns +1 currency
     }
@@ -49,7 +52,7 @@ export default function Quiz({ subcategory }: QuizProps) {
     if (currentQuestionIndex + 1 >= quizQuestions.length) {
       setIsQuizFinished(true)
       setCurrencyEarned((cur) => cur + QUIZ_COMPLETION_REWARD) // Finishing quiz earns +5 currency
-      addCurrency(QUIZ_COMPLETION_REWARD) // Finishing quiz earns +5 currency
+      addCurrency(QUIZ_COMPLETION_REWARD)
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
@@ -78,7 +81,7 @@ export default function Quiz({ subcategory }: QuizProps) {
           />
         </div>
       )}
-      <ul className='w-full grid grid-cols-2 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
+      <ul className='relative w-full grid grid-cols-2 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
         {currentQuestion.answers.map((answer) => {
           let colorTheme: 'correct' | 'user-correct' | 'user' | undefined
           if (userSelectedOption) {

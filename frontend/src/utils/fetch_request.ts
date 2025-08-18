@@ -1,4 +1,9 @@
-export async function fetchRequest<T>(url: string, method: 'GET' | 'POST' | 'PUT', body?: Record<string, unknown>, authToken?: string) {
+export async function fetchRequest<T>(
+  url: string,
+  method: 'GET' | 'POST' | 'PUT',
+  body?: Record<string, unknown>,
+  authToken?: string
+) {
   try {
     const res = await fetch('http://localhost:8080/api' + url, {
       method,
@@ -9,6 +14,9 @@ export async function fetchRequest<T>(url: string, method: 'GET' | 'POST' | 'PUT
       body: body ? JSON.stringify(body) : undefined,
     })
     const resBody = await res.json()
+    if (!res.ok) {
+      return { ok: res.ok, status: res.status, error: resBody.error }
+    }
     return { ok: res.ok, status: res.status, body: resBody as T }
   } catch (error) {
     console.log(error)
