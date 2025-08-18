@@ -18,8 +18,12 @@ type QuizProps = {
 }
 
 export default function Quiz({ subcategory }: QuizProps) {
-  const [quizQuestions, setQuizQuestions] = useState(useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions]))
-  const [userAnswers, setUserAnswers] = useState<Array<boolean | undefined>>(Array(quizQuestions.length).fill(undefined))
+  const [quizQuestions, setQuizQuestions] = useState(
+    useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions])
+  )
+  const [userAnswers, setUserAnswers] = useState<Array<boolean | undefined>>(
+    Array(quizQuestions.length).fill(undefined)
+  )
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [userSelectedOption, setUserSelectedOption] = useState<string | null>(null)
   const [isQuizFinished, setIsQuizFinished] = useState(false)
@@ -65,10 +69,16 @@ export default function Quiz({ subcategory }: QuizProps) {
       {currentQuestion.text && <p className='uppercase text-lg my-4 text-center sm:my-8'>{currentQuestion.text}</p>}
       {currentQuestion.imgUrl && (
         <div className='relative w-full aspect-[3_/_2] mb-4 sm:w-2/3'>
-          <Image src={currentQuestion.imgUrl} alt='Image for quiz question' width={600} height={400} className='h-auto rounded-2xl' />
+          <Image
+            src={currentQuestion.imgUrl}
+            alt='Image for quiz question'
+            width={600}
+            height={400}
+            className='h-auto rounded-2xl'
+          />
         </div>
       )}
-      <ul className='absolute bottom-8 left-6 right-6 grid grid-cols-2 gap-2 gap-y-3 sm:grid-cols-1 sm:gap-3'>
+      <ul className='w-full grid grid-cols-2 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
         {currentQuestion.answers.map((answer) => {
           let colorTheme: 'correct' | 'user-correct' | 'user' | undefined
           if (userSelectedOption) {
@@ -84,7 +94,12 @@ export default function Quiz({ subcategory }: QuizProps) {
           }
           return (
             <li key={answer}>
-              <AnswerButton disabled={!!userSelectedOption} value={answer} colorTheme={colorTheme} onClick={() => submitAnswer(answer)} />
+              <AnswerButton
+                disabled={!!userSelectedOption}
+                value={answer}
+                colorTheme={colorTheme}
+                onClick={() => submitAnswer(answer)}
+              />
             </li>
           )
         })}
@@ -98,7 +113,9 @@ export default function Quiz({ subcategory }: QuizProps) {
   )
 
   if (isQuizFinished) {
-    content = <QuizResult userAnswers={userAnswers as boolean[]} currencyEarned={currencyEarned} onReplay={handleReplay} />
+    content = (
+      <QuizResult userAnswers={userAnswers as boolean[]} currencyEarned={currencyEarned} onReplay={handleReplay} />
+    )
   }
 
   return (
