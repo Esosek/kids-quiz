@@ -69,7 +69,9 @@ export default function Quiz({ subcategory }: QuizProps) {
 
   let content = (
     <>
-      {currentQuestion.text && <p className='uppercase text-lg my-4 text-center sm:my-8'>{currentQuestion.text}</p>}
+      {currentQuestion.text && (
+        <p className='uppercase text-lg my-4 text-center sm:my-8 sm:text-2xl'>{currentQuestion.text}</p>
+      )}
       {currentQuestion.imgUrl && (
         <div className='relative w-full aspect-[3_/_2] mb-4 sm:w-2/3'>
           <Image
@@ -117,7 +119,12 @@ export default function Quiz({ subcategory }: QuizProps) {
 
   if (isQuizFinished) {
     content = (
-      <QuizResult userAnswers={userAnswers as boolean[]} currencyEarned={currencyEarned} onReplay={handleReplay} />
+      <QuizResult
+        userAnswers={userAnswers as boolean[]}
+        currencyEarned={currencyEarned}
+        onReplay={handleReplay}
+        subcategoryId={subcategory.id}
+      />
     )
   }
 

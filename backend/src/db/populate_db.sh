@@ -1,4 +1,4 @@
-psql postgres -d kids_quiz << 'EOF'
+psql -d kids_quiz << 'EOF'
 DELETE FROM categories;
 DELETE FROM subcategories;
 
