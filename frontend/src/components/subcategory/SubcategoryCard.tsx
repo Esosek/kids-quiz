@@ -8,6 +8,7 @@ import PrimaryButton from '../common/PrimaryButton'
 import { useCurrencyStore } from '@/stores/currency_store'
 import { useState } from 'react'
 import LoadSpinner from '../common/LoadSpinner'
+import { useCategoryStore } from '@/stores/category_store'
 // import LinkButton from '../common/LinkButton'
 
 type SubcategoryCardProps = {
@@ -18,14 +19,15 @@ export default function SubcategoryCard({ subcategory }: SubcategoryCardProps) {
   const router = useRouter()
   const [isUnlocking, setIsUnlocking] = useState(false)
   const { currency, removeCurrency } = useCurrencyStore()
+  const unlockSubcategory = useCategoryStore((state) => state.unlockSubcategory)
 
   const answeredQuestion = subcategory.questions.filter((q) => q.hasUserAnswered)
 
   async function handleUnlock() {
     try {
       setIsUnlocking(true)
+      await unlockSubcategory(subcategory.id)
       await removeCurrency(subcategory.unlockPrice)
-      subcategory.isUnlocked = true
     } catch (error) {
       console.log(error)
     }
@@ -39,7 +41,13 @@ export default function SubcategoryCard({ subcategory }: SubcategoryCardProps) {
     <li className='relative text-center w-full bg-pink-300 pt-6 pb-10 px-8 rounded-2x flex flex-col gap-5 justify-between items-center shadow-xl rounded-2xl'>
       <h2 className='uppercase text-2xl font-light'>{subcategory.label}</h2>
       <div className='relative h-20 w-full flex justify-center'>
-        <Image src={subcategory.imageURL} alt={`Obrázek kvízu s názvem "${subcategory.label}"`} fill sizes='100%' className='object-contain' />
+        <Image
+          src={subcategory.imageURL}
+          alt={`Obrázek kvízu s názvem "${subcategory.label}"`}
+          fill
+          sizes='100%'
+          className='object-contain'
+        />
       </div>
 
       <SubcategoryTracker answeredCount={answeredQuestion.length} questionCount={subcategory.questions.length} />
