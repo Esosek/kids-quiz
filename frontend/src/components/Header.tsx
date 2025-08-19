@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 
 import { useUserStore } from '@/stores/user_store'
 import iconLogout from '@/assets/icon_logout.svg'
@@ -14,17 +13,12 @@ export default function Header() {
     <header className='relative flex justify-between items-start w-full mb-8 sm:mb-10'>
       <CurrencyDisplay value={currency} />
       {user?.id === process.env.NEXT_PUBLIC_ADMIN_ID && (
-        <>
-          <Link href={'/admin'} className='uppercase underline self-center'>
-            admin sekce
-          </Link>
-          <button
-            className='absolute left-0 bottom-2 bg-green-500 py-1 px-2 text-sm rounded-2xl'
-            onClick={() => addCurrency(25)}
-          >
-            +25
-          </button>
-        </>
+        <button
+          className='absolute left-0 bottom-2 bg-green-500 py-1 px-2 text-sm rounded-2xl'
+          onClick={() => addCurrency(25)}
+        >
+          +25
+        </button>
       )}
       <div className='grid justify-items-center gap-1'>
         <div className='size-10'>
