@@ -1,9 +1,9 @@
-type SubcategoryFilterProps = {
+type DropdownProps = {
   options: string[]
   onChange: (filter: string) => void
 }
 
-export default function SubcategoryFilter(props: SubcategoryFilterProps) {
+export default function Dropdown(props: DropdownProps) {
   const handleSelect = (value: string) => props.onChange(value)
 
   return (

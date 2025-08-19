@@ -1,8 +1,9 @@
+import { useState } from 'react'
+
 import Header from './Header'
 import SubcategoryCard from './subcategory/SubcategoryCard'
 import { useCategoryStore } from '@/stores/category_store'
-import SubcategoryFilter from './subcategory/SubcategoryFilter'
-import { useState } from 'react'
+import Dropdown from './common/Dropdown'
 
 export default function Dashboard() {
   const { subcategories, categories } = useCategoryStore()
@@ -42,7 +43,7 @@ export default function Dashboard() {
   return (
     <>
       <Header />
-      <SubcategoryFilter options={filterOptions} onChange={handleFilter} />
+      <Dropdown options={filterOptions} onChange={handleFilter} />
       <ul className='gap-8 grid auto-rows-fr grid-cols-1 sm:grid-cols-2 w-full max-w-sm sm:max-w-none'>
         {Object.values(filteredSubcategories).map((sub) => (
           <SubcategoryCard key={sub.id} subcategory={sub} />
