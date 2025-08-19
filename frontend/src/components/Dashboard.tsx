@@ -17,28 +17,27 @@ export default function Dashboard() {
   })
   const [filteredSubcategories, setFilteredSubcategories] = useState(sortedSubcategories)
 
-  const filterOptions = [
-    'Všechny kategorie',
-    ...Object.values(categories!).map((sub) => sub.label),
-    'Odemčené',
-    'Zamčené',
+  const filterOptions: [string, string][] = [
+    ['all', 'Všechny kategorie'],
+    ...(Object.entries(categories!).map(([catId, cat]) => [catId, cat.label]) as [string, string][]),
+    ['unlocked', 'Odemčené'],
+    ['locked', 'Zamčené'],
   ]
 
-  function handleFilter(value: string) {
-    const filter = value.toLowerCase()
+  function handleFilter(filter: string) {
     switch (filter) {
-      case 'všechny kategorie':
+      case 'all':
         setFilteredSubcategories(sortedSubcategories)
         break
-      case 'odemčené':
+      case 'unlocked':
         setFilteredSubcategories(sortedSubcategories.filter((sub) => sub.isUnlocked))
         break
-      case 'zamčené':
+      case 'locked':
         setFilteredSubcategories(sortedSubcategories.filter((sub) => !sub.isUnlocked))
         break
 
       default:
-        setFilteredSubcategories(sortedSubcategories.filter((sub) => sub.category.label.toLowerCase() === filter))
+        setFilteredSubcategories(sortedSubcategories.filter((sub) => sub.category.id === filter))
         break
     }
   }
