@@ -8,16 +8,14 @@ type UserStore = {
   user: User | null
   initializeUser: (user: User) => void
   login: (username: string, password: string, keepLoggedIn?: boolean) => Promise<{ ok: boolean; error?: string }>
-  register: (username: string, password: string, avatar: string, keepLoggedIn?: boolean) => Promise<{ ok: boolean; error?: string }>
+  register: (
+    username: string,
+    password: string,
+    avatar: string,
+    keepLoggedIn?: boolean
+  ) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
 }
-
-// const MOCK_USER = {
-//   id: '123',
-//   username: 'Alfik',
-//   avatar: 'penguin.png',
-//   token: 'abcdtoken',
-// }
 
 export const useUserStore = create<UserStore>()((set) => ({
   user: null,
