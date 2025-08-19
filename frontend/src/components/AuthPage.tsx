@@ -76,59 +76,47 @@ export default function AuthPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className='grid justify-items-center w-full'>
-      <div className='max-w-[50%] h-auto relative flex flex-col items-center'>
-        <Image
-          src={logo}
-          alt='Logo aplikace'
-          width={512}
-          height={512}
-          priority
+    <main>
+      <form onSubmit={handleSubmit} className='grid justify-items-center w-full'>
+        <div className='max-w-[50%] h-auto relative flex flex-col items-center'>
+          <Image src={logo} alt='Logo aplikace' width={512} height={512} priority />
+        </div>
+        <TextInput
+          id='username'
+          placeholder='PŘEZDÍVKA'
+          value={username}
+          onChange={(value) => handleUsernameChange(value)}
+          error={usernameError}
         />
-      </div>
-      <TextInput
-        id='username'
-        placeholder='PŘEZDÍVKA'
-        value={username}
-        onChange={(value) => handleUsernameChange(value)}
-        error={usernameError}
-      />
-      <TextInput
-        id='password'
-        type='password'
-        placeholder='HESLO'
-        value={password}
-        onChange={(value) => handlePasswordChange(value)}
-        error={passwordError}
-      />
-      <div className='justify-self-start m-2 ml-4 flex items-center'>
-        <input
-          type='checkbox'
-          name='keep-logged'
-          id='logged'
-          className=' accent-green-500 size-6'
-          checked={keepLoggedIn}
-          onChange={() => setKeepLoggedIn(!keepLoggedIn)}
+        <TextInput
+          id='password'
+          type='password'
+          placeholder='HESLO'
+          value={password}
+          onChange={(value) => handlePasswordChange(value)}
+          error={passwordError}
         />
-        <label htmlFor='keep-logged' className='uppercase ml-2'>
-          zůstat přihlášen
-        </label>
-      </div>
-      <PrimaryButton type='submit' className='my-4'>
-        {isRegistrationOpen ? 'VYTVOŘIT ÚČET' : 'PŘIHLÁSIT'}
-      </PrimaryButton>
-      {isRegistrationOpen && (
-        <AvatarPicker
-          value={selectedAvatar}
-          onChange={(avatar) => setSelectedAvatar(avatar)}
-        />
-      )}
-      <LinkButton
-        onClick={() => setIsRegistrationOpen(!isRegistrationOpen)}
-        className='my-4'
-      >
-        {isRegistrationOpen ? 'ZPÁTKY K PŘIHLÁŠENÍ' : 'JSI TU POPRVÉ?'}
-      </LinkButton>
-    </form>
+        <div className='justify-self-start m-2 ml-4 flex items-center'>
+          <input
+            type='checkbox'
+            name='keep-logged'
+            id='logged'
+            className=' accent-green-500 size-6'
+            checked={keepLoggedIn}
+            onChange={() => setKeepLoggedIn(!keepLoggedIn)}
+          />
+          <label htmlFor='keep-logged' className='uppercase ml-2'>
+            zůstat přihlášen
+          </label>
+        </div>
+        <PrimaryButton type='submit' className='my-4'>
+          {isRegistrationOpen ? 'VYTVOŘIT ÚČET' : 'PŘIHLÁSIT'}
+        </PrimaryButton>
+        {isRegistrationOpen && <AvatarPicker value={selectedAvatar} onChange={(avatar) => setSelectedAvatar(avatar)} />}
+        <LinkButton onClick={() => setIsRegistrationOpen(!isRegistrationOpen)} className='my-4'>
+          {isRegistrationOpen ? 'ZPÁTKY K PŘIHLÁŠENÍ' : 'JSI TU POPRVÉ?'}
+        </LinkButton>
+      </form>
+    </main>
   )
 }

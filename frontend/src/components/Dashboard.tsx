@@ -41,7 +41,7 @@ export default function Dashboard() {
   }
 
   return (
-    <>
+    <main>
       <Header />
       <Dropdown options={filterOptions} onChange={handleFilter} />
       <ul className='gap-8 grid auto-rows-fr grid-cols-1 sm:grid-cols-2 w-full max-w-sm sm:max-w-none'>
@@ -49,6 +49,6 @@ export default function Dashboard() {
           <SubcategoryCard key={sub.id} subcategory={sub} />
         ))}
       </ul>
-    </>
+    </main>
   )
 }
