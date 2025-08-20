@@ -1,14 +1,14 @@
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
 
+import { useCurrencyStore } from '@/stores/currency_store'
+import { useCategoryStore } from '@/stores/category_store'
+import PrimaryButton from '../common/PrimaryButton'
+import LoadSpinner from '../common/LoadSpinner'
 import SubcategoryTracker from './SubcategoryTracker'
 import CurrencyDisplay from '../CurrencyDisplay'
-import PrimaryButton from '../common/PrimaryButton'
-import { useCurrencyStore } from '@/stores/currency_store'
-import { useState } from 'react'
-import LoadSpinner from '../common/LoadSpinner'
-import { useCategoryStore } from '@/stores/category_store'
-// import LinkButton from '../common/LinkButton'
 
 type SubcategoryCardProps = {
   subcategoryId: string
@@ -53,8 +53,7 @@ export default function SubcategoryCard({ subcategoryId }: SubcategoryCardProps)
         answeredCount={answeredQuestion.length}
         questionCount={subcategories![subcategoryId].questions.length}
       />
-      {/* TODO: Implement subcategory explore */}
-      {/* <LinkButton className='mb-2'>PROZKOUMAT</LinkButton> */}
+
       {subcategories![subcategoryId].isUnlocked ? (
         <PrimaryButton fontSize='text-base' onClick={handleStartQuiz}>
           SPUSTIT
@@ -77,6 +76,9 @@ export default function SubcategoryCard({ subcategoryId }: SubcategoryCardProps)
           </PrimaryButton>
         </>
       )}
+      <Link href={'/subcategories/' + subcategoryId} className='mb-2 underline hover:opacity-75'>
+        PROZKOUMAT
+      </Link>
       <div className='absolute right-4 bottom-3 uppercase text-xs text-gray-800/60'>
         {subcategories![subcategoryId].category.label}
       </div>
