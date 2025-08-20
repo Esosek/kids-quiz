@@ -13,7 +13,7 @@ import { useUserStore } from '@/stores/user_store'
 
 export default function AdminPage() {
   const router = useRouter()
-  const userData = useInitializeData()
+  const [userData, hasDataLoaded] = useInitializeData()
   const user = useUserStore((state) => state.user)
 
   const { initialize, categories, subcategories } = useCategoryStore()
@@ -22,14 +22,7 @@ export default function AdminPage() {
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | undefined>()
   const [isCreatingCategory, setIsCreatingCategory] = useState(false)
   const [isCreatingSubcategory, setIsCreatingSubcategory] = useState(false)
-  const [hasDataLoaded, setHasDataLoaded] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (userData !== undefined) {
-      setHasDataLoaded(true)
-    }
-  }, [userData])
 
   useEffect(() => {
     if (hasDataLoaded && userData?.user.id !== process.env.NEXT_PUBLIC_ADMIN_ID) {
