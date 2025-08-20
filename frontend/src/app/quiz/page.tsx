@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import LoadSpinner from '@/components/common/LoadSpinner'
@@ -12,23 +12,15 @@ export default function QuizPage() {
   const router = useRouter()
   const subcategoryId = useSearchParams().get('id')
 
-  const userData = useInitializeData()
+  const [userData, hasDataLoaded] = useInitializeData()
   const { user } = useUserStore()
 
-  const [dataLoaded, setDataLoaded] = useState(false)
-
   useEffect(() => {
-    if (userData !== undefined) {
-      setDataLoaded(true)
-    }
-  }, [userData])
-
-  useEffect(() => {
-    if (dataLoaded && (!user || !subcategoryId)) {
+    if (hasDataLoaded && (!user || !subcategoryId)) {
       router.push('/')
     }
-  }, [router, user, dataLoaded, subcategoryId])
-  return dataLoaded && userData ? (
+  }, [router, user, hasDataLoaded, subcategoryId])
+  return hasDataLoaded && userData ? (
     <>
       <Header />
       <Quiz subcategory={userData!.subcategories[subcategoryId!]} />

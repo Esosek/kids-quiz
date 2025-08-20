@@ -14,12 +14,15 @@ type UserData =
       subcategories: Record<string, Subcategory>
     }
   | undefined
-
-export const useInitializeData = () => {
+/**
+ * @returns [userData, hasDataLoaded]
+ */
+export const useInitializeData = (): [UserData | null, boolean] => {
   const { user, initializeUser } = useUserStore()
   const initializeCurrency = useCurrencyStore((state) => state.initializeCurrency)
   const initializeCategoryData = useCategoryStore((state) => state.initialize)
   const [userData, setUserData] = useState<UserData | null>(undefined)
+  const [hasDataLoaded, setHasDataLoaded] = useState(false)
 
   useEffect(() => {
     const tokenStorageKey = process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY
@@ -29,7 +32,10 @@ export const useInitializeData = () => {
       const token = localStorage.getItem(tokenStorageKey) ?? user?.token
       if (token) {
         fetchUserData(token)
-      } else setUserData(null)
+      } else {
+        setUserData(null)
+        setHasDataLoaded(true)
+      }
     }
 
     async function fetchUserData(token: string) {
@@ -45,13 +51,14 @@ export const useInitializeData = () => {
 
         initializeCategoryData({ categories: validatedBody.categories, subcategories: validatedBody.subcategories })
         setUserData(validatedBody)
+        setHasDataLoaded(true)
       } catch (error) {
         console.log(error)
       }
     }
   }, [initializeUser, initializeCurrency, initializeCategoryData, user])
 
-  return userData
+  return [userData, hasDataLoaded]
 }
 
 function validateBody(body: unknown): UserData {
