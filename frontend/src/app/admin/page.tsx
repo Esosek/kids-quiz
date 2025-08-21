@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 
 import Header from '@/components/Header'
 import { useCategoryStore } from '@/stores/category_store'
@@ -18,6 +18,7 @@ export default function AdminPage() {
 
   const { initialize, categories, subcategories } = useCategoryStore()
 
+  const formRef = useRef<HTMLFormElement>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>()
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | undefined>()
   const [isCreatingCategory, setIsCreatingCategory] = useState(false)
@@ -61,8 +62,8 @@ export default function AdminPage() {
 
       if (res.ok) {
         const body = await res.json()
-        console.log(body)
-        // TODO: Sync created question with local category store
+        setFormError('Otázka byla úspěšně vytvořena pod ID ' + body.id)
+        formRef.current?.reset()
       } else {
         throw new Error('Failed to submit form: ' + res.statusText)
       }
@@ -99,11 +100,11 @@ export default function AdminPage() {
   }
 
   return hasDataLoaded ? (
-    <main className='flex flex-col items-center gap-8'>
+    <main className='flex flex-col items-center gap-8 pb-16'>
       <Header />
       <h1 className='uppercase text-2xl'>nová otázka</h1>
       {formError && <p className='text-red-500'>{formError}</p>}
-      <form onSubmit={handleSubmit} className='flex flex-col gap-6 items-center  w-full'>
+      <div className='w-full'>
         <Dropdown
           options={Object.entries(categories!).map(([id, cat]) => [id, cat.label]) as [string, string][]}
           onChange={handleCategorySelect}
@@ -122,6 +123,8 @@ export default function AdminPage() {
             isFullWidth
           />
         )}
+      </div>
+      <form onSubmit={handleSubmit} ref={formRef} className='flex flex-col gap-6 items-center  w-full'>
         {selectedSubcategory && <QuestionInput />}
         <PrimaryButton type='submit'>VYTVOŘIT</PrimaryButton>
       </form>
