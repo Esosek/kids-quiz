@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores/user_store'
 import PrimaryButton from './common/PrimaryButton'
 import LinkButton from './common/LinkButton'
 import { FormEvent, useState } from 'react'
-import TextInput from './common/TextInput'
+import CommonInput from './common/CommonInput'
 import AvatarPicker from './AvatarPicker'
 
 export default function AuthPage() {
@@ -81,14 +81,14 @@ export default function AuthPage() {
         <div className='max-w-[50%] h-auto relative flex flex-col items-center'>
           <Image src={logo} alt='Logo aplikace' width={512} height={512} priority />
         </div>
-        <TextInput
+        <CommonInput
           id='username'
           placeholder='PŘEZDÍVKA'
           value={username}
           onChange={(value) => handleUsernameChange(value)}
           error={usernameError}
         />
-        <TextInput
+        <CommonInput
           id='password'
           type='password'
           placeholder='HESLO'

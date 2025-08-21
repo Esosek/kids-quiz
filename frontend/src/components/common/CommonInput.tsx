@@ -1,19 +1,20 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { Ref, useState } from 'react'
 
 import iconVisibility from '@/assets/icon_visibility.svg'
 import iconVisibilityOff from '@/assets/icon_visibility_off.svg'
 
-type TextInputProps = {
+type CommonInputProps = {
   id: string
+  ref?: Ref<HTMLInputElement>
   value?: string
-  type?: string
+  type?: 'text' | 'number' | 'password'
   placeholder?: string
   error?: string
   onChange?: (value: string) => void
 }
 
-export default function TextInput(props: TextInputProps) {
+export default function CommonInput(props: CommonInputProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   let type = 'text'
@@ -35,30 +36,20 @@ export default function TextInput(props: TextInputProps) {
         props.error ? 'mt-4 border-red-600' : 'border-green-700'
       }`}
     >
-      {props.error && (
-        <p className='absolute text-red-600 uppercase text-sm -top-5 left-5'>
-          {props.error}
-        </p>
-      )}
+      {props.error && <p className='absolute text-red-600 uppercase text-sm -top-5 left-5'>{props.error}</p>}
       <input
         name={props.id}
         id={props.id}
         type={type}
         placeholder={props.placeholder}
         value={props.value}
-        onChange={
-          props.onChange ? (e) => props.onChange!(e.target.value) : undefined
-        }
+        onChange={props.onChange ? (e) => props.onChange!(e.target.value) : undefined}
         className={`text-2xl uppercase text-center w-full h-full py-3 rounded-full overflow-clip focus:outline-none placeholder:text-green-800/45 ${
           props.error ? 'text-red-600' : 'text-black'
         }`}
       />
       {props.type === 'password' && (
-        <button
-          type='button'
-          onClick={handleToggleVisibility}
-          className='absolute right-4 top-0 bottom-0 sm:right-8'
-        >
+        <button type='button' onClick={handleToggleVisibility} className='absolute right-4 top-0 bottom-0 sm:right-8'>
           <Image
             src={isPasswordVisible ? iconVisibilityOff : iconVisibility}
             width={24}
