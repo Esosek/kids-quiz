@@ -4,7 +4,7 @@ import { Subcategory } from '@/types/subcategory'
 import { fetchRequest } from '@/utils/fetch_request'
 import { useUserStore } from './user_store'
 
-type Category = { id: string; label: string }
+export type Category = { id: string; label: string }
 
 type CategoryStore = {
   categories: Record<string, Category> | undefined
@@ -12,6 +12,8 @@ type CategoryStore = {
   initialize: (data: Pick<CategoryStore, 'categories' | 'subcategories'>) => void
   unlockSubcategory: (subId: string) => Promise<void>
   answerQuestion: (subId: string, questionId: string) => Promise<void>
+  addCategory: (category: Category) => void
+  addSubcategory: (subcategory: Subcategory) => void
 }
 
 export const useCategoryStore = create<CategoryStore>()((set) => ({
@@ -54,5 +56,19 @@ export const useCategoryStore = create<CategoryStore>()((set) => ({
         })
       } else console.error(res.error)
     }
+  },
+  addCategory(category) {
+    set((cur) => {
+      const updatedCategories = { ...cur.categories }
+      updatedCategories[category.id] = category
+      return { ...cur, categories: updatedCategories }
+    })
+  },
+  addSubcategory(subcategory) {
+    set((cur) => {
+      const updatedSubcategories = { ...cur.subcategories }
+      updatedSubcategories[subcategory.id] = subcategory
+      return { ...cur, subcategories: updatedSubcategories }
+    })
   },
 }))

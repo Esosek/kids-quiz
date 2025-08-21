@@ -12,8 +12,6 @@ export default function Dashboard() {
     if (!a.isUnlocked && b.isUnlocked) return 1
     return a.unlockPrice - b.unlockPrice
   })
-  const [filteredSubcategories, setFilteredSubcategories] = useState(sortedSubcategories)
-
   const filterOptions: [string, string][] = [
     ['all', 'Všechny kategorie'],
     ...(Object.entries(categories!).map(([catId, cat]) => [catId, cat.label]) as [string, string][]),
@@ -21,7 +19,11 @@ export default function Dashboard() {
     ['locked', 'Zamčené'],
   ]
 
+  const [filteredSubcategories, setFilteredSubcategories] = useState(sortedSubcategories)
+  const [subcategoryFilter, setSubcategoryFilter] = useState(filterOptions[0][1])
+
   function handleFilter(filter: string) {
+    setSubcategoryFilter(filter)
     switch (filter) {
       case 'all':
         setFilteredSubcategories(sortedSubcategories)
@@ -42,8 +44,8 @@ export default function Dashboard() {
   return (
     <main>
       <Header />
-      <Dropdown options={filterOptions} onChange={handleFilter} />
-      <ul className='gap-8 grid auto-rows-fr grid-cols-1 sm:grid-cols-2 w-full max-w-sm sm:max-w-none'>
+      <Dropdown options={filterOptions} value={subcategoryFilter} onChange={handleFilter} />
+      <ul className='gap-8 grid auto-rows-fr grid-cols-1 my-4 sm:grid-cols-2 w-full max-w-sm sm:max-w-none'>
         {Object.values(filteredSubcategories).map((sub) => (
           <SubcategoryCard key={sub.id} subcategoryId={sub.id} />
         ))}

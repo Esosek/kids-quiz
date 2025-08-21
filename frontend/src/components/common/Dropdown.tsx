@@ -1,5 +1,6 @@
 type DropdownProps = {
   options: [string, string][]
+  value: string | undefined
   onChange: (filter: string) => void
   placeholder?: string
   isFullWidth?: boolean
@@ -10,7 +11,8 @@ export default function Dropdown(props: DropdownProps) {
   return (
     <select
       onChange={(e) => handleSelect(e.target.value)}
-      className={`block mb-4 rounded-2xl w-full py-4 px-5 bg-lime-100 ${props.isFullWidth ? '' : 'sm:w-auto'}`}
+      value={props.value}
+      className={`block rounded-2xl w-full py-4 px-5 bg-lime-100 ${props.isFullWidth ? '' : 'sm:w-auto'}`}
     >
       {props.placeholder && <option hidden>{props.placeholder.toUpperCase()}</option>}
       {props.options.map(([key, value]) => (

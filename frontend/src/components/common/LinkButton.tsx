@@ -5,6 +5,7 @@ type LinkButtonProps = {
   onClick?: () => void
   className?: string
   type?: 'button' | 'submit' | 'reset' | undefined
+  disabled?: boolean
 }
 
 export default function LinkButton(props: LinkButtonProps) {
@@ -12,6 +13,7 @@ export default function LinkButton(props: LinkButtonProps) {
     <button
       onClick={props.onClick}
       type={props.type ?? 'button'}
+      disabled={props.disabled ?? false}
       className={`${props.className ?? ''} underline`}
     >
       {props.children}
