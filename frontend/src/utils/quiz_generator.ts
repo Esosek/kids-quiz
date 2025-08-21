@@ -2,6 +2,7 @@ import { Question } from '@/types/question'
 
 const QUESTIONS_PER_QUIZ = 10
 const ANSWER_OPTIONS = 5
+const HINT_REMOVED_COUNT = 2
 
 export function generateQuiz(questionPool: Question[]) {
   const questionsPerQuiz = questionPool.length < QUESTIONS_PER_QUIZ ? questionPool.length : QUESTIONS_PER_QUIZ
@@ -52,20 +53,25 @@ function shuffleArrayOrder<T>(array: Array<T>) {
 }
 
 // Mutates the answers field to include random (5) answers including the correctAnswer
-function generateAnswers(questions: Question[]): Question[] {
+function generateAnswers(questions: Question[]) {
   return questions.map((question) => {
     const questionAnswers = [...question.answers]
+    const hintRemovedAnswers: string[] = []
     const randomizedAnswers: string[] = [questionAnswers.shift()!]
     for (let i = 0; i < ANSWER_OPTIONS - 1; i++) {
       //  -1 because we are adding correctAnswer to answer options
       const answerIndex = Math.round(Math.random() * (questionAnswers.length - 1))
       randomizedAnswers.push(questionAnswers[answerIndex])
+      if (hintRemovedAnswers.length < HINT_REMOVED_COUNT) {
+        hintRemovedAnswers.push(questionAnswers[answerIndex])
+      }
       questionAnswers.splice(answerIndex, 1)
     }
     shuffleArrayOrder(randomizedAnswers)
     return {
       ...question,
       answers: randomizedAnswers,
+      hintRemovedAnswers,
     }
   })
 }

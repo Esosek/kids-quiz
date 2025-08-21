@@ -10,6 +10,7 @@ import IconButton from '../common/IconButton'
 import QuizResult from './QuizResult'
 import { useCurrencyStore } from '@/stores/currency_store'
 import { useCategoryStore } from '@/stores/category_store'
+import HintButton from './HintButton'
 
 const QUIZ_COMPLETION_REWARD = 5
 const CORRECT_ANSWER_REWARD = 1
@@ -32,7 +33,7 @@ export default function Quiz({ subcategory }: QuizProps) {
   const addCurrency = useCurrencyStore((state) => state.addCurrency)
   const answerQuestion = useCategoryStore((state) => state.answerQuestion)
 
-  const currentQuestion = quizQuestions[currentQuestionIndex]
+  const [currentQuestion, setCurrentQuestion] = useState(quizQuestions[currentQuestionIndex])
 
   async function submitAnswer(value: string) {
     const isAnswerCorrect = value === currentQuestion.correctAnswer
@@ -55,6 +56,7 @@ export default function Quiz({ subcategory }: QuizProps) {
       addCurrency(QUIZ_COMPLETION_REWARD)
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
+      setCurrentQuestion(quizQuestions[currentQuestionIndex + 1])
     }
     setUserSelectedOption(null)
   }
@@ -63,8 +65,17 @@ export default function Quiz({ subcategory }: QuizProps) {
     setQuizQuestions(generateQuiz(subcategory.questions))
     setUserAnswers(Array(quizQuestions.length).fill(undefined))
     setCurrentQuestionIndex(0)
+    setCurrentQuestion(quizQuestions[0])
     setCurrencyEarned(0)
     setIsQuizFinished(false)
+  }
+
+  function handleHintAccept() {
+    const hintedAnswers = currentQuestion.answers.filter(
+      (answer) => !currentQuestion.hintRemovedAnswers.includes(answer)
+    )
+    const updatedQuestions = { ...currentQuestion, answers: hintedAnswers }
+    setCurrentQuestion(updatedQuestions)
   }
 
   let content = (
@@ -81,6 +92,9 @@ export default function Quiz({ subcategory }: QuizProps) {
             height={400}
             className='h-auto rounded-2xl'
           />
+          <div className='absolute top-3 left-3 sm:-left-20 sm:bottom-0 sm:top-0 sm:flex sm:items-center'>
+            <HintButton onAccept={handleHintAccept} />
+          </div>
         </div>
       )}
       <ul className='relative w-full grid grid-cols-2 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
@@ -130,7 +144,7 @@ export default function Quiz({ subcategory }: QuizProps) {
 
   return (
     <div className='flex flex-col items-center'>
-      <h1 className='absolute top-8 text-2xl uppercase mb-6 sm:top-16'>{subcategory.label}</h1>
+      <h1 className='absolute top-11 text-2xl uppercase mb-6 sm:top-16'>{subcategory.label}</h1>
       <QuizProgressTracker currentIndex={currentQuestionIndex} answers={userAnswers} />
       {content}
     </div>
