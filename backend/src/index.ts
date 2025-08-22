@@ -30,6 +30,8 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.static('public'))
+app.get('/', (_req, res) => res.status(200).send('Server is up!'))
+app.get('/api', (_req, res) => res.status(200).send('Server is up!'))
 app.post('/api/users', handlerCreateUser)
 app.put('/api/users', handlerUpdateUser)
 app.post('/api/login', handlerLogin)
