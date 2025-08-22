@@ -27,7 +27,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 }
 
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.static('public'))
 app.get('/', (_req, res) => res.status(200).send('Server is up!'))
