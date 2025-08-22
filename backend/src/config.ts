@@ -1,4 +1,4 @@
-process.loadEnvFile()
+// process.loadEnvFile()
 
 const config = {
   db: {
