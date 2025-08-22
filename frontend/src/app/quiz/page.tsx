@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import LoadSpinner from '@/components/common/LoadSpinner'
@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/user_store'
 import Header from '@/components/Header'
 import Quiz from '@/components/quiz/Quiz'
 
-export default function QuizPage() {
+function QuizSuspense() {
   const router = useRouter()
   const subcategoryId = useSearchParams().get('id')
 
@@ -30,5 +30,13 @@ export default function QuizPage() {
       Nahrávám uživatelská data...
       <LoadSpinner />
     </div>
+  )
+}
+
+export default function QuizPage() {
+  return (
+    <Suspense>
+      <QuizSuspense />
+    </Suspense>
   )
 }
