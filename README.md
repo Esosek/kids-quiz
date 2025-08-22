@@ -29,13 +29,13 @@ To get a local copy of the project up and running, follow these steps:
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/Esosek/kids-quiz-app.git
+   git clone https://github.com/Esosek/kids-quiz.git
    ```
 
 2. **Navigate to the project directory:**
 
    ```sh
-   cd kids-quiz-app
+   cd kids-quiz
    ```
 
 3. **Set up the backend:**
