@@ -5,7 +5,7 @@ export async function fetchRequest<T>(
   authToken?: string
 ) {
   try {
-    const res = await fetch('http://localhost:8080/api' + url, {
+    const res = await fetch('https://kids-quiz-back.vercel.app/api' + url, {
       method,
       headers: {
         'Content-Type': body ? 'application/json' : '',
