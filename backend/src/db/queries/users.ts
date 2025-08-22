@@ -6,11 +6,7 @@ import { NotFoundError, ValidationError } from '../../types/errors'
 
 type UserResponse = Omit<User, 'hashedPassword'>
 
-export async function createUser(
-  username: string,
-  password: string,
-  avatar: string
-): Promise<UserResponse> {
+export async function createUser(username: string, password: string, avatar: string): Promise<UserResponse> {
   try {
     const [result] = await db
       .insert(users)
@@ -31,12 +27,9 @@ export async function createUser(
 
 export async function getUserByName(username: string): Promise<User> {
   try {
-    const [result] = await db
-      .select()
-      .from(users)
-      .where(eq(users.username, username))
+    const [result] = await db.select().from(users).where(eq(users.username, username))
     if (!result) {
-      throw new NotFoundError('User not found')
+      throw new NotFoundError('Uživatel neexistuje')
     }
     return result
   } catch (error) {
@@ -66,25 +59,15 @@ type UserData = {
   currency?: number
 }
 
-export async function updateUser(
-  userId: string,
-  userData: UserData
-): Promise<UserResponse> {
+export async function updateUser(userId: string, userData: UserData): Promise<UserResponse> {
   try {
     if (userData.username) {
-      const [result] = await db
-        .select()
-        .from(users)
-        .where(eq(users.username, userData.username))
+      const [result] = await db.select().from(users).where(eq(users.username, userData.username))
       if (result) {
         throw new ValidationError(`User ${userData.username} already exists`)
       }
     }
-    const [result] = await db
-      .update(users)
-      .set(userData)
-      .where(eq(users.id, userId))
-      .returning()
+    const [result] = await db.update(users).set(userData).where(eq(users.id, userId)).returning()
     if (!result) {
       throw new NotFoundError('User not found')
     }
