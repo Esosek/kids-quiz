@@ -2,7 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import multer from 'multer'
 
-const upload = multer({ dest: 'tmp/uploads' })
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
 
 import errorHandler from './middleware/error_handler'
 import checkAdmin from './middleware/check_admin'
@@ -27,7 +28,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 }
 
-// app.use(cors(corsOptions))
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.static('public'))
 app.get('/', (_req, res) => res.status(200).send('Server is up!'))

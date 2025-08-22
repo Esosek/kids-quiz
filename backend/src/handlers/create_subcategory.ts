@@ -13,7 +13,7 @@ export async function handlerCreateSubcategory(req: Request, res: Response, next
       throw new ValidationError('Missing image file')
     }
     const body = validateInput(req.body)
-    const imageURL = await processImage(req.file.path, req.body.label)
+    const imageURL = await processImage(req.file.buffer, req.body.label)
 
     const createdSubcategory = await createSubcategory(body.label, imageURL, body.categoryId, body.unlockPrice)
     res.status(201).json(createdSubcategory)
@@ -58,18 +58,11 @@ function validateInput(reqBody: any): {
   }
 }
 
-async function processImage(filePath: string, subcategoryLabel: string) {
+async function processImage(fileBuffer: Buffer<ArrayBufferLike>, subcategoryLabel: string) {
   const imageFileName = subcategoryLabel.toLowerCase().replace(/\s+/g, '_') + '.png'
   const imageRef = ref(storage, 'subcategory_images/' + imageFileName)
-  const file = fs.readFileSync(filePath)
-  await uploadBytes(imageRef, file, {
+  await uploadBytes(imageRef, fileBuffer, {
     contentType: 'image/png',
-  })
-  fs.unlink(filePath, (err) => {
-    if (err) {
-      console.log(err)
-      throw new Error('Removing file from file system failed')
-    }
   })
   return await getDownloadURL(imageRef)
 }

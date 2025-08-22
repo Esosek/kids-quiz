@@ -14,17 +14,11 @@ export async function handlerCreateQuestion(req: Request, res: Response, next: N
     if (body.image) {
       const imageFileName = body.answers[0].toLowerCase().replace(/\s+/g, '_') + '.png'
       const imageRef = ref(storage, `question_images/subcategory_${body.subcategoryId}/` + imageFileName)
-      const file = fs.readFileSync(body.image.path)
-      await uploadBytes(imageRef, file, {
+      const fileBuffer = body.image.buffer
+      await uploadBytes(imageRef, fileBuffer, {
         contentType: 'image/png',
       })
       imageURL = await getDownloadURL(imageRef)
-      fs.unlink(body.image.path, (err) => {
-        if (err) {
-          console.log(err)
-          throw new Error('Removing file from file system failed')
-        }
-      })
     }
 
     const createdQuestion = await createQuestion({ ...body, imgUrl: imageURL })
