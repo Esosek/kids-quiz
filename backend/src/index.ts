@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import multer from 'multer'
 
-const upload = multer({ dest: 'public/uploads' })
+const upload = multer({ dest: 'tmp/uploads' })
 
 import errorHandler from './middleware/error_handler'
 import checkAdmin from './middleware/check_admin'
