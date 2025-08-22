@@ -22,7 +22,7 @@ const app = express()
 const PORT = 8080
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Replace with the origin of your client application
+  origin: process.env.FRONTEND_URL ?? 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }
