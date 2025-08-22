@@ -3,10 +3,11 @@ import { describe, it, vi, expect } from 'vitest'
 import { createUser, getUserByName, updateUser } from '../users'
 import { NotFoundError, ValidationError } from '../../../types/errors'
 
-const { USER_ID, USERNAME, PASSWORD } = vi.hoisted(() => ({
+const { USER_ID, USERNAME, PASSWORD, AVATAR } = vi.hoisted(() => ({
   USER_ID: 'a81bc81b-dead-4e5d-abff-90865d1e13b1',
   USERNAME: 'CactoHippoTanto',
   PASSWORD: 'password',
+  AVATAR: 'hippo.png',
 }))
 
 vi.mock('../../../db/index', () => {
@@ -27,9 +28,7 @@ vi.mock('../../../db/index', () => {
         where: vi.fn((isTrue: boolean) => {
           if (isTrue) {
             return {
-              returning: vi
-                .fn()
-                .mockReturnValue([{ ...userResponse, ...updatedUserData }]),
+              returning: vi.fn().mockReturnValue([{ ...userResponse, ...updatedUserData }]),
             }
           } else {
             return { returning: vi.fn().mockReturnValue([]) }
@@ -60,7 +59,7 @@ vi.mock('drizzle-orm', () => ({
 
 describe('Creating user', () => {
   it('should return a user response in correct format', async () => {
-    const result = await createUser(USERNAME, PASSWORD)
+    const result = await createUser(USERNAME, PASSWORD, AVATAR)
     expect(result.id).toBeTypeOf('string')
     expect(result.createdAt).toBeTypeOf('string')
     expect(result.updatedAt).toBeTypeOf('string')

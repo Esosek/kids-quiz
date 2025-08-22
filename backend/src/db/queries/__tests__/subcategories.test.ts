@@ -53,9 +53,10 @@ describe('Getting subcategories', () => {
 
 describe('Creating subcategory', () => {
   const label = 'Geografie I'
+  const imgUrl = 'example.com'
 
   it('should return created subcategory when categoryId is NOT provided', async () => {
-    const result = await createSubcategory(label)
+    const result = await createSubcategory(label, imgUrl)
 
     expect(result.label).toBe(label)
     expect(result.categoryId).toBeNull()
@@ -64,7 +65,7 @@ describe('Creating subcategory', () => {
 
   it('should return created subcategory when categoryId is provided', async () => {
     const categoryId = MOCK_SUBCATEGORIES[1].categoryId
-    const result = await createSubcategory(label, categoryId!)
+    const result = await createSubcategory(label, imgUrl, categoryId!)
 
     expect(result.label).toBe(label)
     expect(result.categoryId).toBe(categoryId)
