@@ -2,12 +2,8 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { useEffect } from 'react'
 
-import { useInitializeData } from '@/hooks/useInitializeData'
-import { useUserStore } from '@/stores/user_store'
 import Header from '@/components/Header'
-import LoadSpinner from '@/components/common/LoadSpinner'
 import { useCategoryStore } from '@/stores/category_store'
 import SubcategoryTracker from '@/components/subcategory/SubcategoryTracker'
 import PrimaryButton from '@/components/common/PrimaryButton'
@@ -15,27 +11,21 @@ import PrimaryButton from '@/components/common/PrimaryButton'
 export default function SubcategoryDetailPage() {
   const { subId } = useParams() as { subId: string }
   const router = useRouter()
-  const [userData, hasDataLoaded] = useInitializeData()
-  const user = useUserStore((state) => state.user)
+
   const subcategories = useCategoryStore((state) => state.subcategories)
-  const subQuestions = subcategories ? subcategories![subId].questions : []
+  const subcategory = subcategories ? subcategories[subId] : undefined
+  const subQuestions = subcategory ? subcategory.questions : []
   subQuestions.sort((a, b) => {
     if (a.hasUserAnswered && !b.hasUserAnswered) return -1
     if (!a.hasUserAnswered && b.hasUserAnswered) return 1
     return a.correctAnswer < b.correctAnswer ? -1 : 1
   })
 
-  useEffect(() => {
-    if (hasDataLoaded && !user) {
-      router.push('/')
-    }
-  }, [hasDataLoaded, userData, router, user])
-
   function handleQuizStart() {
     router.push('/quiz?id=' + subId)
   }
 
-  return hasDataLoaded ? (
+  return subcategory ? (
     <main className='relative text-center pb-16'>
       <Header />
       <h1 className='absolute top-8 left-0 right-0 text-2xl uppercase mb-6 sm:top-16'>{subcategories![subId].label}</h1>
@@ -72,9 +62,6 @@ export default function SubcategoryDetailPage() {
       </ul>
     </main>
   ) : (
-    <div className='grid justify-items-center gap-4'>
-      Nahrávám uživatelská data...
-      <LoadSpinner />
-    </div>
+    <p className='text-center'>Kvíz neexistuje...</p>
   )
 }

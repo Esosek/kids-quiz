@@ -2,34 +2,28 @@
 import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import LoadSpinner from '@/components/common/LoadSpinner'
-import { useInitializeData } from '@/hooks/useInitializeData'
-import { useUserStore } from '@/stores/user_store'
 import Header from '@/components/Header'
 import Quiz from '@/components/quiz/Quiz'
+import { useCategoryStore } from '@/stores/category_store'
 
 function QuizSuspense() {
-  const router = useRouter()
   const subcategoryId = useSearchParams().get('id')
-
-  const [userData, hasDataLoaded] = useInitializeData()
-  const { user } = useUserStore()
+  const router = useRouter()
+  const subcategories = useCategoryStore((state) => state.subcategories)
 
   useEffect(() => {
-    if (hasDataLoaded && (!user || !subcategoryId)) {
+    if (!subcategories || !subcategoryId || !subcategories[subcategoryId]) {
       router.push('/')
     }
-  }, [router, user, hasDataLoaded, subcategoryId])
-  return hasDataLoaded && userData ? (
+  }, [router, subcategories, subcategoryId])
+
+  return (
     <>
       <Header />
-      <Quiz subcategory={userData!.subcategories[subcategoryId!]} />
+      {subcategories && subcategoryId && subcategories[subcategoryId] && (
+        <Quiz subcategory={subcategories[subcategoryId]} />
+      )}
     </>
-  ) : (
-    <div className='grid justify-items-center gap-4'>
-      Nahrávám uživatelská data...
-      <LoadSpinner />
-    </div>
   )
 }
 

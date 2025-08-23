@@ -1,14 +1,17 @@
+'use client'
 import Image from 'next/image'
 
 import logo from '@/assets/logo.png'
 import { useUserStore } from '@/stores/user_store'
-import PrimaryButton from './common/PrimaryButton'
-import LinkButton from './common/LinkButton'
+import PrimaryButton from '@/components/common/PrimaryButton'
+import LinkButton from '@/components/common/LinkButton'
 import { FormEvent, useState } from 'react'
-import CommonInput from './common/CommonInput'
-import AvatarPicker from './AvatarPicker'
+import CommonInput from '@/components/common/CommonInput'
+import AvatarPicker from '@/components/AvatarPicker'
+import { useRouter } from 'next/navigation'
 
-export default function AuthPage() {
+export default function LoginPage() {
+  const router = useRouter()
   const { login, register } = useUserStore()
 
   const [keepLoggedIn, setKeepLoggedIn] = useState(true)
@@ -47,6 +50,8 @@ export default function AuthPage() {
       if (/\bheslo\b/.test(result.error)) {
         setPasswordError(result.error!)
       } else setUsernameError(result.error!)
+    } else {
+      router.push('/')
     }
   }
 
