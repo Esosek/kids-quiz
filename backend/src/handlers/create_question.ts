@@ -12,7 +12,8 @@ export async function handlerCreateQuestion(req: Request, res: Response, next: N
     const body = validateBody(req)
     let imageURL: string | undefined
     if (body.image) {
-      const imageFileName = body.answers[0].toLowerCase().replace(/\s+/g, '_') + '.png'
+      const randomId = Math.round(Math.random() * 1000)
+      const imageFileName = body.answers[0].toLowerCase().replace(/\s+/g, '_') + '_' + randomId + '.png'
       const imageRef = ref(storage, `question_images/subcategory_${body.subcategoryId}/` + imageFileName)
       const fileBuffer = body.image.buffer
       await uploadBytes(imageRef, fileBuffer, {
