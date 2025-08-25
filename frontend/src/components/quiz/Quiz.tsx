@@ -94,7 +94,7 @@ export default function Quiz({ subcategory }: QuizProps) {
             height={400}
             className='h-auto rounded-2xl'
           />
-          {(!currentQuestion.hasUserAnswered || !hintAccepted) && (
+          {!currentQuestion.hasUserAnswered && !hintAccepted && (
             <div className='absolute top-3 left-3 sm:-left-20 sm:bottom-0 sm:top-0 sm:flex sm:items-center'>
               <HintButton onAccept={handleHintAccept} />
             </div>
