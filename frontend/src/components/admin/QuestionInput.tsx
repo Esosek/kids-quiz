@@ -26,7 +26,7 @@ export default function QuestionInput() {
         </label>
       </div>
       <label htmlFor='img-input' className='mt-8 text-sm text-center'>
-        <span className='text-base'>OBRÁZEK</span> nahraj ve velikosti 400x600 px
+        <span className='text-base'>OBRÁZEK</span> nahraj ve velikosti 600x400 px
       </label>
       <input type='file' name='question_image' id='img-input' className='bg-lime-100 py-3 px-4 rounded-2xl' />
     </div>
