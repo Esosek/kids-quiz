@@ -30,6 +30,7 @@ export default function Quiz({ subcategory }: QuizProps) {
   const [userSelectedOption, setUserSelectedOption] = useState<string | null>(null)
   const [isQuizFinished, setIsQuizFinished] = useState(false)
   const [currencyEarned, setCurrencyEarned] = useState(0)
+  const [hintAccepted, setHintAccepted] = useState(false)
   const addCurrency = useCurrencyStore((state) => state.addCurrency)
   const answerQuestion = useCategoryStore((state) => state.answerQuestion)
 
@@ -76,6 +77,7 @@ export default function Quiz({ subcategory }: QuizProps) {
     )
     const updatedQuestions = { ...currentQuestion, answers: hintedAnswers }
     setCurrentQuestion(updatedQuestions)
+    setHintAccepted(true)
   }
 
   let content = (
@@ -92,9 +94,11 @@ export default function Quiz({ subcategory }: QuizProps) {
             height={400}
             className='h-auto rounded-2xl'
           />
-          <div className='absolute top-3 left-3 sm:-left-20 sm:bottom-0 sm:top-0 sm:flex sm:items-center'>
-            <HintButton onAccept={handleHintAccept} />
-          </div>
+          {(!currentQuestion.hasUserAnswered || !hintAccepted) && (
+            <div className='absolute top-3 left-3 sm:-left-20 sm:bottom-0 sm:top-0 sm:flex sm:items-center'>
+              <HintButton onAccept={handleHintAccept} />
+            </div>
+          )}
         </div>
       )}
       <ul className='relative w-full grid grid-cols-2 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
