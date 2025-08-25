@@ -25,12 +25,12 @@ export default function LoginPage() {
 
   function handleUsernameChange(value: string) {
     setUsernameError('')
-    setUsername(value)
+    setUsername(value.toLowerCase())
   }
 
   function handlePasswordChange(value: string) {
     setPasswordError('')
-    setPassword(value)
+    setPassword(value.toLowerCase())
   }
 
   const handleSubmit = async (event: FormEvent) => {
