@@ -51,10 +51,10 @@ export const useInitializeData = (): [UserData | null, boolean] => {
 
         initializeCategoryData({ categories: validatedBody.categories, subcategories: validatedBody.subcategories })
         setUserData(validatedBody)
-        setHasDataLoaded(true)
       } catch (error) {
         console.log(error)
       }
+      setHasDataLoaded(true)
     }
   }, [initializeUser, initializeCurrency, initializeCategoryData, user])
 
