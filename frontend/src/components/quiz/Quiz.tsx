@@ -12,7 +12,7 @@ import { useCurrencyStore } from '@/stores/currency_store'
 import { useCategoryStore } from '@/stores/category_store'
 import HintButton from './HintButton'
 
-const QUIZ_COMPLETION_REWARD = 5
+const QUIZ_COMPLETION_REWARD = 2
 const CORRECT_ANSWER_REWARD = 1
 
 type QuizProps = {
