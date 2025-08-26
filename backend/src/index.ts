@@ -2,6 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import multer from 'multer'
 
+process.loadEnvFile()
+
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
 

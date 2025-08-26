@@ -1,5 +1,3 @@
-// process.loadEnvFile()
-
 const config = {
   db: {
     url: envOrThrow('DB_URL'),
