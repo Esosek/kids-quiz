@@ -1,10 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 import { getStorage } from 'firebase/storage'
+import config from './config'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: config.firebaseApiKey,
   authDomain: 'kids-quiz-c9ae5.firebaseapp.com',
   projectId: 'kids-quiz-c9ae5',
   storageBucket: 'kids-quiz-c9ae5.firebasestorage.app',

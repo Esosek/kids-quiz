@@ -10,6 +10,7 @@ const config = {
     cookieName: 'kidsqz_l',
   },
   adminUserId: envOrThrow('ADMIN_USER_ID'),
+  firebaseApiKey: envOrThrow('FIREBASE_API_KEY'),
 }
 
 function envOrThrow(key: string) {
