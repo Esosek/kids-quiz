@@ -86,12 +86,12 @@ export default function Quiz({ subcategory }: QuizProps) {
         <p className='uppercase text-lg my-4 text-center sm:my-8 sm:text-2xl'>{currentQuestion.text}</p>
       )}
       {currentQuestion.imgUrl && (
-        <div className='relative w-full aspect-[3_/_2] mb-4 sm:w-2/3'>
+        <div className='relative w-4/5 aspect-[3_/_2] mb-4 sm:w-2/3'>
           <Image
             src={currentQuestion.imgUrl}
             alt='Image for quiz question'
             width={600}
-            height={400}
+            height={200}
             className='h-auto rounded-2xl'
           />
           {!currentQuestion.hasUserAnswered && !hintAccepted && (
