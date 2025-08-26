@@ -35,7 +35,7 @@ export default function AdminPage() {
   const [isProcessing, setIsProcessing] = useState(false)
 
   useEffect(() => {
-    if (hasDataLoaded && userData?.user.id !== process.env.NEXT_PUBLIC_ADMIN_ID) {
+    if (hasDataLoaded && !userData?.user.isAdmin) {
       router.push('/')
     } else {
       initialize({ categories: userData?.categories, subcategories: userData?.subcategories })

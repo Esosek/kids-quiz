@@ -15,7 +15,7 @@ export default function Header() {
   return (
     <header className='relative flex justify-between items-start w-full mb-2 sm:mb-10'>
       <CurrencyDisplay value={currency} />
-      {user?.id === process.env.NEXT_PUBLIC_ADMIN_ID && (
+      {user?.isAdmin && (
         <>
           <Link href={pathName === '/admin' ? '/' : '/admin'} className='uppercase underline'>
             {pathName === '/admin' ? 'dashboard' : 'admin sekce'}

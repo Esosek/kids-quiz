@@ -44,9 +44,9 @@ export const useInitializeData = (): [UserData | null, boolean] => {
         const validatedBody = validateBody(body)!
 
         if (!user) {
-          const { id, avatar, username, currency } = validatedBody.user
+          const { id, avatar, username, currency, isAdmin } = validatedBody.user
           initializeCurrency(currency)
-          initializeUser({ id, avatar, username, token })
+          initializeUser({ id, avatar, username, token, isAdmin })
         }
 
         initializeCategoryData({ categories: validatedBody.categories, subcategories: validatedBody.subcategories })
