@@ -37,7 +37,7 @@ export default function SubcategoryCard({ subcategoryId }: SubcategoryCardProps)
     router.push(`/quiz?id=${subcategoryId}`)
   }
   return (
-    <li className='relative text-center w-full bg-pink-300 pt-6 pb-10 px-8 rounded-2x flex flex-col gap-5 justify-between items-center shadow-xl rounded-2xl'>
+    <li className='relative text-center w-full bg-pink-300 pt-6 pb-10 px-6 rounded-2x flex flex-col gap-5 justify-between items-center shadow-xl rounded-2xl'>
       <h2 className='uppercase text-2xl font-light'>{subcategories![subcategoryId].label}</h2>
       <div className='relative h-20 w-full flex justify-center'>
         <Image
