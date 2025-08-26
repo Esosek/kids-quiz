@@ -6,16 +6,11 @@ import { NotFoundError, ValidationError } from '../../types/errors'
 import { getUserById } from './users'
 import { getFreeSubcategories, getSubcategoryById } from './subcategories'
 
-export async function createUserUnlock(
-  userId: string,
-  subcategoryId: string
-): Promise<UserUnlock> {
+export async function createUserUnlock(userId: string, subcategoryId: string): Promise<UserUnlock> {
   try {
     const existingUnlock = await getUserUnlock(userId, subcategoryId)
     if (existingUnlock) {
-      throw new ValidationError(
-        `Subcategory with ID ${subcategoryId} is already unlocked`
-      )
+      throw new ValidationError(`Subcategory with ID ${subcategoryId} is already unlocked`)
     }
 
     const { currency } = await getUserById(userId)
@@ -27,12 +22,9 @@ export async function createUserUnlock(
       throw new ValidationError('Not enough currency')
     }
 
-    const [result] = await db
-      .insert(userUnlocks)
-      .values({ userId, subcategoryId })
-      .returning()
+    const [result] = await db.insert(userUnlocks).values({ userId, subcategoryId }).returning()
 
-    await db.update(users).set({ currency: updatedCurrency })
+    await db.update(users).set({ currency: updatedCurrency }).where(eq(users.id, userId))
 
     return result
   } catch (error) {
@@ -45,10 +37,7 @@ export async function createUserUnlock(
 
 export async function getUserUnlocks(userId: string) {
   try {
-    const result = await db
-      .select()
-      .from(userUnlocks)
-      .where(eq(userUnlocks.userId, userId))
+    const result = await db.select().from(userUnlocks).where(eq(userUnlocks.userId, userId))
     return result
   } catch (error) {
     throw new Error('Retrieving user unlocks with subcategories failed')
@@ -63,20 +52,12 @@ export async function unlockFreeSubcategoriesForUser(userId: string) {
   })
 }
 
-async function getUserUnlock(
-  userId: string,
-  subcategoryId: string
-): Promise<UserUnlock | undefined> {
+async function getUserUnlock(userId: string, subcategoryId: string): Promise<UserUnlock | undefined> {
   try {
     const [result] = await db
       .select()
       .from(userUnlocks)
-      .where(
-        and(
-          eq(userUnlocks.userId, userId),
-          eq(userUnlocks.subcategoryId, subcategoryId)
-        )
-      )
+      .where(and(eq(userUnlocks.userId, userId), eq(userUnlocks.subcategoryId, subcategoryId)))
 
     return result
   } catch (error) {
