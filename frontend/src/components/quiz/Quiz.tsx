@@ -101,7 +101,7 @@ export default function Quiz({ subcategory }: QuizProps) {
           )}
         </div>
       )}
-      <ul className='relative w-full grid grid-cols-2 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
+      <ul className='relative w-full grid grid-cols-2 grid-rows-3 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
         {currentQuestion.answers.map((answer) => {
           let colorTheme: 'correct' | 'user-correct' | 'user' | undefined
           if (userSelectedOption) {
