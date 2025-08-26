@@ -38,6 +38,7 @@ export const useUserStore = create<UserStore>()((set) => ({
           avatar: body.avatar,
           token: body.token,
           username: body.username,
+          isAdmin: body.isAdmin,
         },
       }))
       return { ok: true }
@@ -64,6 +65,7 @@ export const useUserStore = create<UserStore>()((set) => ({
           avatar: body.avatar,
           token: body.token,
           username: body.username,
+          isAdmin: body.isAdmin,
         },
       }))
       return { ok: true }
