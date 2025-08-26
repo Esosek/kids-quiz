@@ -20,7 +20,7 @@ export default function QuestionInput() {
           className='block w-full bg-lime-100 rounded-2xl py-3 px-4'
         />
         <label htmlFor='answers-input' className='text-sm'>
-          První odpověď je považována za správnou. Odpovědi odděl čárkou a mezerou. Příklad:
+          První odpověď je považována za správnou. Přidej alespoň 5 odpovědí. Odděl čárkou a mezerou. Příklad:
           <span className='italic'>Jupiter, Uran, Saturn</span>
           <span className='absolute left-2 top-1 text-red-500 text-xl'>*</span>
         </label>
