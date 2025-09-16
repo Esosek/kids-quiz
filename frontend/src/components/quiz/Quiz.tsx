@@ -66,7 +66,7 @@ export default function Quiz({ subcategory }: QuizProps) {
     setQuizQuestions(generatedQuiz)
     setUserAnswers(Array(quizQuestions.length).fill(undefined))
     setCurrentQuestionIndex(0)
-    setCurrentQuestion(quizQuestions[0])
+    setCurrentQuestion(generatedQuiz[0])
     setCurrencyEarned(0)
     setIsQuizFinished(false)
   }
