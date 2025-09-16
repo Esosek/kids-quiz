@@ -1,5 +1,3 @@
-// process.loadEnvFile()
-
 const config = {
   db: {
     url: envOrThrow('DB_URL'),
@@ -11,7 +9,7 @@ const config = {
     secret: envOrThrow('JWT_SECRET_KEY'),
     cookieName: 'kidsqz_l',
   },
-  adminUserId: envOrThrow('ADMIN_USER_ID'),
+  firebaseApiKey: envOrThrow('FIREBASE_API_KEY'),
 }
 
 function envOrThrow(key: string) {

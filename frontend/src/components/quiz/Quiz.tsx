@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Subcategory } from '@/types/subcategory'
 import { generateQuiz } from '@/utils/quiz_generator'
@@ -12,7 +12,7 @@ import { useCurrencyStore } from '@/stores/currency_store'
 import { useCategoryStore } from '@/stores/category_store'
 import HintButton from './HintButton'
 
-const QUIZ_COMPLETION_REWARD = 5
+const QUIZ_COMPLETION_REWARD = 2
 const CORRECT_ANSWER_REWARD = 1
 
 type QuizProps = {
@@ -86,12 +86,12 @@ export default function Quiz({ subcategory }: QuizProps) {
         <p className='uppercase text-lg my-4 text-center sm:my-8 sm:text-2xl'>{currentQuestion.text}</p>
       )}
       {currentQuestion.imgUrl && (
-        <div className='relative w-full aspect-[3_/_2] mb-4 sm:w-2/3'>
+        <div className='relative w-4/5 aspect-[3_/_2] mb-4 sm:w-2/3'>
           <Image
             src={currentQuestion.imgUrl}
             alt='Image for quiz question'
             width={600}
-            height={400}
+            height={200}
             className='h-auto rounded-2xl'
           />
           <div className='absolute top-3 left-3 sm:-left-20 sm:bottom-0 sm:top-0 sm:flex sm:items-center'>
@@ -99,7 +99,7 @@ export default function Quiz({ subcategory }: QuizProps) {
           </div>
         </div>
       )}
-      <ul className='relative w-full grid grid-cols-2 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
+      <ul className='relative w-full grid grid-cols-2 grid-rows-3 gap-2 gap-y-3 mb-10 sm:grid-cols-1 sm:gap-3'>
         {currentQuestion.answers.map((answer) => {
           let colorTheme: 'correct' | 'user-correct' | 'user' | undefined
           if (userSelectedOption) {

@@ -3,6 +3,7 @@ type User = {
   username: string
   avatar: string
   token: string
+  isAdmin: boolean
 }
 
 export default User

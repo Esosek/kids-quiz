@@ -1,12 +1,4 @@
-import { unique } from 'drizzle-orm/pg-core'
-import {
-  pgTable,
-  timestamp,
-  uuid,
-  varchar,
-  integer,
-  text,
-} from 'drizzle-orm/pg-core'
+import { pgTable, timestamp, uuid, varchar, integer, text, unique, boolean } from 'drizzle-orm/pg-core'
 
 export type User = typeof users.$inferSelect
 export type Category = typeof categories.$inferSelect
@@ -21,6 +13,7 @@ export const users = pgTable('users', {
   hashedPassword: varchar('hashed_password').default('unset').notNull(),
   currency: integer('currency').default(0).notNull(),
   avatar: varchar('avatar').notNull().default('not set'),
+  isAdmin: boolean('is_admin').notNull().default(false),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
@@ -88,9 +81,7 @@ export const userUnlocks = pgTable(
       .$onUpdate(() => new Date()),
   },
   (table) => {
-    return [
-      unique('unique_user_subcategory').on(table.userId, table.subcategoryId),
-    ]
+    return [unique('unique_user_subcategory').on(table.userId, table.subcategoryId)]
   }
 )
 

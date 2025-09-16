@@ -27,7 +27,7 @@ export default function AnswerButton({ value, onClick, disabled, colorTheme }: A
       disabled={disabled}
       onClick={() => onClick(value)}
       style={{ opacity: '75%' }}
-      className={`${themeStyles} border-2 rounded-[1.25rem] w-full py-3 uppercase hover:not-disabled:bg-green-500/25 sm:bg-none sm:rounded-3xl`}
+      className={`${themeStyles} border-2 rounded-[1.25rem] w-full h-full py-3 uppercase hover:not-disabled:bg-green-500/25 sm:bg-none sm:rounded-3xl`}
     >
       {value}
     </button>

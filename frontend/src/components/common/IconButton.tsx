@@ -16,7 +16,11 @@ export default function IconButton({ iconSrc, onClick, alt = '', bgColor = 'bg-g
     }, 50)
   }, [])
   return (
-    <button onClick={onClick} style={{ scale }} className={`${bgColor} flex justify-center size-13 rounded-full transition-transform duration-100 sm:size-14`}>
+    <button
+      onClick={onClick}
+      style={{ scale }}
+      className={`${bgColor} flex justify-center items-center size-13 rounded-full transition-transform duration-100 sm:size-14`}
+    >
       <Image src={iconSrc} width={30} height={30} alt={alt} />
     </button>
   )

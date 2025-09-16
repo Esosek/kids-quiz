@@ -38,6 +38,7 @@ export const useUserStore = create<UserStore>()((set) => ({
           avatar: body.avatar,
           token: body.token,
           username: body.username,
+          isAdmin: body.isAdmin,
         },
       }))
       return { ok: true }
@@ -53,16 +54,18 @@ export const useUserStore = create<UserStore>()((set) => ({
     })
 
     if (res.ok) {
-      const body = res.body as User
+      const body = res.body as User & { currency: number }
       if (keepLoggedIn) {
         localStorage.setItem(process.env.NEXT_PUBLIC_TOKEN_STORAGE_KEY!, body.token)
       }
+      useCurrencyStore.getState().initializeCurrency(body.currency)
       set(() => ({
         user: {
           id: body.id,
           avatar: body.avatar,
           token: body.token,
           username: body.username,
+          isAdmin: body.isAdmin,
         },
       }))
       return { ok: true }

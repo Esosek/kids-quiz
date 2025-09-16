@@ -13,9 +13,9 @@ export default function Header() {
   const { user, logout } = useUserStore()
   const { currency, addCurrency } = useCurrencyStore()
   return (
-    <header className='relative flex justify-between items-start w-full mb-8 sm:mb-10'>
+    <header className='relative flex justify-between items-start w-full mb-2 sm:mb-10'>
       <CurrencyDisplay value={currency} />
-      {user?.id === process.env.NEXT_PUBLIC_ADMIN_ID && (
+      {user?.isAdmin && (
         <>
           <Link href={pathName === '/admin' ? '/' : '/admin'} className='uppercase underline'>
             {pathName === '/admin' ? 'dashboard' : 'admin sekce'}
