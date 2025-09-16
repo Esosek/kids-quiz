@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Subcategory } from '@/types/subcategory'
 import { generateQuiz } from '@/utils/quiz_generator'
@@ -20,10 +20,9 @@ type QuizProps = {
 }
 
 export default function Quiz({ subcategory }: QuizProps) {
+  const generatedQuiz = useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions])
   const userCurrency = useCurrencyStore((state) => state.currency)
-  const [quizQuestions, setQuizQuestions] = useState(
-    useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions])
-  )
+  const [quizQuestions, setQuizQuestions] = useState(generatedQuiz)
   const [userAnswers, setUserAnswers] = useState<Array<boolean | undefined>>(
     Array(quizQuestions.length).fill(undefined)
   )
@@ -63,7 +62,9 @@ export default function Quiz({ subcategory }: QuizProps) {
   }
 
   function handleReplay() {
-    setQuizQuestions(generateQuiz(subcategory.questions))
+    const generatedQuiz = generateQuiz(subcategory.questions)
+    console.log(generatedQuiz.map((q) => q.correctAnswer))
+    setQuizQuestions(generatedQuiz)
     setUserAnswers(Array(quizQuestions.length).fill(undefined))
     setCurrentQuestionIndex(0)
     setCurrentQuestion(quizQuestions[0])
