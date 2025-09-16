@@ -63,7 +63,6 @@ export default function Quiz({ subcategory }: QuizProps) {
 
   function handleReplay() {
     const generatedQuiz = generateQuiz(subcategory.questions)
-    console.log(generatedQuiz.map((q) => q.correctAnswer))
     setQuizQuestions(generatedQuiz)
     setUserAnswers(Array(quizQuestions.length).fill(undefined))
     setCurrentQuestionIndex(0)
