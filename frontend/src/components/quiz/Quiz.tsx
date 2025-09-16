@@ -20,6 +20,7 @@ type QuizProps = {
 }
 
 export default function Quiz({ subcategory }: QuizProps) {
+  const userCurrency = useCurrencyStore((state) => state.currency)
   const [quizQuestions, setQuizQuestions] = useState(
     useMemo(() => generateQuiz(subcategory.questions), [subcategory.questions])
   )
@@ -74,8 +75,8 @@ export default function Quiz({ subcategory }: QuizProps) {
     const hintedAnswers = currentQuestion.answers.filter(
       (answer) => !currentQuestion.hintRemovedAnswers.includes(answer)
     )
-    const updatedQuestions = { ...currentQuestion, answers: hintedAnswers }
-    setCurrentQuestion(updatedQuestions)
+    const updatedQuestion = { ...currentQuestion, answers: hintedAnswers, hasUserAnswered: true }
+    setCurrentQuestion(updatedQuestion)
   }
 
   let content = (
@@ -93,7 +94,7 @@ export default function Quiz({ subcategory }: QuizProps) {
             className='h-auto rounded-2xl'
           />
           <div className='absolute top-3 left-3 sm:-left-20 sm:bottom-0 sm:top-0 sm:flex sm:items-center'>
-            <HintButton onAccept={handleHintAccept} />
+            {!currentQuestion.hasUserAnswered && userCurrency > 1 && <HintButton onAccept={handleHintAccept} />}
           </div>
         </div>
       )}
